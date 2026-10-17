@@ -8,13 +8,14 @@ Fase 1 en curso.
 
 | Componente | Estado |
 |---|---|
-| Esquema de base de datos (10 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
+| Esquema de base de datos (12 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
 | Importador del Rexistro de Entidades Deportivas de Galicia (clubes) con geocodificación CartoCiudad | ✅ Probado con datos reales |
 | Importador de OpenStreetMap (tiendas y talleres de bicicletas) desde extractos provinciales | ✅ Probado con datos reales |
 | Worker con cola persistente, reintentos y recuperación | ✅ |
 | Búsqueda, mapa con agrupación y control de importaciones (funciones SQL) | ✅ Probado en local |
-| Proyecto Supabase: 10 migraciones aplicadas, asesor de seguridad revisado | ✅ (sin datos todavía) |
-| Aplicación web (listado, ficha, mapa, CRM) | ⏳ Siguiente paso |
+| Proyecto Supabase: 12 migraciones aplicadas, asesor de seguridad revisado, datos reales de Santiago cargados | ✅ |
+| Aplicación web: resumen, directorio, ficha con procedencia, mapa, CRM mínimo, duplicados, importaciones | ✅ Probada de extremo a extremo (18/18) |
+| Despliegue (Vercel + importador en Railway) | ⏳ Ver docs/despliegue.md |
 
 ## Estructura
 
@@ -27,6 +28,8 @@ tests/integration/     Pruebas de la ingesta contra PostgreSQL (datos de prueba 
 tests/sql/             Pruebas de seguridad (RLS) y funciones SQL
 scripts/test-db.sh     Prueba completa de extremo a extremo con datos reales
 docs/decisiones.md     Decisiones de arquitectura y licencias
+docs/despliegue.md     Guía de puesta en marcha (cuentas, Vercel, importador)
+src/app/               Aplicación web (Next.js)
 ```
 
 ## Requisitos

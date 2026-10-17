@@ -61,6 +61,7 @@ describe("normalización", () => {
     expect(addressLooksPersonal("Estadio Multiusos San Lázaro")).toBe(false);
     expect(addressLooksPersonal("RUA XESÚS CARRO 3 1derec")).toBe(true);
     expect(addressLooksPersonal("RÚA RESTOLLAL, 35, BAIXO")).toBe(false);
+    expect(addressLooksPersonal("RÚA PONTE DO SAR, 43 C, 1 E")).toBe(true);
   });
 });
 

@@ -131,7 +131,9 @@ export function addressLooksPersonal(address: string): boolean {
     // "6IZQ", "3 dcha", "piso", "puerta" (también pegado al número)
     /(\b|\d)(izq\w*|izd\w*|dch\w*|drch\w*|derec\w*|dereit\w*|dta|esq\w*|piso|puerta|porta)\b/.test(a) ||
     // "12-3B"
-    /\b\d+\s*-\s*\d+\s*[a-z]\b/.test(a)
+    /\b\d+\s*-\s*\d+\s*[a-z]\b/.test(a) ||
+    // "43 C, 1 E": tras el portal, otro número con letra (piso y puerta)
+    /\d+[^,]*,\s*\d+\s*[a-z]\b/.test(a)
   );
 }
 

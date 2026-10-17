@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/*
+  Sistema visual: tintas de mapa topográfico.
+  Papel frío, tinta verde-azulada profunda, pino gallego como acción principal
+  y un color propio por fuente de datos (la procedencia es la seña de identidad).
+*/
+:root {
+  --paper: #f4f6f5;
+  --surface: #ffffff;
+  --ink: #17282c;
+  --ink-soft: #566a6d;
+  --ink-faint: #8a9b9d;
+  --line: #d8e0de;
+  --line-strong: #b9c6c3;
+  --pine: #2d6a4f;
+  --pine-strong: #23553f;
+  --pine-wash: #e3efe8;
+  --atlantic: #245b8c;
+  --danger: #a8322a;
+  --danger-wash: #f8e7e5;
+  --warn: #9a6b12;
+  --warn-wash: #f7efdc;
+
+  --src-osm: #3f7e55;
+  --src-red: #245b8c;
+  --src-ign: #a87416;
+  --src-manual: #17282c;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-pine: var(--pine);
+  --color-pine-strong: var(--pine-strong);
+  --color-pine-wash: var(--pine-wash);
+  --color-atlantic: var(--atlantic);
+  --color-danger: var(--danger);
+  --color-danger-wash: var(--danger-wash);
+  --color-warn: var(--warn);
+  --color-warn-wash: var(--warn-wash);
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-feature-settings: "tnum" 1, "ss01" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--paper);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--atlantic);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Componentes base reutilizables (como utilidades para poder combinarlos) */
+@utility field {
+  @apply h-9 rounded-md border border-line bg-surface px-3 text-[14px] text-ink placeholder:text-ink-faint;
+  @apply hover:border-line-strong focus:border-atlantic focus:outline-none;
+}
+@utility btn {
+  @apply inline-flex h-9 items-center justify-center gap-2 rounded-md px-3.5 text-[14px] font-medium;
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-pine text-white hover:bg-pine-strong;
+}
+@utility btn-secondary {
+  @apply btn border border-line bg-surface text-ink hover:border-line-strong;
+}
+@utility btn-danger {
+  @apply btn border border-danger/30 bg-surface text-danger hover:bg-danger-wash;
+}
+@utility label {
+  @apply text-[13px] font-medium text-ink-soft;
+}
+@utility panel {
+  @apply rounded-lg border border-line bg-surface;
+}
+@utility tag {
+  @apply inline-flex h-6 items-center rounded px-2 text-[12px] font-medium;
+}
