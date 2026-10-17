@@ -5,7 +5,10 @@ Registro breve de las decisiones relevantes. Cada una indica el contexto, la dec
 ## ADR-0001 · Proyecto aislado y stack base
 
 - **Contexto:** la plataforma no debe compartir recursos con GROPO.
-- **Decisión:** repositorio, organización de Supabase, proyecto, claves y despliegues propios. Stack: PostgreSQL + PostGIS (Supabase), worker en Node.js/TypeScript, aplicación web en Next.js (fase 1, siguiente paso) y mapa con MapLibre.
+- **Decisión:** repositorio, proyecto de Supabase (base de datos y claves), y despliegues propios.
+  Por decisión del propietario (17-10-2026), el proyecto de Supabase vive en la organización «Gropo»:
+  comparte facturación y miembros de la organización con GROPO, pero no comparte base de datos,
+  claves ni código. Se puede transferir a otra organización más adelante sin cambiar el código. Stack: PostgreSQL + PostGIS (Supabase), worker en Node.js/TypeScript, aplicación web en Next.js (fase 1, siguiente paso) y mapa con MapLibre.
 - **Consecuencias:** las migraciones viven en `supabase/migrations` y son la única fuente de verdad del esquema.
 
 ## ADR-0002 · OpenStreetMap: extractos provinciales en lugar de Overpass para cargas masivas

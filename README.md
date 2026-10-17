@@ -8,12 +8,12 @@ Fase 1 en curso.
 
 | Componente | Estado |
 |---|---|
-| Esquema de base de datos (9 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
+| Esquema de base de datos (10 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
 | Importador del Rexistro de Entidades Deportivas de Galicia (clubes) con geocodificación CartoCiudad | ✅ Probado con datos reales |
 | Importador de OpenStreetMap (tiendas y talleres de bicicletas) desde extractos provinciales | ✅ Probado con datos reales |
 | Worker con cola persistente, reintentos y recuperación | ✅ |
 | Búsqueda, mapa con agrupación y control de importaciones (funciones SQL) | ✅ Probado en local |
-| Proyecto Supabase en producción | ⏳ Pendiente de acceso |
+| Proyecto Supabase: 10 migraciones aplicadas, asesor de seguridad revisado | ✅ (sin datos todavía) |
 | Aplicación web (listado, ficha, mapa, CRM) | ⏳ Siguiente paso |
 
 ## Estructura
