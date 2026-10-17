@@ -1,0 +1,7 @@
+node_modules/
+.env
+.env.local
+.cache/
+*.osm.pbf
+.next/
+coverage/
