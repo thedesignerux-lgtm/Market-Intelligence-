@@ -1,6 +1,6 @@
 # Market Intelligence
 
-Plataforma interna de inteligencia comercial y territorial: descubre, importa, organiza y gestiona comercios, clubes y asociaciones reales en España. Empieza por Galicia (piloto: **Santiago de Compostela**, vertical **ciclismo**).
+Plataforma interna de inteligencia comercial y territorial: descubre, importa, organiza y gestiona comercios, clubes y asociaciones reales en España. Cobertura actual: **toda Galicia** (313 municipios), vertical **ciclismo**. El piloto empezó en Santiago de Compostela.
 
 ## Estado
 
@@ -13,7 +13,8 @@ Fase 1 en curso.
 | Importador de OpenStreetMap (tiendas y talleres de bicicletas) desde extractos provinciales | ✅ Probado con datos reales |
 | Worker con cola persistente, reintentos y recuperación | ✅ |
 | Búsqueda, mapa con agrupación y control de importaciones (funciones SQL) | ✅ Probado en local |
-| Proyecto Supabase: 12 migraciones aplicadas, asesor de seguridad revisado, datos reales de Santiago cargados | ✅ |
+| Proyecto Supabase: 12 migraciones aplicadas, asesor de seguridad revisado | ✅ |
+| Datos reales de toda Galicia: 728 entidades (622 clubes RED, 105 comercios OSM), 494 con ubicación | ✅ |
 | Aplicación web: resumen, directorio, ficha con procedencia, mapa, CRM mínimo, duplicados, importaciones | ✅ Probada de extremo a extremo (18/18) |
 | Aplicación web desplegada en Vercel | ✅ |
 | Importador en Railway | ⏳ Ver docs/despliegue.md |
