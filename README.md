@@ -15,7 +15,8 @@ Fase 1 en curso.
 | Búsqueda, mapa con agrupación y control de importaciones (funciones SQL) | ✅ Probado en local |
 | Proyecto Supabase: 12 migraciones aplicadas, asesor de seguridad revisado, datos reales de Santiago cargados | ✅ |
 | Aplicación web: resumen, directorio, ficha con procedencia, mapa, CRM mínimo, duplicados, importaciones | ✅ Probada de extremo a extremo (18/18) |
-| Despliegue (Vercel + importador en Railway) | ⏳ Ver docs/despliegue.md |
+| Aplicación web desplegada en Vercel | ✅ |
+| Importador en Railway | ⏳ Ver docs/despliegue.md |
 
 ## Estructura
 
