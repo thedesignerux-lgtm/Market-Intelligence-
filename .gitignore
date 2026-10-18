@@ -6,3 +6,4 @@ node_modules/
 .next/
 coverage/
 public/vendor/
+*.tsbuildinfo
