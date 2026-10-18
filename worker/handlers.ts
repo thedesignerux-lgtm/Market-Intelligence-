@@ -55,7 +55,27 @@ export async function ensureMunicipality(db: Db, config: Config, code: string): 
   );
   if (existing.rowCount) return { name: existing.rows[0]!.name };
 
-  const province = code.slice(0, 2);
+  await loadProvinceMunicipalities(db, config, code.slice(0, 2));
+  const after = await db.query<{ name: string }>(
+    "select name from public.admin_areas where code = $1 and geom is not null",
+    [code],
+  );
+  if (!after.rowCount) throw new PermanentTaskError(`El municipio ${code} no aparece en los límites de OSM`);
+  return { name: after.rows[0]!.name };
+}
+
+/** Códigos INE de todos los municipios de una provincia (carga sus límites de OSM si faltan). */
+export async function provinceMunicipalityCodes(db: Db, config: Config, province: string): Promise<string[]> {
+  const sql = "select code from public.admin_areas where level = 'municipio' and parent_code = $1 and geom is not null order by code";
+  let { rows } = await db.query<{ code: string }>(sql, [province]);
+  if (rows.length === 0) {
+    await loadProvinceMunicipalities(db, config, province);
+    ({ rows } = await db.query<{ code: string }>(sql, [province]));
+  }
+  return rows.map((r) => r.code);
+}
+
+async function loadProvinceMunicipalities(db: Db, config: Config, province: string): Promise<void> {
   if (!PROVINCE_EXTRACTS[province]) throw new PermanentTaskError(`Provincia ${province} fuera de la cobertura configurada`);
   const { file } = await ensureExtract(config, province);
   const munis = await extractMunicipalities(file, province, path.join(config.CACHE_DIR, "work", `admin-${province}`));
@@ -72,12 +92,6 @@ export async function ensureMunicipality(db: Db, config: Config, code: string): 
       );
     }
   });
-  const after = await db.query<{ name: string }>(
-    "select name from public.admin_areas where code = $1 and geom is not null",
-    [code],
-  );
-  if (!after.rowCount) throw new PermanentTaskError(`El municipio ${code} no aparece en los límites de OSM`);
-  return { name: after.rows[0]!.name };
 }
 
 async function recordIssue(db: Db, task: ImportTask, severity: "info" | "warning" | "error", code: string, message: string) {
@@ -107,8 +121,15 @@ async function ingestAll(db: Db, task: ImportTask, records: NormalizedRecord[], 
   }
 }
 
+/** Registra la versión de la fuente usada. Una importación de varias provincias acumula una versión por extracto. */
 async function setRunVersion(db: Db, runId: string, version: string) {
-  await db.query("update public.import_runs set source_version = $2 where id = $1 and source_version is distinct from $2", [runId, version]);
+  await db.query(
+    `update public.import_runs
+        set source_version = case when source_version is null or source_version = '' then $2
+                                  else source_version || ', ' || $2 end
+      where id = $1 and not ($2 = any (string_to_array(coalesce(source_version, ''), ', ')))`,
+    [runId, version],
+  );
 }
 
 export async function runRedTask(db: Db, config: Config, task: ImportTask, geocoder: Geocoder): Promise<TaskStats> {

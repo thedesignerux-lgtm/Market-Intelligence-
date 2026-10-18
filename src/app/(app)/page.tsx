@@ -19,6 +19,39 @@ interface MunicipalityRow {
   last_seen_at: string;
 }
 
+const PROVINCES = [
+  { code: "15", name: "A Coruña" },
+  { code: "27", name: "Lugo" },
+  { code: "32", name: "Ourense" },
+  { code: "36", name: "Pontevedra" },
+];
+const TOP_MUNICIPALITIES = 15;
+
+function MunicipalityRows({ rows }: { rows: MunicipalityRow[] }) {
+  return (
+    <>
+      {rows.map((m) => (
+        <tr key={m.municipality_code} className="border-b border-line last:border-0">
+          <td className="px-4 py-3">
+            <Link className="font-medium hover:underline" href={`/directorio?municipio=${m.municipality_code}`}>
+              {m.municipality_name}
+            </Link>
+          </td>
+          <td className="px-4 py-3 text-right">{m.comercios}</td>
+          <td className="px-4 py-3 text-right">{m.clubes}</td>
+          <td className="px-4 py-3 text-right">
+            {m.con_ubicacion} <span className="text-ink-faint">de {m.entities}</span>
+          </td>
+          <td className="px-4 py-3">
+            <SourceMarks sources={m.sources} />
+          </td>
+          <td className="px-4 py-3 text-ink-soft">{formatDate(m.last_seen_at)}</td>
+        </tr>
+      ))}
+    </>
+  );
+}
+
 export default async function SummaryPage() {
   await getSession();
   const supabase = await createClient();
@@ -30,6 +63,19 @@ export default async function SummaryPage() {
 
   const total = (munis ?? []).reduce((s, m) => s + m.entities, 0);
   const located = (munis ?? []).reduce((s, m) => s + m.con_ubicacion, 0);
+  const provinces = PROVINCES.map((p) => {
+    const rows = (munis ?? []).filter((m) => m.municipality_code.startsWith(p.code));
+    return {
+      ...p,
+      municipios: rows.length,
+      comercios: rows.reduce((s, m) => s + m.comercios, 0),
+      clubes: rows.reduce((s, m) => s + m.clubes, 0),
+      entities: rows.reduce((s, m) => s + m.entities, 0),
+      con_ubicacion: rows.reduce((s, m) => s + m.con_ubicacion, 0),
+    };
+  }).filter((p) => p.entities > 0);
+  const topMunis = (munis ?? []).slice(0, TOP_MUNICIPALITIES);
+  const restMunis = (munis ?? []).slice(TOP_MUNICIPALITIES);
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-6 md:px-8">
@@ -68,10 +114,49 @@ export default async function SummaryPage() {
             )}
           </p>
 
+          {provinces.length > 1 && (
+            <section className="mt-6" aria-labelledby="provincias">
+              <h2 id="provincias" className="text-[16px] font-semibold">
+                Por provincia
+              </h2>
+              <div className="panel mt-3 overflow-x-auto">
+                <table className="w-full min-w-[560px] text-left">
+                  <thead className="border-b border-line text-[13px] text-ink-soft">
+                    <tr>
+                      <th className="px-4 py-2.5 font-medium">Provincia</th>
+                      <th className="px-4 py-2.5 text-right font-medium">Municipios con datos</th>
+                      <th className="px-4 py-2.5 text-right font-medium">Comercios</th>
+                      <th className="px-4 py-2.5 text-right font-medium">Clubes</th>
+                      <th className="px-4 py-2.5 text-right font-medium">Con ubicación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {provinces.map((p) => (
+                      <tr key={p.code} className="border-b border-line last:border-0">
+                        <td className="px-4 py-3 font-medium">{p.name}</td>
+                        <td className="px-4 py-3 text-right">{p.municipios}</td>
+                        <td className="px-4 py-3 text-right">{p.comercios}</td>
+                        <td className="px-4 py-3 text-right">{p.clubes}</td>
+                        <td className="px-4 py-3 text-right">
+                          {p.con_ubicacion} <span className="text-ink-faint">de {p.entities}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
           <section className="mt-6" aria-labelledby="cobertura">
             <h2 id="cobertura" className="text-[16px] font-semibold">
               Cobertura por municipio
             </h2>
+            {restMunis.length > 0 && (
+              <p className="mt-1 text-[13px] text-ink-soft">
+                Los {TOP_MUNICIPALITIES} municipios con más entidades. Los demás están en la lista desplegable de abajo.
+              </p>
+            )}
             <div className="panel mt-3 overflow-x-auto">
               <table className="w-full min-w-[640px] text-left">
                 <thead className="border-b border-line text-[13px] text-ink-soft">
@@ -85,27 +170,22 @@ export default async function SummaryPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {munis?.map((m) => (
-                    <tr key={m.municipality_code} className="border-b border-line last:border-0">
-                      <td className="px-4 py-3">
-                        <Link className="font-medium hover:underline" href={`/directorio?municipio=${m.municipality_code}`}>
-                          {m.municipality_name}
-                        </Link>
-                      </td>
-                      <td className="px-4 py-3 text-right">{m.comercios}</td>
-                      <td className="px-4 py-3 text-right">{m.clubes}</td>
-                      <td className="px-4 py-3 text-right">
-                        {m.con_ubicacion} <span className="text-ink-faint">de {m.entities}</span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <SourceMarks sources={m.sources} />
-                      </td>
-                      <td className="px-4 py-3 text-ink-soft">{formatDate(m.last_seen_at)}</td>
-                    </tr>
-                  ))}
+                  <MunicipalityRows rows={topMunis} />
                 </tbody>
               </table>
             </div>
+            {restMunis.length > 0 && (
+              <details className="panel mt-3 overflow-x-auto">
+                <summary className="cursor-pointer px-4 py-3 text-[14px] font-medium">
+                  Ver los otros {restMunis.length} municipios
+                </summary>
+                <table className="w-full min-w-[640px] border-t border-line text-left">
+                  <tbody>
+                    <MunicipalityRows rows={restMunis} />
+                  </tbody>
+                </table>
+              </details>
+            )}
           </section>
         </>
       )}

@@ -46,6 +46,8 @@ cp .env.example .env    # y rellena DATABASE_URL y CONTACT
 npm install
 npm run import -- red_galicia 15078   # clubes del RED en Santiago
 npm run import -- osm 15078           # comercios de OSM en Santiago
+npm run import -- red_galicia 36      # todos los municipios de una provincia
+npm run import -- osm galicia         # los 313 municipios de Galicia
 npm run worker                         # proceso continuo que atiende la cola
 ```
 
