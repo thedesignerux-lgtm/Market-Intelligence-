@@ -29,14 +29,15 @@ La aplicación no tiene registro público: las cuentas las crea un administrador
 
 ## 3. Importador en Railway
 
-El importador descarga los datos abiertos, los normaliza y los guarda. Atiende las importaciones que se piden desde la pantalla **Importaciones**.
+El importador descarga los datos abiertos, los normaliza y los guarda. Atiende las importaciones que se piden desde la pantalla **Importaciones**. El archivo `railway.json` del repositorio ya le indica a Railway que use `Dockerfile.worker` (el importador, no la web).
 
 1. En railway.com: **New Project → Deploy from GitHub repo** y elige el repositorio.
-2. En **Variables** añade:
-   - `RAILWAY_DOCKERFILE_PATH` = `Dockerfile.worker`
-   - `CONTACT` = un email o URL de contacto **del proyecto**. Se envía a los servicios públicos para que puedan avisar si hay un problema.
-   - `DATABASE_URL` = cadena de conexión de Supabase. Obtenla en **Connect → Session pooler** y sustituye `[YOUR-PASSWORD]` por la contraseña de la base de datos que guardaste al crear el proyecto.
-3. Despliega. En los registros (logs) debe aparecer `[worker] … iniciado`.
+2. En el servicio creado, pestaña **Variables**, añade:
+   - `DATABASE_URL` = cadena de conexión de Supabase. En Supabase pulsa **Connect**, elige **Session pooler** (funciona con IPv4), copia la cadena y sustituye `[YOUR-PASSWORD]` por la contraseña de la base de datos. Pégala solo en Railway, nunca en el chat.
+   - `CONTACT` = `https://github.com/thedesignerux-lgtm/Market-Intelligence-` (contacto del proyecto que se envía a los servicios públicos).
+3. Railway vuelve a desplegar solo. En **Deployments → View logs** debe aparecer `[worker] … iniciado`.
 4. Prueba: en la aplicación, ve a **Importaciones**, elige «Clubes» y el municipio `15078`, y pulsa **Importar**. En menos de un minuto debe aparecer como «Completada».
+
+La conexión con Supabase va cifrada (TLS). Para verificar además el certificado del servidor, descarga el certificado de Supabase (**Project Settings → Database → SSL Configuration**) y pega su contenido en la variable `DATABASE_CA_CERT`.
 
 Si una importación se queda «En cola» más de 3 minutos, la pantalla avisa: casi siempre significa que el importador no está en marcha o que `DATABASE_URL` no es correcta.
