@@ -18,7 +18,7 @@ Fase 1 en curso.
 | Aplicación web: resumen, directorio, ficha con procedencia, mapa, CRM mínimo, duplicados, importaciones | ✅ Probada de extremo a extremo (18/18) |
 | Dashboard comercial: 4 indicadores, roles comprador/vendedor, participación en GROPO con prueba, próxima acción y pantalla Seguimiento | ✅ Probado de extremo a extremo (27/27) y con pruebas SQL (30/30) |
 | Aplicación web desplegada en Vercel | ✅ |
-| Importador en Railway | ⏳ Ver docs/despliegue.md |
+| Importador en GitHub Actions (cada noche y bajo demanda) | ⏳ Falta el secreto DATABASE_URL: ver docs/despliegue.md |
 
 ## Estructura
 

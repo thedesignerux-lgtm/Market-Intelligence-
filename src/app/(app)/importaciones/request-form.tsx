@@ -50,7 +50,12 @@ export function RequestImportForm({ municipalities }: { municipalities: { code: 
       </button>
       <p aria-live="polite" className="basis-full text-[13px]">
         {state.error && <span className="text-danger">{state.error}</span>}
-        {state.ok && <span className="text-pine">Importación en cola. Aparecerá abajo y se actualizará al recargar.</span>}
+        {state.ok &&
+          (state.started ? (
+            <span className="text-pine">Importación en cola. El importador arranca en un minuto; recarga la página para ver el progreso.</span>
+          ) : (
+            <span className="text-pine">Importación en cola. Se procesará en la ejecución automática de esta noche.</span>
+          ))}
       </p>
     </form>
   );

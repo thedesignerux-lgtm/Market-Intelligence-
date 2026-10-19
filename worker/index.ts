@@ -1,4 +1,6 @@
-// Proceso worker de larga duración. Despliegue: un contenedor pequeño (ver docs/deploy.md).
+// Importador (worker).
+// · Sin argumentos: proceso de larga duración que atiende la cola continuamente.
+// · Con --once: procesa todo lo que haya en la cola y termina (lo usa GitHub Actions).
 import { loadConfig } from "./config";
 import { createPool } from "./db";
 import { drainQueue } from "./runner";
@@ -14,7 +16,15 @@ for (const sig of ["SIGINT", "SIGTERM"] as const) {
   });
 }
 
-console.log(`[worker] ${config.WORKER_ID} iniciado`);
+const once = process.argv.includes("--once");
+console.log(`[worker] ${config.WORKER_ID} iniciado${once ? " (una pasada)" : ""}`);
+if (once) {
+  const stats = await drainQueue(db, config, { signal: controller.signal });
+  const { rows } = await db.query<{ n: number }>("select count(*)::int as n from public.import_tasks where status in ('queued', 'running')");
+  console.log(`[worker] cola procesada. Geocodificador: ${JSON.stringify(stats)}. Tareas pendientes: ${rows[0]?.n ?? 0}`);
+  await db.end();
+  process.exit(0);
+}
 while (!controller.signal.aborted) {
   try {
     await drainQueue(db, config, { signal: controller.signal });

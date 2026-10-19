@@ -66,6 +66,14 @@ Registro breve de las decisiones relevantes. Cada una indica el contexto, la dec
 
 **Consecuencias.** El indicador de participantes empieza en 0 y crece solo con marcas verificadas. Si en el futuro se integra GROPO, la sincronización escribiría las mismas marcas con su prueba.
 
+## ADR-0008 · Importador en GitHub Actions en lugar de un servidor propio
+
+**Contexto.** El importador necesita Node y osmium, y conexión directa a PostgreSQL. Mantener un contenedor siempre encendido (Railway u otro) cuesta dinero y otra cuenta que gestionar. El responsable del producto prefirió no usar Railway.
+
+**Decisión.** El importador se ejecuta en GitHub Actions: cada noche (refresco completo de Galicia y cola pendiente) y bajo demanda (la web lanza el workflow con la API de GitHub al pedir una importación). El modo `--once` procesa la cola y termina. La cola en PostgreSQL (ADR-0005) no cambia: el mismo código sirve como proceso continuo si algún día hace falta.
+
+**Consecuencias.** Gratis mientras el repositorio sea público. Una importación pedida desde la web tarda alrededor de un minuto en empezar (arranque del runner). La contraseña de la base de datos vive solo en los secretos de GitHub. Si el repositorio pasa a privado, hay un cupo mensual de minutos gratuitos: la ejecución nocturna consume unos minutos al día.
+
 ## Licencias de las fuentes
 
 | Fuente | Licencia | Obligaciones |

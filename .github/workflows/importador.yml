@@ -1,0 +1,68 @@
+# Importador de Market Intelligence en GitHub Actions (sin servidor propio).
+#
+# · Cada noche: actualiza toda Galicia (clubes del RED y comercios de OpenStreetMap)
+#   y procesa cualquier importación pendiente.
+# · Bajo demanda: la web lo lanza al pedir una importación (si tiene GITHUB_DISPATCH_TOKEN),
+#   o se lanza a mano desde la pestaña Actions → «Importador» → «Run workflow».
+#
+# Secreto necesario en el repositorio: DATABASE_URL (cadena «Session pooler» de Supabase).
+name: Importador
+
+on:
+  schedule:
+    - cron: "17 3 * * *" # 03:17 UTC (05:17 en Madrid en horario de verano)
+  workflow_dispatch:
+    inputs:
+      refresco_completo:
+        description: "Además de la cola, actualizar toda Galicia"
+        type: boolean
+        default: false
+
+# Nunca dos ejecuciones a la vez: la siguiente espera a que termine la anterior.
+concurrency:
+  group: importador
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CONTACT: https://github.com/thedesignerux-lgtm/Market-Intelligence-
+      CACHE_DIR: .cache
+      WORKER_ID: github-actions-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Comprobar configuración
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Falta el secreto DATABASE_URL (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+
+      - name: Instalar osmium (procesa los extractos de OpenStreetMap)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+
+      - name: Instalar dependencias
+        run: npm ci --ignore-scripts
+
+      - name: Procesar las importaciones pedidas desde la web
+        run: npm run -s worker -- --once
+
+      - name: Actualizar toda Galicia
+        if: github.event_name == 'schedule' || inputs.refresco_completo
+        run: |
+          # Si ya hay una importación igual en curso, se sigue con la siguiente.
+          npm run -s import -- red_galicia galicia || echo "::warning::No se pudo lanzar la actualización de clubes"
+          npm run -s import -- osm galicia || echo "::warning::No se pudo lanzar la actualización de comercios"
+          npm run -s worker -- --once

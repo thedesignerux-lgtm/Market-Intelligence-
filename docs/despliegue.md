@@ -6,7 +6,7 @@ Tres piezas:
 |---|---|---|
 | Base de datos y acceso de usuarios | Supabase (ya creado) | Plan gratuito |
 | Aplicación web | Vercel | Plan gratuito (Hobby) |
-| Importador (worker) | Railway, u otro servicio que ejecute contenedores | Unos pocos euros al mes |
+| Importador (worker) | GitHub Actions (repositorio público) | Gratis |
 
 Las claves **secretas** (la contraseña de la base de datos) se pegan solo en el panel de cada servicio, nunca en el chat ni en el código.
 
@@ -27,17 +27,33 @@ La aplicación no tiene registro público: las cuentas las crea un administrador
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = la clave «publishable» de Supabase (**Project Settings → API Keys**)
 3. Pulsa **Deploy**. Cuando termine, abre la URL que te da Vercel y entra con tu cuenta.
 
-## 3. Importador en Railway
+## 3. Importador en GitHub Actions
 
-El importador descarga los datos abiertos, los normaliza y los guarda. Atiende las importaciones que se piden desde la pantalla **Importaciones**. El archivo `railway.json` del repositorio ya le indica a Railway que use `Dockerfile.worker` (el importador, no la web).
+El importador descarga los datos abiertos, los normaliza y los guarda. Se ejecuta en GitHub Actions (`.github/workflows/importador.yml`), sin servidor propio:
 
-1. En railway.com: **New Project → Deploy from GitHub repo** y elige el repositorio.
-2. En el servicio creado, pestaña **Variables**, añade:
-   - `DATABASE_URL` = cadena de conexión de Supabase. En Supabase pulsa **Connect**, elige **Session pooler** (funciona con IPv4), copia la cadena y sustituye `[YOUR-PASSWORD]` por la contraseña de la base de datos. Pégala solo en Railway, nunca en el chat.
-   - `CONTACT` = `https://github.com/thedesignerux-lgtm/Market-Intelligence-` (contacto del proyecto que se envía a los servicios públicos).
-3. Railway vuelve a desplegar solo. En **Deployments → View logs** debe aparecer `[worker] … iniciado`.
-4. Prueba: en la aplicación, ve a **Importaciones**, elige «Clubes» y el municipio `15078`, y pulsa **Importar**. En menos de un minuto debe aparecer como «Completada».
+- **Cada noche** actualiza toda Galicia y procesa las importaciones pendientes.
+- **Al pedir una importación** desde la pantalla **Importaciones**, la web lo lanza en el momento (si tiene el token del paso 2).
+- **A mano**: GitHub → pestaña **Actions** → «Importador» → **Run workflow**.
 
-La conexión con Supabase va cifrada (TLS). Para verificar además el certificado del servidor, descarga el certificado de Supabase (**Project Settings → Database → SSL Configuration**) y pega su contenido en la variable `DATABASE_CA_CERT`.
+### Paso 1 · Conexión con la base de datos (obligatorio)
 
-Si una importación se queda «En cola» más de 3 minutos, la pantalla avisa: casi siempre significa que el importador no está en marcha o que `DATABASE_URL` no es correcta.
+1. En Supabase pulsa **Connect**, elige **Session pooler** y copia la cadena. Sustituye `[YOUR-PASSWORD]` por la contraseña de la base de datos.
+2. En GitHub, en el repositorio: **Settings → Secrets and variables → Actions → New repository secret**.
+   - Name: `DATABASE_URL`
+   - Secret: la cadena del punto 1. Pégala solo ahí, nunca en el chat.
+3. Prueba: pestaña **Actions** → «Importador» → **Run workflow**. En unos minutos debe terminar en verde.
+
+### Paso 2 · Arranque inmediato desde la web (opcional)
+
+Sin este paso, lo que pidas en **Importaciones** se procesa en la ejecución nocturna.
+
+1. En GitHub: foto de perfil → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+   - Repository access: **Only select repositories** → `Market-Intelligence-`.
+   - Permissions → Repository permissions → **Actions: Read and write**. Nada más.
+   - Caducidad: la que prefieras (al caducar, vuelve a crear uno).
+2. En Vercel, proyecto **market-intelligence** → **Settings → Environment Variables** → añade `GITHUB_DISPATCH_TOKEN` (tipo **Secret**) con ese token, en Production.
+3. **Deployments → Redeploy** para que la web lo use.
+
+La conexión con Supabase va cifrada (TLS). Para verificar además el certificado del servidor, añade el certificado de Supabase (**Project Settings → Database → SSL Configuration**) como secreto `DATABASE_CA_CERT` y pásalo en el workflow.
+
+Alternativa: `Dockerfile.worker` permite ejecutar el importador como proceso continuo en cualquier servicio de contenedores.

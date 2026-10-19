@@ -32,8 +32,10 @@ export default async function ImportsPage() {
     : { data: [] as { run_id: string; severity: string; code: string; message: string }[] };
   const muniName = new Map((munis ?? []).map((m) => [m.code, m.name]));
 
-  // Si algo lleva más de 3 minutos en cola sin empezar, probablemente el importador no está en marcha.
-  const stalled = (runs ?? []).some((r) => r.status === "queued" && Date.now() - new Date(r.created_at).getTime() > 3 * 60_000);
+  // El importador corre en GitHub Actions: al pedir una importación se lanza en seguida (si está configurado)
+  // y, en todo caso, cada noche. Si algo lleva más de 15 minutos en cola, se avisa.
+  const immediate = Boolean(process.env.GITHUB_DISPATCH_TOKEN);
+  const stalled = (runs ?? []).some((r) => r.status === "queued" && Date.now() - new Date(r.created_at).getTime() > 15 * 60_000);
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-6 md:px-8">
@@ -53,7 +55,9 @@ export default async function ImportsPage() {
 
       {stalled && (
         <p role="alert" className="mt-4 rounded-md bg-warn-wash px-3 py-2 text-[13px] text-warn">
-          Hay importaciones en cola desde hace más de 3 minutos. Comprueba que el importador (worker) está en marcha.
+          {immediate
+            ? "Hay importaciones en cola desde hace más de 15 minutos. Revisa la última ejecución en GitHub → Actions → «Importador»."
+            : "Hay importaciones en cola. Se procesarán en la ejecución automática de esta noche (o lánzala a mano en GitHub → Actions → «Importador» → «Run workflow»)."}
         </p>
       )}
 

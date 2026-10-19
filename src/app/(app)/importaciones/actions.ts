@@ -4,7 +4,36 @@ import { z } from "zod";
 import { canCurate, getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 
-export type ImportState = { ok: boolean; error: string | null };
+export type ImportState = { ok: boolean; error: string | null; started?: boolean };
+
+/**
+ * Lanza el importador en GitHub Actions para que la importación empiece en seguida.
+ * Requiere GITHUB_DISPATCH_TOKEN (token con permiso Actions: escritura sobre el repositorio).
+ * Sin él, la importación queda en cola y se procesa en la ejecución nocturna.
+ */
+async function startImporter(): Promise<boolean> {
+  const token = process.env.GITHUB_DISPATCH_TOKEN;
+  if (!token) return false;
+  const repo = process.env.GITHUB_REPOSITORY_SLUG ?? "thedesignerux-lgtm/Market-Intelligence-";
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/importador.yml/dispatches`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "market-intelligence-web",
+      },
+      body: JSON.stringify({ ref: "main" }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) console.error(`[importaciones] GitHub respondió ${res.status} al lanzar el importador`);
+    return res.ok;
+  } catch (err) {
+    console.error("[importaciones] no se pudo lanzar el importador:", (err as Error).message);
+    return false;
+  }
+}
 
 const GALICIA = ["15", "27", "32", "36"];
 
@@ -53,14 +82,17 @@ export async function requestImport(_prev: ImportState, formData: FormData): Pro
   if (error) {
     return { ok: false, error: error.code === "23505" ? "Ya hay una importación igual en curso." : "No se pudo solicitar la importación." };
   }
+  const started = await startImporter();
   revalidatePath("/importaciones");
-  return { ok: true, error: null };
+  return { ok: true, error: null, started };
 }
 
 export async function controlRun(runId: string, action: "pause" | "resume" | "cancel" | "retry_failed"): Promise<void> {
   const session = await getSession();
   if (!canCurate(session.role) || !z.string().uuid().safeParse(runId).success) return;
   const supabase = await createClient();
-  await supabase.rpc("control_import", { p_run: runId, p_action: action });
+  const { error } = await supabase.rpc("control_import", { p_run: runId, p_action: action });
+  // Reanudar o reintentar deja tareas en cola: se lanza el importador.
+  if (!error && (action === "resume" || action === "retry_failed")) await startImporter();
   revalidatePath("/importaciones");
 }
