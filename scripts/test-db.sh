@@ -37,8 +37,10 @@ fi
 echo "   ✔ Idempotente: $second entidades, 0 creadas en la segunda pasada"
 
 echo "▶ 3. Pruebas SQL (seguridad y funciones)"
-psql -X -d "$DB" -f tests/sql/10_security_and_functions.sql | grep -E "^ (OK|FALLO)" || true
-psql -X -d "$DB" -f tests/sql/10_security_and_functions.sql > /dev/null
+for t in tests/sql/1*.sql tests/sql/2*.sql; do
+  psql -X -d "$DB" -f "$t" | grep -E "^ (OK|FALLO)" || true
+  psql -X -d "$DB" -f "$t" > /dev/null
+done
 
 echo "▶ 4. Pruebas unitarias y de integración"
 npx vitest run

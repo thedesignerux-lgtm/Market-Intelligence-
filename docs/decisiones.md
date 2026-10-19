@@ -53,6 +53,19 @@ Registro breve de las decisiones relevantes. Cada una indica el contexto, la dec
   - Nunca devuelve más de 5.000 puntos.
 - **Consecuencias:** el navegador nunca recibe la base completa. Las vector tiles quedan para cuando las mediciones con toda España lo justifiquen.
 
+## ADR-0007 · Roles comerciales separados del estado del CRM; participación en GROPO solo con prueba
+
+**Contexto.** El resumen necesita distinguir compradores y vendedores potenciales de los que ya participan en GROPO. Market Intelligence no tiene datos de GROPO: está aislado a propósito (ADR-0001).
+
+**Decisión.**
+- Tabla `entity_roles` por espacio de trabajo con cuatro marcas: comprador potencial, vendedor potencial, comprador participante y vendedor participante. Una entidad puede tener varias.
+- Las marcas de potencial se deducen del tipo de entidad (clubes, asociaciones y comunidades → comprador; comercios y distribuidores → vendedor) mientras nadie las cambie. Las cambian admin, editor y comercial.
+- La participación **nunca se deduce** del directorio, del contacto ni del interés. La marca un admin o editor con una prueba (ID o enlace de la cuenta o del pedido en GROPO). Se guarda quién y cuándo, y queda en la auditoría. Opción elegida por el responsable del producto frente a sincronizar con la base de datos de GROPO, que rompería el aislamiento.
+- Escritura solo a través de `set_entity_roles()`, que valida permisos y prueba. Los estados del CRM (Nuevo, Contactado…) no cambian.
+- El CRM gana «próxima acción» y su fecha. Sin sistema de tareas aparte.
+
+**Consecuencias.** El indicador de participantes empieza en 0 y crece solo con marcas verificadas. Si en el futuro se integra GROPO, la sincronización escribiría las mismas marcas con su prueba.
+
 ## Licencias de las fuentes
 
 | Fuente | Licencia | Obligaciones |

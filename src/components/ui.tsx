@@ -1,6 +1,6 @@
 // Piezas visuales compartidas. La procedencia (qué fuente aporta cada dato) es el elemento distintivo.
 import { CRM_TONE } from "./crm-tone";
-import { PRECISION, SOURCE } from "@/lib/labels";
+import { PRECISION, PRIORITY, SOURCE } from "@/lib/labels";
 
 export function SourceMark({ source, showName = false }: { source: string; showName?: boolean }) {
   const s = SOURCE[source] ?? { short: source, name: source, color: "var(--ink-soft)" };
@@ -76,5 +76,41 @@ export function ErrorNote({ children }: { children: React.ReactNode }) {
     <p role="alert" className="rounded-md bg-danger-wash px-3 py-2 text-[13px] text-danger">
       {children}
     </p>
+  );
+}
+
+export interface RoleFlags {
+  buyer_potential: boolean;
+  seller_potential: boolean;
+  buyer_participant: boolean;
+  seller_participant: boolean;
+}
+
+/** Roles comerciales de una entidad. La participación verificada en GROPO se distingue del potencial. */
+export function RoleTags({ roles }: { roles: RoleFlags }) {
+  const tags: { key: string; label: string; cls: string; title: string }[] = [];
+  if (roles.buyer_participant) tags.push({ key: "bp", label: "Comprador GROPO", cls: "bg-atlantic text-white", title: "Participa en GROPO como comprador (verificado)" });
+  else if (roles.buyer_potential) tags.push({ key: "b", label: "Comprador", cls: "bg-[#e4edf6] text-atlantic", title: "Comprador potencial" });
+  if (roles.seller_participant) tags.push({ key: "sp", label: "Vendedor GROPO", cls: "bg-pine text-white", title: "Participa en GROPO como vendedor (verificado)" });
+  else if (roles.seller_potential) tags.push({ key: "s", label: "Vendedor", cls: "bg-pine-wash text-pine-strong", title: "Vendedor potencial" });
+  if (tags.length === 0) return <span className="text-ink-faint">Sin rol</span>;
+  return (
+    <span className="inline-flex flex-wrap gap-1">
+      {tags.map((t) => (
+        <span key={t.key} className={`tag ${t.cls}`} title={t.title}>
+          {t.label}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+export function PriorityTag({ priority }: { priority: number | null }) {
+  const p = priority ? PRIORITY[priority] : null;
+  if (!p) return <span className="text-ink-faint">—</span>;
+  return (
+    <span className="tag" style={{ background: p.bg, color: p.fg }}>
+      {p.label}
+    </span>
   );
 }

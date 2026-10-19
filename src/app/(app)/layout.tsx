@@ -30,7 +30,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[216px_1fr]">
-      <aside className="flex flex-col gap-4 bg-ink px-3 py-4 text-white md:sticky md:top-0 md:h-dvh md:gap-6 md:py-5">
+      <aside className="flex flex-col gap-4 bg-sidebar px-3 py-4 text-white md:sticky md:top-0 md:h-dvh md:gap-6 md:py-5">
         <div className="flex items-start justify-between gap-3 px-3">
           <div>
           <p className="text-[15px] font-semibold">Market Intelligence</p>

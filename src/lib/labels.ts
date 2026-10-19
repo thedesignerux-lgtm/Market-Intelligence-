@@ -70,3 +70,46 @@ export function formatDate(iso: string | null | undefined, withTime = false): st
     timeZone: "Europe/Madrid",
   });
 }
+
+export const PROVINCES: { code: string; name: string }[] = [
+  { code: "15", name: "A Coruña" },
+  { code: "27", name: "Lugo" },
+  { code: "32", name: "Ourense" },
+  { code: "36", name: "Pontevedra" },
+];
+
+/** Filtro de rol comercial (independiente del estado del CRM). */
+export const ROLE_FILTER: Record<string, string> = {
+  comprador_potencial: "Compradores potenciales",
+  vendedor_potencial: "Vendedores potenciales",
+  participante: "Participantes de GROPO",
+  comprador_participante: "Compradores participantes",
+  vendedor_participante: "Vendedores participantes",
+  sin_rol: "Sin rol",
+};
+
+export const FOLLOW_FILTER: Record<string, string> = {
+  pendiente: "Contactos pendientes",
+  primer_contacto: "Primer contacto pendiente",
+  seguimiento: "Con próxima acción",
+  vencido: "Acciones vencidas",
+};
+
+export const PRIORITY: Record<number, { label: string; bg: string; fg: string }> = {
+  1: { label: "Alta", bg: "var(--danger-wash)", fg: "var(--danger)" },
+  2: { label: "Media", bg: "var(--warn-wash)", fg: "var(--warn)" },
+  3: { label: "Baja", bg: "#eef1f0", fg: "var(--ink-soft)" },
+};
+
+/** Fecha sin hora ("2026-10-20") → "20 oct 2026". */
+export function formatDay(day: string | null | undefined): string {
+  if (!day) return "—";
+  const [y, m, d] = day.split("-").map(Number);
+  if (!y || !m || !d) return day;
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+}
+
+/** Hoy en España como "AAAA-MM-DD" (las fechas de seguimiento son locales). */
+export function todayMadrid(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid" }).format(new Date());
+}

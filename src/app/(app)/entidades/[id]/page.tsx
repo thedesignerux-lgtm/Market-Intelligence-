@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MiniMap } from "@/components/mini-map";
-import { CrmBadge, PrecisionMeter, SourceMark } from "@/components/ui";
-import { ENTITY_TYPE, FIELD, METHOD, PRECISION, SOURCE, STATUS, formatDate } from "@/lib/labels";
-import { canEditCrm, getSession } from "@/lib/session";
+import { CrmBadge, PrecisionMeter, RoleTags, SourceMark } from "@/components/ui";
+import { ENTITY_TYPE, FIELD, METHOD, PRECISION, PRIORITY, SOURCE, STATUS, formatDate, formatDay } from "@/lib/labels";
+import { canCurate, canEditCrm, getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { deleteNote } from "./actions";
-import { NoteForm, StatusForm } from "./crm-panel";
+import { NoteForm, RolesForm, StatusForm } from "./crm-panel";
 
 interface Detail {
   id: string;
@@ -74,17 +74,24 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
   const { data: e } = await supabase.from("entity_details").select("*").eq("id", id).maybeSingle<Detail>();
   if (!e) notFound();
 
-  const [values, contacts, identifiers, records, crm, statuses, notes, events, dups] = await Promise.all([
+  const [values, contacts, identifiers, records, crm, statuses, notes, events, dups, rolesRes] = await Promise.all([
     supabase.from("field_values").select("id, field, value, source_id, method, confidence, observed_at, is_selected, source_url").eq("entity_id", id).returns<FieldValue[]>(),
     supabase.from("contact_points").select("kind, value, normalized, is_personal_data, source_id").eq("entity_id", id),
     supabase.from("entity_identifiers").select("scheme, value").eq("entity_id", id),
     supabase.from("entity_sources").select("link_method, confidence, source_records(source_id, external_id, last_seen_at, missing_since, first_seen_at)").eq("entity_id", id),
-    supabase.from("entity_crm").select("status_id, priority, updated_at, crm_statuses(slug, label, blocks_contact)").eq("entity_id", id).eq("workspace_id", session.workspaceId!).maybeSingle(),
+    supabase.from("entity_crm").select("status_id, priority, next_action, next_action_at, updated_at, crm_statuses(slug, label, blocks_contact)").eq("entity_id", id).eq("workspace_id", session.workspaceId!).maybeSingle(),
     supabase.from("crm_statuses").select("id, slug, label, blocks_contact").eq("workspace_id", session.workspaceId!).order("sort"),
     supabase.from("entity_notes").select("id, body, created_at, author_id").eq("entity_id", id).eq("workspace_id", session.workspaceId!).order("created_at", { ascending: false }),
     supabase.from("crm_events").select("id, kind, from_value, to_value, created_at").eq("entity_id", id).eq("workspace_id", session.workspaceId!).order("created_at", { ascending: false }).limit(15),
     supabase.from("duplicate_candidates").select("id", { count: "exact", head: true }).eq("status", "pending").or(`entity_a.eq.${id},entity_b.eq.${id}`),
+    supabase
+      .from("entity_effective_roles")
+      .select("buyer_potential, seller_potential, buyer_participant, seller_participant, buyer_evidence, seller_evidence, buyer_verified_at, seller_verified_at, is_manual")
+      .eq("workspace_id", session.workspaceId!)
+      .eq("entity_id", id)
+      .maybeSingle(),
   ]);
+  const roles = rolesRes.data;
 
   const byField = new Map<string, FieldValue[]>();
   for (const v of values.data ?? []) byField.set(v.field, [...(byField.get(v.field) ?? []), v]);
@@ -122,6 +129,7 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {roles && <RoleTags roles={roles} />}
           {e.status !== "active" && <span className="tag bg-warn-wash text-warn">{STATUS[e.status]}</span>}
           <CrmBadge slug={crmStatus?.slug ?? null} label={crmStatus?.label ?? null} />
           {e.lat != null && (
@@ -293,6 +301,15 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
             <PrecisionMeter precision={e.location_precision} />
           </section>
 
+          {roles && (
+            <section aria-labelledby="clasificacion" className="panel flex flex-col gap-3 p-4">
+              <h2 id="clasificacion" className="text-[16px] font-semibold">
+                Clasificación comercial
+              </h2>
+              <RolesForm entityId={e.id} roles={roles} canEdit={editable} canVerify={canCurate(session.role)} />
+            </section>
+          )}
+
           <section aria-labelledby="comercial" className="panel flex flex-col gap-5 p-4">
             <h2 id="comercial" className="text-[16px] font-semibold">
               Seguimiento comercial
@@ -302,6 +319,8 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
               statuses={statuses.data ?? []}
               currentStatusId={crm.data?.status_id ?? null}
               currentPriority={crm.data?.priority ?? null}
+              currentNextAction={crm.data?.next_action ?? null}
+              currentNextActionAt={crm.data?.next_action_at ?? null}
               disabled={!editable}
             />
             {!editable && <p className="text-[13px] text-ink-soft">Tu rol es de solo lectura.</p>}
@@ -346,8 +365,16 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
                           : ev.kind === "note_deleted"
                             ? "nota eliminada"
                             : ev.kind === "priority_changed"
-                              ? "prioridad cambiada"
-                              : "responsable cambiado"}
+                              ? ev.to_value
+                                ? `prioridad ${PRIORITY[Number(ev.to_value)]?.label.toLowerCase() ?? ev.to_value}`
+                                : "prioridad quitada"
+                              : ev.kind === "next_action_changed"
+                                ? ev.to_value
+                                  ? `próxima acción: ${(ev.to_value as { action: string }).action} (${formatDay((ev.to_value as { date: string }).date)})`
+                                  : "próxima acción completada o quitada"
+                                : ev.kind === "roles_changed"
+                                  ? "clasificación comercial cambiada"
+                                  : "responsable cambiado"}
                     </li>
                   ))}
                 </ol>

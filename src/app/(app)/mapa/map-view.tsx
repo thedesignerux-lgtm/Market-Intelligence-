@@ -6,28 +6,33 @@ import type { GeoJSONSource, MapGeoJSONFeature, MapLayerMouseEvent } from "mapli
 import type { Feature, Point } from "geojson";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { DEFAULT_CENTER, DEFAULT_ZOOM, MAPLIBRE_WORKER_URL, MAP_STYLE } from "@/components/map-style";
+import { ROLE_FILTER } from "@/lib/labels";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
   workspaceId: string;
   focus: { id: string; lon: number; lat: number; name: string } | null;
   statuses: { slug: string; label: string }[];
+  categories: { id: string; name: string; parent_id: string | null }[];
+  initial: { role: string; category: string };
 }
 
 type LoadState = { kind: "idle" | "loading" } | { kind: "ok"; total: number; clustered: boolean } | { kind: "error"; message: string };
 
 const EMPTY = { type: "FeatureCollection" as const, features: [] };
 
-export function MapView({ workspaceId, focus, statuses }: Props) {
+export function MapView({ workspaceId, focus, statuses, categories, initial }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const reqId = useRef(0);
   const [types, setTypes] = useState<string>("");
   const [crm, setCrm] = useState<string>("");
+  const [role, setRole] = useState<string>(initial.role);
+  const [category, setCategory] = useState<string>(initial.category);
   const [state, setState] = useState<LoadState>({ kind: "idle" });
   const router = useRouter();
-  const filters = useRef({ types, crm });
-  filters.current = { types, crm };
+  const filters = useRef({ types, crm, role, category });
+  filters.current = { types, crm, role, category };
 
   const load = useCallback(async () => {
     const map = mapRef.current;
@@ -45,6 +50,8 @@ export function MapView({ workspaceId, focus, statuses }: Props) {
       p_zoom: Math.round(map.getZoom()),
       p_types: filters.current.types ? [filters.current.types as "comercio"] : undefined,
       p_crm_status: filters.current.crm || undefined,
+      p_role: filters.current.role || undefined,
+      p_category: filters.current.category || undefined,
     });
     if (id !== reqId.current) return; // llegó tarde: hay otra petición más reciente
     if (error) {
@@ -138,7 +145,7 @@ export function MapView({ workspaceId, focus, statuses }: Props) {
 
   useEffect(() => {
     if (mapRef.current?.isStyleLoaded()) load();
-  }, [types, crm, load]);
+  }, [types, crm, role, category, load]);
 
   return (
     <div className="relative h-[calc(100dvh-57px)] md:h-dvh">
@@ -147,6 +154,28 @@ export function MapView({ workspaceId, focus, statuses }: Props) {
         <div ref={container} className="h-full w-full" />
       </div>
       <div className="absolute left-3 top-3 z-10 flex max-w-[calc(100%-64px)] flex-wrap items-end gap-2 rounded-lg border border-line bg-surface/95 p-3 shadow-[0_1px_2px_rgba(23,40,44,0.08)]">
+        <label className="flex flex-col gap-1">
+          <span className="label">Rol</span>
+          <select className="field" value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="">Todos</option>
+            {Object.entries(ROLE_FILTER).filter(([k]) => k !== "sin_rol").map(([k, v]) => (
+              <option key={k} value={k}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="label">Categoría</span>
+          <select className="field" value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Todas</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.parent_id ? `\u00a0\u00a0${c.name}` : c.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex flex-col gap-1">
           <span className="label">Tipo</span>
           <select className="field" value={types} onChange={(e) => setTypes(e.target.value)}>

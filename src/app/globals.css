@@ -9,6 +9,8 @@
   --paper: #f4f6f5;
   --surface: #ffffff;
   --ink: #17282c;
+  --sidebar: #133a2e;
+  --sidebar-strong: #0e2d23;
   --ink-soft: #566a6d;
   --ink-faint: #8a9b9d;
   --line: #d8e0de;
@@ -32,6 +34,8 @@
   --color-paper: var(--paper);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-strong: var(--sidebar-strong);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
   --color-line: var(--line);

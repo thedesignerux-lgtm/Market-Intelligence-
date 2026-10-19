@@ -6,8 +6,9 @@ const ITEMS = [
   { href: "/", label: "Resumen" },
   { href: "/directorio", label: "Directorio" },
   { href: "/mapa", label: "Mapa" },
-  { href: "/duplicados", label: "Duplicados" },
+  { href: "/seguimiento", label: "Seguimiento" },
   { href: "/importaciones", label: "Importaciones" },
+  { href: "/duplicados", label: "Duplicados" },
 ];
 
 export function Nav({ pendingDuplicates }: { pendingDuplicates: number }) {

@@ -99,20 +99,31 @@ select pg_temp.check('búsqueda sin acento encuentra "Lázaro"',
 select pg_temp.check('filtro por estado CRM',
   (select count(*) = 1 from public.search_entities('10000000-0000-0000-0000-000000000001', p_crm_status => 'no_contactar')));
 select pg_temp.check('filtro por categoría (padre incluye hijas)',
-  (select count(*) from public.search_entities('10000000-0000-0000-0000-000000000001', p_category => 'comercio.deporte'))
-  = (select count(*) from public.entities where entity_type = 'comercio'));
+  (select count(*) from public.search_entities('10000000-0000-0000-0000-000000000001', p_category => 'comercio.deporte', p_limit => 200))
+  = (select least(count(*), 200) from public.entities where entity_type = 'comercio' and merged_into is null));
 
--- Paginación por cursor: dos páginas sin solapes que cubren todo
+-- Paginación por cursor: recorrer todas las páginas sin solapes ni huecos
 do $$
 declare
-  p1 record; last record; n1 int; n2 int; total int;
+  total int; seen int := 0; distinct_seen int; pages int := 0;
+  k text := null; i uuid := null; r record;
 begin
   select count(*) into total from public.entities where merged_into is null;
-  select count(*) into n1 from public.search_entities('10000000-0000-0000-0000-000000000001', p_limit => 10);
-  select * into last from (select * from public.search_entities('10000000-0000-0000-0000-000000000001', p_limit => 10)) x order by sort_key desc, id desc limit 1;
-  select count(*) into n2 from public.search_entities('10000000-0000-0000-0000-000000000001', p_limit => 200,
-         p_after_key => last.sort_key, p_after_id => last.id);
-  perform pg_temp.check('paginación por cursor cubre todo sin solapes', n1 + n2 = total, format('%s + %s de %s', n1, n2, total));
+  create temp table t_seen (id uuid) on commit drop;
+  loop
+    pages := pages + 1;
+    r := null;
+    for r in select * from public.search_entities('10000000-0000-0000-0000-000000000001', p_limit => 200,
+                                                   p_after_key => k, p_after_id => i) loop
+      insert into t_seen values (r.id);
+      seen := seen + 1;
+      k := r.sort_key; i := r.id;
+    end loop;
+    exit when r is null or seen >= total or pages > 50;
+  end loop;
+  select count(distinct id) into distinct_seen from t_seen;
+  perform pg_temp.check('paginación por cursor cubre todo sin solapes', seen = total and distinct_seen = total,
+                        format('%s vistas, %s distintas de %s en %s páginas', seen, distinct_seen, total, pages));
 end $$;
 
 select pg_temp.check('mapa agrupa a zoom bajo',

@@ -8,14 +8,15 @@ Fase 1 en curso.
 
 | Componente | Estado |
 |---|---|
-| Esquema de base de datos (12 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
+| Esquema de base de datos (13 migraciones): entidades, procedencia por campo, deduplicación, importaciones, CRM mínimo, auditoría, RLS | ✅ Probado en local |
 | Importador del Rexistro de Entidades Deportivas de Galicia (clubes) con geocodificación CartoCiudad | ✅ Probado con datos reales |
 | Importador de OpenStreetMap (tiendas y talleres de bicicletas) desde extractos provinciales | ✅ Probado con datos reales |
 | Worker con cola persistente, reintentos y recuperación | ✅ |
 | Búsqueda, mapa con agrupación y control de importaciones (funciones SQL) | ✅ Probado en local |
-| Proyecto Supabase: 12 migraciones aplicadas, asesor de seguridad revisado | ✅ |
+| Proyecto Supabase: 13 migraciones aplicadas, asesor de seguridad revisado | ✅ |
 | Datos reales de toda Galicia: 728 entidades (622 clubes RED, 105 comercios OSM), 494 con ubicación | ✅ |
 | Aplicación web: resumen, directorio, ficha con procedencia, mapa, CRM mínimo, duplicados, importaciones | ✅ Probada de extremo a extremo (18/18) |
+| Dashboard comercial: 4 indicadores, roles comprador/vendedor, participación en GROPO con prueba, próxima acción y pantalla Seguimiento | ✅ Probado de extremo a extremo (27/27) y con pruebas SQL (30/30) |
 | Aplicación web desplegada en Vercel | ✅ |
 | Importador en Railway | ⏳ Ver docs/despliegue.md |
 

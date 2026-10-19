@@ -1,3 +1,4 @@
+import { Coverage } from "@/components/coverage";
 import { EmptyState, PageHeader } from "@/components/ui";
 import { RUN_STATUS, SOURCE, formatDate } from "@/lib/labels";
 import { canCurate, getSession } from "@/lib/session";
@@ -143,6 +144,15 @@ export default async function ImportsPage() {
             })}
           </ul>
         )}
+      </section>
+      <section className="mt-8" aria-labelledby="cobertura">
+        <h2 id="cobertura" className="text-[16px] font-semibold">
+          Cobertura de datos
+        </h2>
+        <p className="mt-1 mb-3 max-w-[70ch] text-[13px] text-ink-soft">
+          Qué hay importado en cada territorio. Que un municipio aparezca no significa que estén todas sus entidades: depende de lo que publica cada fuente.
+        </p>
+        <Coverage />
       </section>
     </main>
   );
