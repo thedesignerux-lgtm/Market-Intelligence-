@@ -19,7 +19,7 @@ import {
   type OsmFeature,
 } from "./sources/osm";
 import { CYCLING, registryRowToRecord, type RegistryRow, type RegistrySource } from "./sources/registries/common";
-import { buildMunicipalityIndex, resolveMunicipality } from "../src/lib/domain/municipality-match";
+import { buildMunicipalityIndex, postalCodeIndex, resolveMunicipality } from "../src/lib/domain/municipality-match";
 import type { CategoryMapping } from "../src/lib/domain/categories";
 import type { NormalizedRecord } from "../src/lib/domain/records";
 
@@ -204,18 +204,29 @@ async function registrySnapshot(db: Db, config: Config, source: RegistrySource):
     source.provinces.map((p) => [p, buildMunicipalityIndex(munis.filter((m) => m.code.startsWith(p)))]),
   );
 
-  const byMunicipality = new Map<string, RegistryRow[]>();
-  const unresolved: RegistryRow[] = [];
+  // 1) Código INE publicado por la fuente o nombre del municipio.
+  const resolved: { row: RegistryRow; code: string }[] = [];
+  const pending: RegistryRow[] = [];
   for (const row of rows) {
     let code = row.municipalityCode && known.has(row.municipalityCode) ? row.municipalityCode : null;
     if (!code) {
       const index = (row.provinceCode && indexByProvince.get(row.provinceCode)) || indexAll;
       code = resolveMunicipality(index, row.municipalityName);
     }
-    if (!code) {
-      unresolved.push(row);
-      continue;
-    }
+    if (code) resolved.push({ row, code });
+    else pending.push(row);
+  }
+  // 2) Código postal, solo si en las filas ya resueltas de esta fuente apunta siempre al mismo municipio
+  //    (p. ej. la fuente pone el nombre de un concejo o pedanía en lugar del municipio).
+  const byPostalCode = postalCodeIndex(resolved.map((r) => ({ postalCode: r.row.postalCode, code: r.code })));
+  const unresolved: RegistryRow[] = [];
+  for (const row of pending) {
+    const code = row.postalCode ? byPostalCode.get(row.postalCode) : undefined;
+    if (code) resolved.push({ row, code });
+    else unresolved.push(row);
+  }
+  const byMunicipality = new Map<string, RegistryRow[]>();
+  for (const { row, code } of resolved) {
     const list = byMunicipality.get(code) ?? [];
     list.push(row);
     byMunicipality.set(code, list);

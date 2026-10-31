@@ -1,6 +1,6 @@
 // Datos de prueba: filas inventadas con el formato de cada registro (no son datos reales).
 import { describe, expect, it } from "vitest";
-import { buildMunicipalityIndex, municipalityKeys, resolveMunicipality } from "../../src/lib/domain/municipality-match";
+import { buildMunicipalityIndex, municipalityKeys, postalCodeIndex, resolveMunicipality } from "../../src/lib/domain/municipality-match";
 import { CYCLING, isCyclingModality, registryRowToRecord } from "../../worker/sources/registries/common";
 import { parseCataluna, cataluna } from "../../worker/sources/registries/cataluna";
 import { parseEuskadi } from "../../worker/sources/registries/euskadi";
@@ -14,6 +14,8 @@ describe("emparejar municipios por nombre", () => {
     { code: "31201", name: "Pamplona/Iruña" },
     { code: "35016", name: "Las Palmas de Gran Canaria" },
     { code: "17079", name: "Girona" },
+    { code: "31097", name: "Estella-Lizarra" },
+    { code: "43054", name: "L'Espluga de Francolí" },
     { code: "99001", name: "Villanueva" },
     { code: "99002", name: "Villanueva" },
   ]);
@@ -24,6 +26,23 @@ describe("emparejar municipios por nombre", () => {
     expect(resolveMunicipality(index, "Iruña")).toBe("31201");
     expect(resolveMunicipality(index, "Palmas de Gran Canaria (Las)")).toBe("35016");
     expect(resolveMunicipality(index, "Gírona")).toBe("17079");
+  });
+
+  it("reconoce una parte de un nombre compuesto con guion y el artículo final sin coma", () => {
+    expect(resolveMunicipality(index, "ESTELLA")).toBe("31097");
+    expect(resolveMunicipality(index, "Espluga de Francolí l'")).toBe("43054");
+  });
+
+  it("código postal solo cuando siempre apunta al mismo municipio", () => {
+    const idx = postalCodeIndex([
+      { postalCode: "31001", code: "31201" },
+      { postalCode: "31001", code: "31201" },
+      { postalCode: "31620", code: "31086" },
+      { postalCode: "31620", code: "31907" },
+      { postalCode: null, code: "31201" },
+    ]);
+    expect(idx.get("31001")).toBe("31201");
+    expect(idx.has("31620")).toBe(false);
   });
 
   it("no adivina: nombres desconocidos o ambiguos quedan sin resolver", () => {
