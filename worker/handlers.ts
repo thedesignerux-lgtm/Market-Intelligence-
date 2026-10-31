@@ -18,6 +18,8 @@ import {
   representativePoint,
   type OsmFeature,
 } from "./sources/osm";
+import { CYCLING, registryRowToRecord, type RegistryRow, type RegistrySource } from "./sources/registries/common";
+import { buildMunicipalityIndex, resolveMunicipality } from "../src/lib/domain/municipality-match";
 import type { CategoryMapping } from "../src/lib/domain/categories";
 import type { NormalizedRecord } from "../src/lib/domain/records";
 
@@ -168,6 +170,117 @@ export async function runRedTask(db: Db, config: Config, task: ImportTask, geoco
   }
   await ingestAll(db, task, records, await sourceConfidence(db, RED_SOURCE_ID), stats);
   stats.marked_missing = await withTx(db, (tx) => markMissing(tx, RED_SOURCE_ID, muni, task.run_id));
+  return stats;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Registros autonómicos de entidades deportivas (Cataluña, Euskadi, Navarra, Canarias…).
+
+interface RegistrySnapshot {
+  day: string;
+  version: string;
+  byMunicipality: Map<string, RegistryRow[]>;
+  unresolved: RegistryRow[];
+}
+const registrySnapshots = new Map<string, RegistrySnapshot>();
+const unresolvedReported = new Set<string>();
+
+/** Descarga el registro (una vez al día por proceso) y reparte sus filas por municipio (código INE). */
+async function registrySnapshot(db: Db, config: Config, source: RegistrySource): Promise<RegistrySnapshot> {
+  const day = new Date().toISOString().slice(0, 10);
+  const cached = registrySnapshots.get(source.id);
+  if (cached && cached.day === day) return cached;
+
+  const { rows, version } = await source.load(config);
+  // Límites y nombres de los municipios de las provincias del registro (se cargan de OSM si faltan).
+  for (const p of source.provinces) await provinceMunicipalityCodes(db, config, p);
+  const { rows: munis } = await db.query<{ code: string; name: string }>(
+    "select code, name from public.admin_areas where level = 'municipio' and left(code, 2) = any($1::text[])",
+    [source.provinces],
+  );
+  const known = new Set(munis.map((m) => m.code));
+  const indexAll = buildMunicipalityIndex(munis);
+  const indexByProvince = new Map(
+    source.provinces.map((p) => [p, buildMunicipalityIndex(munis.filter((m) => m.code.startsWith(p)))]),
+  );
+
+  const byMunicipality = new Map<string, RegistryRow[]>();
+  const unresolved: RegistryRow[] = [];
+  for (const row of rows) {
+    let code = row.municipalityCode && known.has(row.municipalityCode) ? row.municipalityCode : null;
+    if (!code) {
+      const index = (row.provinceCode && indexByProvince.get(row.provinceCode)) || indexAll;
+      code = resolveMunicipality(index, row.municipalityName);
+    }
+    if (!code) {
+      unresolved.push(row);
+      continue;
+    }
+    const list = byMunicipality.get(code) ?? [];
+    list.push(row);
+    byMunicipality.set(code, list);
+  }
+  const snap = { day, version, byMunicipality, unresolved };
+  registrySnapshots.set(source.id, snap);
+  return snap;
+}
+
+export async function runRegistryTask(
+  db: Db,
+  config: Config,
+  task: ImportTask,
+  geocoder: Geocoder,
+  source: RegistrySource,
+): Promise<TaskStats> {
+  const muni = task.params.municipality;
+  if (!source.provinces.includes(muni.slice(0, 2))) {
+    throw new PermanentTaskError(`El municipio ${muni} está fuera de la cobertura de ${source.id}`);
+  }
+  const { name: municipalityName } = await ensureMunicipality(db, config, muni);
+  const mappings = await loadMappings(db);
+  const snap = await registrySnapshot(db, config, source);
+  await setRunVersion(db, task.run_id, snap.version);
+
+  // Clubes de ciclismo cuyo municipio no se ha podido reconocer: se avisan una vez por importación.
+  const reportKey = `${task.run_id}:${source.id}`;
+  if (!unresolvedReported.has(reportKey)) {
+    unresolvedReported.add(reportKey);
+    for (const row of snap.unresolved.filter((r) => r.modalities.includes(CYCLING))) {
+      await recordIssue(db, task, "warning", "unknown_municipality",
+        `${source.id}:${row.externalId} (${row.name}): municipio «${row.municipalityName ?? "?"}» no reconocido; no importado`);
+    }
+  }
+
+  const rows = snap.byMunicipality.get(muni) ?? [];
+  const stats: TaskStats = { source_rows: rows.length, in_scope: 0, geocoded: 0, located_by_source: 0, not_geocoded: 0 };
+  const records: NormalizedRecord[] = [];
+  for (const row of rows) {
+    const record = registryRowToRecord(source, row, muni, mappings);
+    if (!record) continue;
+    stats.in_scope!++;
+    if (record.location) stats.located_by_source!++;
+    else if (record.address) {
+      try {
+        record.location = await geocoder.geocode({
+          address: record.address.text,
+          postalCode: record.postalCode,
+          municipalityName,
+          municipalityCode: muni,
+          streetOnly: record.address.isPersonal,
+        });
+      } catch (err) {
+        await recordIssue(db, task, "warning", "geocoder_error", `${record.externalId}: ${(err as Error).message}`);
+      }
+      if (record.location) stats.geocoded!++;
+    }
+    if (!record.location) {
+      stats.not_geocoded!++;
+      await recordIssue(db, task, "info", "no_location", `${record.externalId} (${record.name}): sin coordenadas; no aparecerá en el mapa`);
+    }
+    records.push(record);
+  }
+  await ingestAll(db, task, records, await sourceConfidence(db, source.id), stats);
+  stats.marked_missing = await withTx(db, (tx) => markMissing(tx, source.id, muni, task.run_id));
   return stats;
 }
 

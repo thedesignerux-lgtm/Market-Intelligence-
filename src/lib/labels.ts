@@ -20,6 +20,10 @@ export const PRECISION: Record<string, { label: string; hint: string }> = {
 export const SOURCE: Record<string, { short: string; name: string; color: string }> = {
   osm: { short: "OSM", name: "OpenStreetMap", color: "var(--src-osm)" },
   red_galicia: { short: "RED", name: "Rexistro de Entidades Deportivas (Xunta)", color: "var(--src-red)" },
+  registro_cataluna: { short: "REE Cat", name: "Registre d'Entitats Esportives (Generalitat)", color: "var(--src-red)" },
+  registro_euskadi: { short: "RED Eus", name: "Registro de Entidades Deportivas (Gobierno Vasco)", color: "var(--src-red)" },
+  registro_navarra: { short: "RED Nav", name: "Registro de Entidades Deportivas (Gobierno de Navarra)", color: "var(--src-red)" },
+  registro_canarias: { short: "RED Can", name: "Registro de Entidades Deportivas (Gobierno de Canarias)", color: "var(--src-red)" },
   cartociudad: { short: "IGN", name: "CartoCiudad (IGN)", color: "var(--src-ign)" },
   manual: { short: "Manual", name: "Edición manual", color: "var(--src-manual)" },
 };

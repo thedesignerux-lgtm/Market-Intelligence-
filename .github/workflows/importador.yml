@@ -2,7 +2,8 @@
 #
 # · Cada noche: actualiza toda Galicia (clubes del RED y comercios de OpenStreetMap)
 #   y procesa cualquier importación pendiente.
-# · Cada domingo: actualiza los comercios de OpenStreetMap de toda España (52 provincias).
+# · Cada domingo: actualiza los comercios de OpenStreetMap de toda España (52 provincias) y los clubes
+#   de los registros autonómicos en abierto (Cataluña, País Vasco, Navarra y Canarias).
 # · Bajo demanda: la web lo lanza al pedir una importación (si tiene GITHUB_DISPATCH_TOKEN),
 #   o se lanza a mano desde la pestaña Actions → «Importador» → «Run workflow»
 #   (en «Ámbito de OpenStreetMap» se puede escribir espana, una comunidad como andalucia, o un código de provincia).
@@ -18,6 +19,10 @@ on:
     inputs:
       refresco_completo:
         description: "Además de la cola, actualizar toda Galicia"
+        type: boolean
+        default: false
+      clubes_registros:
+        description: "Actualizar los clubes de los registros autonómicos (Cataluña, País Vasco, Navarra, Canarias)"
         type: boolean
         default: false
       ambito_osm:
@@ -76,7 +81,11 @@ jobs:
           npm run -s worker -- --once
 
       - name: Comercios de OpenStreetMap en el ámbito pedido (o toda España los domingos)
-        if: (github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.ambito_osm != ''
+        if: ${{ !cancelled() && ((github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.ambito_osm != '') }}
         env:
           AMBITO: ${{ inputs.ambito_osm || 'espana' }}
         run: npm run -s import -- osm "$AMBITO"
+
+      - name: Clubes de los registros autonómicos (o todos los domingos)
+        if: ${{ !cancelled() && ((github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.clubes_registros) }}
+        run: npm run -s import -- clubes espana
