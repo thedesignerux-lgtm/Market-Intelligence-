@@ -2,8 +2,10 @@
 #
 # · Cada noche: actualiza toda Galicia (clubes del RED y comercios de OpenStreetMap)
 #   y procesa cualquier importación pendiente.
+# · Cada domingo: actualiza los comercios de OpenStreetMap de toda España (52 provincias).
 # · Bajo demanda: la web lo lanza al pedir una importación (si tiene GITHUB_DISPATCH_TOKEN),
-#   o se lanza a mano desde la pestaña Actions → «Importador» → «Run workflow».
+#   o se lanza a mano desde la pestaña Actions → «Importador» → «Run workflow»
+#   (en «Ámbito de OpenStreetMap» se puede escribir espana, una comunidad como andalucia, o un código de provincia).
 #
 # Secreto necesario en el repositorio: DATABASE_URL (cadena «Session pooler» de Supabase).
 name: Importador
@@ -11,12 +13,17 @@ name: Importador
 on:
   schedule:
     - cron: "17 3 * * *" # 03:17 UTC (05:17 en Madrid en horario de verano)
+    - cron: "41 0 * * 0" # domingos 00:41 UTC: toda España en OpenStreetMap
   workflow_dispatch:
     inputs:
       refresco_completo:
         description: "Además de la cola, actualizar toda Galicia"
         type: boolean
         default: false
+      ambito_osm:
+        description: "Ámbito de OpenStreetMap (espana, una comunidad como andalucia o madrid, o un código de provincia). Vacío = nada"
+        type: string
+        default: ""
 
 # Nunca dos ejecuciones a la vez: la siguiente espera a que termine la anterior.
 concurrency:
@@ -29,7 +36,8 @@ permissions:
 jobs:
   importar:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # Toda España tarda varias horas. Si se corta, lo pendiente se retoma en la siguiente ejecución.
+    timeout-minutes: 350
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       CONTACT: https://github.com/thedesignerux-lgtm/Market-Intelligence-
@@ -60,9 +68,15 @@ jobs:
         run: npm run -s worker -- --once
 
       - name: Actualizar toda Galicia
-        if: github.event_name == 'schedule' || inputs.refresco_completo
+        if: (github.event_name == 'schedule' && github.event.schedule == '17 3 * * *') || inputs.refresco_completo
         run: |
           # Si ya hay una importación igual en curso, se sigue con la siguiente.
           npm run -s import -- red_galicia galicia || echo "::warning::No se pudo lanzar la actualización de clubes"
           npm run -s import -- osm galicia || echo "::warning::No se pudo lanzar la actualización de comercios"
           npm run -s worker -- --once
+
+      - name: Comercios de OpenStreetMap en el ámbito pedido (o toda España los domingos)
+        if: (github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.ambito_osm != ''
+        env:
+          AMBITO: ${{ inputs.ambito_osm || 'espana' }}
+        run: npm run -s import -- osm "$AMBITO"
