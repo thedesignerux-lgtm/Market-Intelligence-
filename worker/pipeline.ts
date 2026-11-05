@@ -30,7 +30,7 @@ export function recordHash(record: NormalizedRecord): string {
   return createHash("sha256").update(stableStringify({ p: record.payload, l: record.location })).digest("hex");
 }
 
-function toCandidate(record: NormalizedRecord): MatchCandidate {
+export function toCandidate(record: NormalizedRecord): MatchCandidate {
   return {
     normalizedName: record.normalizedName,
     entityType: record.entityType,
@@ -43,7 +43,7 @@ function toCandidate(record: NormalizedRecord): MatchCandidate {
   };
 }
 
-interface CandidateRow {
+export interface CandidateRow {
   id: string;
   entity_type: string;
   normalized_name: string;
@@ -57,7 +57,7 @@ interface CandidateRow {
   has_same_source: boolean;
 }
 
-async function findCandidates(tx: Tx, record: NormalizedRecord): Promise<CandidateRow[]> {
+export async function findCandidates(tx: Tx, record: NormalizedRecord): Promise<CandidateRow[]> {
   const c = toCandidate(record);
   const { rows } = await tx.query<CandidateRow>(
     `select e.id, e.entity_type::text, e.normalized_name,
@@ -114,7 +114,15 @@ async function createEntity(tx: Tx, record: NormalizedRecord): Promise<string> {
 }
 
 async function writeFieldValues(tx: Tx, entityId: string, recordId: string, record: NormalizedRecord, confidence: number) {
-  const values: { field: string; value: unknown; sourceId: string; method: string; confidence: number }[] = [];
+  const values: {
+    field: string;
+    value: unknown;
+    sourceId: string;
+    method: string;
+    confidence: number;
+    sourceUrl?: string | null;
+    observedAt?: string | null;
+  }[] = [];
   const own = (field: string, value: unknown) =>
     values.push({ field, value, sourceId: record.sourceId, method: "found", confidence });
 
@@ -136,14 +144,28 @@ async function writeFieldValues(tx: Tx, entityId: string, recordId: string, reco
     });
   }
 
+  // Campos propios de una fuente curada: cada uno conserva su método y su fecha de verificación.
+  for (const e of record.extraFields ?? []) {
+    values.push({
+      field: e.field,
+      value: e.value,
+      sourceId: record.sourceId,
+      method: e.method,
+      confidence: e.confidence,
+      sourceUrl: e.sourceUrl ?? null,
+      observedAt: e.observedAt ?? null,
+    });
+  }
+
   for (const v of values) {
     await tx.query(
       `insert into public.field_values (entity_id, field, value, source_id, source_record_id, source_url, method, confidence, observed_at)
-       values ($1, $2, $3, $4, $5, $6, $7, $8, now())
+       values ($1, $2, $3, $4, $5, $6, $7, $8, coalesce($9::timestamptz, now()))
        on conflict (entity_id, field, source_id, source_record_id)
        do update set value = excluded.value, method = excluded.method, confidence = excluded.confidence,
-                     source_url = excluded.source_url, observed_at = now()`,
-      [entityId, v.field, JSON.stringify(v.value), v.sourceId, recordId, record.sourceUrl, v.method, v.confidence],
+                     source_url = excluded.source_url, observed_at = excluded.observed_at`,
+      [entityId, v.field, JSON.stringify(v.value), v.sourceId, recordId,
+       v.sourceUrl ?? record.sourceUrl, v.method, v.confidence, v.observedAt ?? null],
     );
   }
   // Campos que la fuente ya no publica: se retiran sus valores (el registro original queda en source_records).

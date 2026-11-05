@@ -95,3 +95,36 @@ Para uso interno no hay obligación de compartir. Las exportaciones a terceros d
 - La URL del registro gallego ya era configurable (`RED_CSV_URL`): un cambio de dirección de la fuente se arregla con una variable de entorno, sin desplegar.
 
 **Consecuencias.** Una fuente caída deja de consumir la ventana nocturna del workflow y deja de bloquear otras importaciones. El coste es que una caída larga de verdad obliga a relanzar la importación a mano (`retry_failed` o una nueva), que es el comportamiento deseado: que alguien lo vea.
+
+## ADR-0010 · Cargador propio para datos comerciales curados
+
+**Contexto.** La investigación de distribuidores produce datos curados a mano: empresas nacionales, sin municipio, con la procedencia distinta en cada campo. La cola de importación no sirve para esto: `request_import()` exige entre 1 y 400 códigos INE de municipio y solo admite fuentes de tipo `osm` u `open_data`.
+
+**Decisión.** Un cargador propio (`worker/cargar-curados.ts`), no una ampliación de `request_import()`.
+
+- El cargador **no reimplementa la ingesta**: llama a `ingestRecord()`, la misma función que usa el worker. La deduplicación, la vinculación a entidades existentes y los candidatos a duplicado son idénticos.
+- Abre y cierra un `import_runs` propio, para que estos registros queden trazados como cualquier otro.
+- **En seco por defecto.** Sin `--escribir` solo imprime la previsualización.
+- `NormalizedRecord` gana `extraFields`: campos con su propio método, confianza, URL y fecha de observación. Así «la web de la empresa confirma la especialización» y «el directorio deduce la web» no se guardan con la misma fiabilidad, sin necesidad de ninguna tabla nueva.
+
+**Consecuencias.** No se toca una función de base de datos que usa toda la aplicación. El precio es un punto de entrada más, que se asume porque su ciclo de vida es distinto: un fichero curado se revisa en un diff y se carga a mano, no se refresca cada noche.
+
+## ADR-0011 · Exclusión comercial de cadenas, separada de las reglas de categorías
+
+**Contexto.** Decathlon y Sprinter venden bicicletas y algunas de sus tiendas están etiquetadas en OSM con servicios de bicicleta, así que las reglas de `category_mappings` las clasifican correctamente. Lo que no encaja es el modelo comercial: son cadenas con precios centralizados y sin capacidad de decisión en tienda, de modo que no pueden cerrar una compra agrupada.
+
+**Decisión.** Una lista de exclusión comercial (`src/lib/domain/exclusiones.ts`) aplicada **después** de clasificar, no una modificación de las reglas de categorías. El descarte se cuenta como `skipped_excluded_chain` en las estadísticas de la importación, así que queda visible y es reversible quitando una línea.
+
+El patrón exige palabra completa por los dos lados. Sin ese límite, «Bicicletas Sprinterman» —una tienda independiente— quedaría excluida por contener «sprinter»: un falso positivo elimina un vendedor real en silencio, así que se prefiere pecar de incluir de más. Hay prueba de ello.
+
+**Consecuencias.** Las reglas generales siguen valiendo para cualquier otra fuente. Hoy la lista descarta 2 establecimientos en Barcelona.
+
+## ADR-0012 · Previsualización con las mismas reglas que la carga
+
+**Contexto.** Antes de incorporar cientos de entidades hace falta saber cuántas son nuevas, cuántas ya existen y cuántas acabarán en revisión. Una previsualización que use criterios propios sería peor que no tenerla: daría confianza falsa.
+
+**Decisión.** `worker/preview.ts` reutiliza `findCandidates()` y `scoreMatch()`, las mismas piezas que la ingesta, incluida la regla de que dos registros de la misma fuente nunca se unen solos. Solo lee; hay una prueba que falla si aparece cualquier `insert`, `update` o `delete`. Clasifica en nuevas, existentes, duplicados y descartados, con el motivo en lenguaje llano, y cuenta los canales de contacto disponibles.
+
+Para que previsualización e importación vean exactamente los mismos candidatos, `runOsmTask` y la previsualización comparten `construirRegistrosOsm()`.
+
+**Consecuencias.** Si la previsualización y la carga difieren, es un error, no una diferencia de criterio.

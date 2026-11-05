@@ -7,6 +7,7 @@ import type { Config } from "./config";
 import { withTx, type Db } from "./db";
 import { Geocoder } from "./geocode";
 import { ingestRecord, markMissing, type IngestOutcome } from "./pipeline";
+import type { Descartada } from "./preview";
 import { RED_SOURCE_ID, fetchRedCsv, parseRedCsv, redRowToRecord } from "./sources/red";
 import {
   OSM_SOURCE_ID,
@@ -310,15 +311,21 @@ async function cachedProvinceFeatures(config: Config, file: string, version: str
   }
 }
 
-export async function runOsmTask(db: Db, config: Config, task: ImportTask): Promise<TaskStats> {
-  const muni = task.params.municipality;
+/**
+ * Construye los registros de un municipio a partir del extracto de OSM, sin escribir nada.
+ * Lo comparten la importación real y la previsualización, para que las dos vean exactamente
+ * los mismos candidatos y los mismos descartes.
+ */
+export async function construirRegistrosOsm(
+  db: Db,
+  config: Config,
+  muni: string,
+): Promise<{ records: NormalizedRecord[]; descartadas: Descartada[]; stats: TaskStats; version: string }> {
   await ensureMunicipality(db, config, muni);
   const mappings = await loadMappings(db);
   const { file, version } = await ensureExtract(config, muni.slice(0, 2));
-  await setRunVersion(db, task.run_id, version);
   const features = await cachedProvinceFeatures(config, file, version, mappings);
 
-  // Qué elementos caen dentro del municipio (PostGIS).
   const candidates: { feature: OsmFeature; point: [number, number] }[] = [];
   for (const feature of features) {
     const point = representativePoint(feature.geometry);
@@ -334,16 +341,40 @@ export async function runOsmTask(db: Db, config: Config, task: ImportTask): Prom
 
   const stats: TaskStats = { province_features: features.length, in_municipality: inside.rowCount ?? 0, in_scope: 0 };
   const records: NormalizedRecord[] = [];
+  const descartadas: Descartada[] = [];
   for (const { i } of inside.rows) {
-    const { record, skipReason } = osmFeatureToRecord(candidates[i]!.feature, muni, mappings);
+    const feature = candidates[i]!.feature;
+    const { record, skipReason } = osmFeatureToRecord(feature, muni, mappings);
     if (record) {
       records.push(record);
       stats.in_scope!++;
     } else if (skipReason) {
       stats[`skipped_${skipReason}`] = (stats[`skipped_${skipReason}`] ?? 0) + 1;
-      if (skipReason === "missing_name") {
-        await recordIssue(db, task, "info", "missing_name", `${candidates[i]!.feature.id}: elemento sin nombre en OSM, no importado`);
-      }
+      descartadas.push({
+        externalId: feature.id,
+        nombre: feature.properties.name ?? "(sin nombre)",
+        motivo: MOTIVO_DESCARTE[skipReason] ?? skipReason,
+      });
+    }
+  }
+  return { records, descartadas, stats, version };
+}
+
+const MOTIVO_DESCARTE: Record<string, string> = {
+  no_category: "Ninguna regla de categorías lo clasifica (no es un negocio de ciclismo)",
+  missing_name: "Sin nombre en OpenStreetMap",
+  disused: "Marcado como cerrado o en desuso en OpenStreetMap",
+  no_geometry: "Sin geometría utilizable",
+  excluded_chain: "Cadena excluida de la captación comercial",
+};
+
+export async function runOsmTask(db: Db, config: Config, task: ImportTask): Promise<TaskStats> {
+  const muni = task.params.municipality;
+  const { records, descartadas, stats, version } = await construirRegistrosOsm(db, config, muni);
+  await setRunVersion(db, task.run_id, version);
+  for (const d of descartadas) {
+    if (d.motivo === MOTIVO_DESCARTE.missing_name) {
+      await recordIssue(db, task, "info", "missing_name", `${d.externalId}: elemento sin nombre en OSM, no importado`);
     }
   }
   await ingestAll(db, task, records, await sourceConfidence(db, OSM_SOURCE_ID), stats);

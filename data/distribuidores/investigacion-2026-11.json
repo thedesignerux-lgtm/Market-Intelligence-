@@ -187,16 +187,16 @@
           "metodo": "verified",
           "observado": "2026-11-05"
         },
-        "clasificacion_directorio": {
-          "valor": "Mayorista según el directorio bicicleta.es",
-          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
-          "metodo": "inferred",
-          "observado": "2026-11-05"
-        },
         "tipo": {
           "valor": "distribuidor",
           "fuente": "https://www.bikedifusion.com/",
           "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
           "observado": "2026-11-05"
         },
         "especializacion": {
@@ -356,16 +356,16 @@
           "metodo": "verified",
           "observado": "2026-11-05"
         },
-        "clasificacion_directorio": {
-          "valor": "Mayorista según el directorio bicicleta.es",
-          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
-          "metodo": "inferred",
-          "observado": "2026-11-05"
-        },
         "tipo": {
           "valor": "distribuidor",
           "fuente": "https://www.casamasferrer.com/",
           "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
           "observado": "2026-11-05"
         },
         "especializacion": {
@@ -425,6 +425,12 @@
         },
         "localidad": {
           "valor": "Alboraya (València)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -509,6 +515,12 @@
         },
         "localidad": {
           "valor": "Tarragona",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -599,6 +611,12 @@
         },
         "localidad": {
           "valor": "Parla (Madrid)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -779,6 +797,12 @@
         },
         "localidad": {
           "valor": "Itziar (Gipuzkoa)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -1109,6 +1133,12 @@
           "metodo": "inferred",
           "observado": "2026-11-05"
         },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
         "clasificacion_directorio": {
           "valor": "Mayorista según el directorio bicicleta.es",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
@@ -1126,6 +1156,12 @@
       "campos": {
         "localidad": {
           "valor": "Vitoria-Gasteiz (Álava)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -1180,6 +1216,12 @@
         },
         "localidad": {
           "valor": "Barbatain (Navarra)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -1248,6 +1290,12 @@
           "metodo": "inferred",
           "observado": "2026-11-05"
         },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
         "clasificacion_directorio": {
           "valor": "Mayorista según el directorio bicicleta.es",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
@@ -1271,6 +1319,12 @@
         },
         "localidad": {
           "valor": "Barcelona",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
           "metodo": "inferred",
           "observado": "2026-11-05"
@@ -1449,6 +1503,12 @@
           "metodo": "inferred",
           "observado": "2026-11-05"
         },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
         "clasificacion_directorio": {
           "valor": "Mayorista según el directorio bicicleta.es",
           "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
@@ -1476,16 +1536,16 @@
           "metodo": "verified",
           "observado": "2026-11-05"
         },
-        "clasificacion_directorio": {
-          "valor": "Mayorista según el directorio bicicleta.es",
-          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
-          "metodo": "inferred",
-          "observado": "2026-11-05"
-        },
         "tipo": {
           "valor": "central_de_compras",
           "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
           "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
           "observado": "2026-11-05"
         },
         "especializacion": {

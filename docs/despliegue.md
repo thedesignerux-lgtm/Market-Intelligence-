@@ -21,6 +21,14 @@ La aplicación no tiene registro público: las cuentas las crea un administrador
 
 ## 2. Aplicación web en Vercel
 
+> **Producción está en Vercel, no en Railway.** Comprobado el 05-11-2026: Vercel publica un estado
+> de confirmación en cada push al repositorio (proyecto `kuorum-s-projects/market-intelligence`) y
+> el último, sobre `main`, es correcto. De Railway solo queda un despliegue del 19-10-2026 que
+> **falló** y no se repitió; no hay `railway.json`, `nixpacks.toml` ni `Procfile` en el repositorio.
+> Si aún existe un proyecto de Railway conectado a este repo, conviene desconectarlo para que no
+> vuelva a publicar estados de despliegue engañosos.
+
+
 1. En vercel.com: **Add New → Project** e importa el repositorio `Market-Intelligence-`.
 2. En **Environment Variables** añade estas dos claves. Son públicas; la seguridad la ponen las políticas de la base de datos.
    - `NEXT_PUBLIC_SUPABASE_URL` = `https://wzpfswvhpbjvwezccfyx.supabase.co`

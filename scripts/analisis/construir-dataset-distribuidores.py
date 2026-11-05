@@ -120,7 +120,9 @@ for nombre, web in ambe:
 
 for nombre, web, localidad in mayoristas:
     # El directorio deduce la web de una captura: se marca como 'inferred' si no la confirmó la empresa.
-    añadir(nombre, web, DIR_MAY, "inferred", localidad=localidad,
+    # El directorio los lista explícitamente como mayoristas: es un dato con origen,
+    # marcado 'inferred' porque no lo confirma la propia empresa. Una ficha verificada lo pisa.
+    añadir(nombre, web, DIR_MAY, "inferred", localidad=localidad, tipo="mayorista",
            clasificacion_directorio="Mayorista según el directorio bicicleta.es")
 
 for clave, f in verificadas.items():

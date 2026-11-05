@@ -12,6 +12,7 @@ import type { Config } from "../config";
 import { userAgent } from "../config";
 import { fetchWithRetry } from "../http";
 import { matchCategories, requiredOsmFilters, type CategoryMapping } from "../../src/lib/domain/categories";
+import { cadenaExcluida } from "../../src/lib/domain/exclusiones";
 import {
   cleanAddress,
   displayName,
@@ -69,6 +70,8 @@ export function osmFeatureToRecord(
   if (categories.length === 0) return { record: null, skipReason: "no_category" };
   const rawName = first(tags.name, tags["name:es"], tags["name:gl"], tags["name:ca"], tags["name:eu"], tags.brand);
   if (!rawName) return { record: null, skipReason: "missing_name" };
+  // Decisión comercial, no de categorías: la regla ya clasificó bien el establecimiento.
+  if (cadenaExcluida(rawName)) return { record: null, skipReason: "excluded_chain" };
   // Establecimientos cerrados o en desuso según OSM.
   if (tags["disused:shop"] || tags["was:shop"] || tags.shop === "vacant") return { record: null, skipReason: "disused" };
   const point = representativePoint(feature.geometry);
