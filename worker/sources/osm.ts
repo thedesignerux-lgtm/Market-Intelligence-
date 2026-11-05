@@ -21,17 +21,13 @@ import {
   normalizeWebsite,
 } from "../../src/lib/domain/normalize";
 import type { EntityType, NormalizedRecord } from "../../src/lib/domain/records";
+import { PROVINCES } from "../../src/lib/domain/territory";
 
 const exec = promisify(execFile);
 export const OSM_SOURCE_ID = "osm";
 
-// Nombre del extracto por provincia (códigos INE).
-export const PROVINCE_EXTRACTS: Record<string, string> = {
-  "15": "la_coruna",
-  "27": "lugo",
-  "32": "ourense",
-  "36": "pontevedra",
-};
+// Ruta del extracto por provincia (códigos INE), relativa a OSM_EXTRACT_BASE_URL.
+export const PROVINCE_EXTRACTS: Record<string, string> = Object.fromEntries(PROVINCES.map((p) => [p.code, p.extract]));
 
 export interface OsmFeature {
   type: "Feature";
@@ -71,7 +67,7 @@ export function osmFeatureToRecord(
   const tags = feature.properties;
   const categories = matchCategories(OSM_SOURCE_ID, tags, mappings);
   if (categories.length === 0) return { record: null, skipReason: "no_category" };
-  const rawName = first(tags.name, tags["name:gl"], tags["name:es"], tags.brand);
+  const rawName = first(tags.name, tags["name:es"], tags["name:gl"], tags["name:ca"], tags["name:eu"], tags.brand);
   if (!rawName) return { record: null, skipReason: "missing_name" };
   // Establecimientos cerrados o en desuso según OSM.
   if (tags["disused:shop"] || tags["was:shop"] || tags.shop === "vacant") return { record: null, skipReason: "disused" };
@@ -135,8 +131,10 @@ async function fileAgeHours(file: string): Promise<number | null> {
 
 /** Descarga (o reutiliza) el extracto de una provincia, verificando su MD5. */
 export async function ensureExtract(config: Config, provinceCode: string): Promise<{ file: string; version: string }> {
-  const name = PROVINCE_EXTRACTS[provinceCode];
-  if (!name) throw new Error(`No hay extracto OSM configurado para la provincia ${provinceCode}`);
+  const extract = PROVINCE_EXTRACTS[provinceCode];
+  if (!extract) throw new Error(`No hay extracto OSM configurado para la provincia ${provinceCode}`);
+  // En caché se guarda con el código de provincia delante: hay nombres repetidos entre regiones.
+  const name = `${provinceCode}_${path.posix.basename(extract)}`;
   const dir = path.join(config.CACHE_DIR, "osm");
   await mkdir(dir, { recursive: true });
   const file = path.join(dir, `${name}.osm.pbf`);
@@ -146,18 +144,18 @@ export async function ensureExtract(config: Config, provinceCode: string): Promi
 
   if (age === null || age > config.OSM_EXTRACT_MAX_AGE_HOURS) {
     const ua = userAgent(config);
-    const md5Text = await (await fetchWithRetry(`${base}/${name}.osm.pbf.md5`, { userAgent: ua })).text();
+    const md5Text = await (await fetchWithRetry(`${base}/${extract}.osm.pbf.md5`, { userAgent: ua })).text();
     const expected = md5Text.trim().split(/\s+/)[0];
-    const res = await fetchWithRetry(`${base}/${name}-latest.osm.pbf`, { userAgent: ua, timeoutMs: 15 * 60_000, retries: 2 });
+    const res = await fetchWithRetry(`${base}/${extract}-latest.osm.pbf`, { userAgent: ua, timeoutMs: 15 * 60_000, retries: 2 });
     const buf = Buffer.from(await res.arrayBuffer());
     const actual = createHash("md5").update(buf).digest("hex");
     if (expected && actual !== expected) {
-      throw new Error(`El extracto ${name} no supera la verificación MD5 (esperado ${expected}, obtenido ${actual})`);
+      throw new Error(`El extracto ${extract} no supera la verificación MD5 (esperado ${expected}, obtenido ${actual})`);
     }
     const tmp = `${file}.tmp`;
     await writeFile(tmp, buf);
     await rename(tmp, file);
-    const state = await (await fetchWithRetry(`${base}/${name}.state.txt`, { userAgent: ua })).text().catch(() => "");
+    const state = await (await fetchWithRetry(`${base}/${extract}.state.txt`, { userAgent: ua })).text().catch(() => "");
     await writeFile(stateFile, state);
   }
   const state = await readFile(stateFile, "utf8").catch(() => "");

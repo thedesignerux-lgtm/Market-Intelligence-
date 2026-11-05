@@ -8,7 +8,7 @@ const schema = z.object({
   // Email o URL de contacto del proyecto (no el email personal de un usuario).
   CONTACT: z.string().min(5),
   CACHE_DIR: z.string().default(".cache"),
-  OSM_EXTRACT_BASE_URL: z.string().url().default("https://download.openstreetmap.fr/extracts/europe/spain/galicia"),
+  OSM_EXTRACT_BASE_URL: z.string().url().default("https://download.openstreetmap.fr/extracts"),
   RED_CSV_URL: z
     .string()
     .url()

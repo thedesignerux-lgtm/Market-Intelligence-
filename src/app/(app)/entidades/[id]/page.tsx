@@ -281,7 +281,7 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
             <p className="mt-2 text-[12px] text-ink-faint">
               {Object.entries(SOURCE)
                 .filter(([k]) => (records.data ?? []).some((r) => (r.source_records as unknown as { source_id: string }).source_id === k) || (k === "cartociudad" && byField.get("location")?.some((v) => v.source_id === k)))
-                .map(([k]) => ({ osm: "© Colaboradores de OpenStreetMap (ODbL)", red_galicia: "Xunta de Galicia (CC BY-SA 4.0)", cartociudad: "CartoCiudad © IGN (CC BY 4.0)", manual: "" })[k])
+                .map(([k]) => ({ osm: "© Colaboradores de OpenStreetMap (ODbL)", red_galicia: "Xunta de Galicia (CC BY-SA 4.0)", registro_cataluna: "Generalitat de Catalunya (Llicència oberta)", registro_euskadi: "Gobierno Vasco (CC BY 4.0)", registro_navarra: "Gobierno de Navarra (CC BY 4.0)", registro_canarias: "Gobierno de Canarias (CC BY 4.0)", cartociudad: "CartoCiudad © IGN (CC BY 4.0)", manual: "" })[k])
                 .filter(Boolean)
                 .join(". ")}
             </p>

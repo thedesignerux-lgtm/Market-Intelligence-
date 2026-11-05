@@ -4,7 +4,8 @@ import type { Config } from "./config";
 import type { Db } from "./db";
 import { Geocoder } from "./geocode";
 import { backoffDelay } from "./http";
-import { PermanentTaskError, runOsmTask, runRedTask, type ImportTask, type TaskStats } from "./handlers";
+import { PermanentTaskError, runOsmTask, runRedTask, runRegistryTask, type ImportTask, type TaskStats } from "./handlers";
+import { REGISTRIES } from "./sources/registries";
 
 export async function executeTask(db: Db, config: Config, task: ImportTask, geocoder: Geocoder): Promise<void> {
   const source = task.task_key.split(":")[0];
@@ -13,6 +14,7 @@ export async function executeTask(db: Db, config: Config, task: ImportTask, geoc
     let stats: TaskStats;
     if (source === "red_galicia") stats = await runRedTask(db, config, task, geocoder);
     else if (source === "osm") stats = await runOsmTask(db, config, task);
+    else if (source && REGISTRIES[source]) stats = await runRegistryTask(db, config, task, geocoder, REGISTRIES[source]);
     else throw new PermanentTaskError(`Fuente desconocida en la tarea: ${source}`);
 
     stats.duration_ms = Date.now() - started;
