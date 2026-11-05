@@ -1,0 +1,31 @@
+Puntuacion,Decision,Distancia_m,Mismo_telefono,Misma_web,Detectado_por_previsualizacion,A_nombre,A_provincia,A_municipio,A_direccion,A_telefono,A_email,A_web,A_osm,B_nombre,B_provincia,B_municipio,B_direccion,B_telefono,B_email,B_web,B_osm
+1,same,3,sí,no,sí,Rincón del Trece,Madrid,Collado Villalba,Calle Santiago Apóstol 6,+34681928805,,,way/904780608,Rincón del Trece,Madrid,Collado Villalba,Calle Santiago Apóstol 6,+34681928805,,,node/1809561216
+1,same,225,sí,sí,sí,Vaic,Barcelona,Sant Cugat del Vallès,Carrer Sant Bonaventura 24,+34936754570,info@vaic.com,vaic.com,node/3714121698,Vaic,Barcelona,Sant Cugat del Vallès,Carrer de Valldoreix 72,+34936754570,,vaic.com,node/13522614720
+1,same,6,no,sí,no,BiciHub,Barcelona,Barcelona,,,,bicihub.barcelona,node/11348369929,Taller Autoreparació Bicihub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439778
+1,same,14,no,sí,sí,BiciHub,Barcelona,Barcelona,,,,bicihub.barcelona,node/11348369929,BiciHub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439780
+1,same,7,no,sí,sí,Taller Autoreparació Bicihub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439778,BiciHub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439780
+1,same,3,sí,sí,sí,The Cyclery,Barcelona,Sant Fruitós de Bages,Carretera de Berga 139,+34938777109,info@thecyclery.es,thecyclery.es,way/152731350,The Cyclery,Barcelona,Sant Fruitós de Bages,Carretera de Berga 139,+34938777109,info@thecyclery.es,thecyclery.es,node/305462700
+1,same,2,sí,sí,sí,Fanatik,Barcelona,Vic,Carrer de la Costa d'en Paratge 16,+34938864725,info@fanatik.cat,fanatik.cat,way/319019056,Fanatik,Barcelona,Vic,Carrer de la Costa d'en Paratge 16,+34938864725,info@fanatik.cat,fanatik.cat,node/638038112
+0.85,same,0,no,no,sí,Sanferbike Pozuelo,Madrid,Pozuelo de Alarcón,Calle Estación 1,,,,way/1188808651,Sanferbike Pozuelo,Madrid,Pozuelo de Alarcón,Calle Estación 1,,,,node/2377617302
+0.85,same,0,no,no,sí,Biking Point,Barcelona,Sabadell,Avinguda de Francesc Macià 70,,,,way/131425266,Biking Point,Barcelona,Sabadell,Avinguda de Francesc Macià 70,,,,node/262850532
+0.85,same,1,no,no,sí,Tomas Domingo,Barcelona,Sant Boi de Llobregat,,,,,way/531843929,Tomas Domingo,Barcelona,Sant Boi de Llobregat,,,,,node/1063687858
+0.85,same,2,no,no,sí,Zona Bici,Barcelona,Sant Boi de Llobregat,,,,,way/531843932,Zona Bici,Barcelona,Sant Boi de Llobregat,,,,,node/1063687864
+0.85,same,2,no,no,sí,VBSPORTS Vilafranca,Barcelona,Vilafranca del Penedès,Carrer de la Múnia 68,,,,way/711127702,VBSPORTS Vilafranca,Barcelona,Vilafranca del Penedès,Carrer de la Múnia 68,,,,node/1422255404
+0.85,same,0,no,no,sí,Cicles Sans Specialized Concept Store,Barcelona,Vilafranca del Penedès,Pla del Diable 1,,,,way/773850203,Cicles Sans Specialized Concept Store,Barcelona,Vilafranca del Penedès,Pla del Diable 1,,,,node/1547700406
+0.85,same,0,no,no,sí,T-Bikes,Barcelona,Parets del Vallès,,,,,way/1007674045,T-Bikes,Barcelona,Parets del Vallès,,,,,node/2015348090
+0.85,same,0,no,no,sí,Addict Bikes,Barcelona,el Masnou,Carrer Mossèn Jacint Verdaguer 6,,,,way/1269068842,Addict Bikes,Barcelona,el Masnou,Carrer Mossèn Jacint Verdaguer 6,,,,node/2538137684
+0.85,same,3,no,no,sí,Ravet Bike,Barcelona,Granollers,Carrer Joanot Martorell 272,,,,way/1338355003,Ravet Bike,Barcelona,Granollers,Carrer Joanot Martorell 272,,,,node/2676710006
+0.769,review,13,no,sí,no,Biciclot,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/6531790385,BiciHub,Barcelona,Barcelona,,,,bicihub.barcelona,node/11348369929
+0.769,review,3,no,sí,sí,Biciclot,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/6531790385,BiciHub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439780
+0.74,review,4,no,no,no,The Bike Club Barcelona,Barcelona,Barcelona,Avinguda de Mistral 68,,,,node/11821408638,Bike club barcelona,Barcelona,Barcelona,,,,,node/11917823369
+0.7,review,217,no,no,sí,Bicicletas Salchi,Madrid,Coslada,Calle Océano Atlántico 7,,,bicicletassalchi.com,node/266171335,Bicicletas Salchi,Madrid,Coslada,Calle del Océano Pacífico 5,,,,node/11226640202
+0.7,review,127,no,no,sí,"Esports Prieto, SL",Barcelona,Vilanova i la Geltrú,Rambla del Castell 86,,,esportsprieto.es,node/11032902086,Esports Prieto,Barcelona,Vilanova i la Geltrú,Carrer de la Providència 11,+34938935903,esportsprietorg@gmail.com,,node/11077789675
+0.7,review,89,no,no,sí,Fanatik,Barcelona,Vic,Carrer de Solsona 6,,,,node/11219710187,Fanatik,Barcelona,Vic,Carrer de la Costa d'en Paratge 16,+34938864725,info@fanatik.cat,fanatik.cat,way/319019056
+0.7,review,91,no,no,sí,Fanatik,Barcelona,Vic,Carrer de Solsona 6,,,,node/11219710187,Fanatik,Barcelona,Vic,Carrer de la Costa d'en Paratge 16,+34938864725,info@fanatik.cat,fanatik.cat,node/638038112
+0.7,review,122,no,no,sí,Koos,Barcelona,Barcelona,Carrer de Terol 30,,,,node/11339601035,Koos,Barcelona,Barcelona,Carrer del Torrent d'en Vidalet 14,,,,node/12257972008
+0.665,review,7,no,sí,no,Biciclot,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/6531790385,Taller Autoreparació Bicihub,Barcelona,Barcelona,Carrer de Pere IV 58-60,,,bicihub.barcelona,node/11969439778
+0.617,review,2,no,sí,no,Terra BikeTours,Barcelona,Barcelona,Carrer de València 337,,,terrabiketours.com,node/6052500460,Canyon Barcelona,Barcelona,Barcelona,Carrer de València 337,,,terrabiketours.com,node/9562519157
+0.6,review,988,no,no,sí,Vila Ors,Barcelona,Vic,Rambla del Passeig 14,,,,node/6249268457,Vila Ors,Barcelona,Vic,Carrer del Remei 53,,,,node/6249268458
+0.6,review,961,no,no,sí,Folding Bikes House,Barcelona,Barcelona,Carrer de la Diputació 176,,,foldingbikeshouse.com,node/9466782642,Folding bikes house,Barcelona,Barcelona,,,,,node/11917779436
+0.55,review,1364,no,no,sí,Alcalá Bikes,Madrid,Alcalá de Henares,Calle del Teniente Ruiz 2,+34912657867,,alcalabikes.es,node/2778991972,Alcalá Bikes,Madrid,Alcalá de Henares,,,,,node/12778914863
+0.55,review,1298,no,no,sí,Va de Bici,Barcelona,Vilanova i la Geltrú,Carrer del Doctor Zamenhof 45,+34938155724,bicitecnic@gmail.com,,node/10985254583,Va de bici,Barcelona,Vilanova i la Geltrú,Carrer de Sant Gregori 7,+34938533249,,,node/11020613129
