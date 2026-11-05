@@ -12,6 +12,7 @@
 import { loadConfig } from "./config";
 import { createPool } from "./db";
 import { construirRegistrosOsm } from "./handlers";
+import { limitesDelExtracto } from "./limites";
 import { previsualizar, resumen, type Descartada, type InformePrevio } from "./preview";
 import { provincesForScope } from "../src/lib/domain/territory";
 import type { NormalizedRecord } from "../src/lib/domain/records";
@@ -30,6 +31,10 @@ async function main() {
   const config = loadConfig();
   const db = createPool(config.DATABASE_URL);
   try {
+    // Los límites salen del extracto de OSM, no de admin_areas: así la previsualización
+    // no necesita que la provincia esté cargada y no escribe ni una fila.
+    const limites = limitesDelExtracto(db, config);
+
     // Un ámbito es un municipio (5 dígitos) o algo que se resuelve a provincias.
     const municipios: string[] = [];
     for (const a of ambitos) {
@@ -39,31 +44,20 @@ async function main() {
       }
       const provincias = provincesForScope(a);
       if (!provincias?.length) throw new Error(`Ámbito no reconocido: ${a}`);
-      const { rows } = await db.query<{ code: string }>(
-        `select code from public.admin_areas
-          where level = 'municipio' and left(code, 2) = any($1::text[]) and geom is not null
-          order by code`,
-        [provincias],
-      );
-      if (rows.length === 0) {
-        // Importante: construirRegistrosOsm() llama a ensureMunicipality(), que si faltan los
-        // límites los descarga de OSM y los INSERTA en admin_areas. Eso es una escritura, así
-        // que la previsualización se detiene aquí en vez de dejar de ser de solo lectura.
-        throw new Error(
-          `No hay límites municipales cargados para «${a}», así que no se puede previsualizar sin escribir.\n` +
-            `Cargarlos inserta unos miles de filas en admin_areas (una escritura), y esta orden es de solo lectura.\n` +
-            `Pide autorización para cargar los límites de esa provincia y vuelve a intentarlo.`,
-        );
+      for (const p of provincias) {
+        const munis = await limites.municipios(p);
+        if (munis.length === 0) throw new Error(`El extracto de la provincia ${p} no trae límites municipales.`);
+        municipios.push(...munis.map((m) => m.code));
       }
-      municipios.push(...rows.map((r) => r.code));
     }
+    if (!json) console.error(`  límites: ${limites.origen} · ${municipios.length} municipios`);
 
     const registros: NormalizedRecord[] = [];
     const descartadas: Descartada[] = [];
     const stats: Record<string, number> = {};
     let hecho = 0;
     for (const muni of municipios) {
-      const r = await construirRegistrosOsm(db, config, muni);
+      const r = await construirRegistrosOsm(db, config, muni, limites);
       registros.push(...r.records);
       descartadas.push(...r.descartadas);
       for (const [k, v] of Object.entries(r.stats)) stats[k] = (stats[k] ?? 0) + (v as number);

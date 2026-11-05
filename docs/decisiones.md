@@ -128,3 +128,20 @@ El patrón exige palabra completa por los dos lados. Sin ese límite, «Biciclet
 Para que previsualización e importación vean exactamente los mismos candidatos, `runOsmTask` y la previsualización comparten `construirRegistrosOsm()`.
 
 **Consecuencias.** Si la previsualización y la carga difieren, es un error, no una diferencia de criterio.
+
+## ADR-0013 · El proveedor de límites municipales se inyecta
+
+**Contexto.** `construirRegistrosOsm()` necesita saber qué municipios tiene una provincia y qué puntos caen dentro de cada uno. Las dos cosas salían de `admin_areas`, y `ensureMunicipality()` las escribe si faltan. Eso convertía cualquier previsualización de una provincia no cargada en una escritura de miles de filas: Madrid y Barcelona tenían 0 municipios, así que previsualizarlas habría insertado unos 2.100 límites antes de leer nada.
+
+**Decisión.** Quién provee los límites se inyecta (`worker/limites.ts`):
+
+- `limitesDeBaseDeDatos(db)` — los lee de `admin_areas`. Es el valor por defecto, así que `runOsmTask` se comporta igual que antes. Solo el camino por defecto llama a `ensureMunicipality()`, de modo que la única escritura posible está a la vista en una línea.
+- `limitesDelExtracto(db, config)` — los lee del propio extracto de OSM con `extractMunicipalities()`, que ya existía y solo ejecuta osmium sobre un fichero local. No escribe.
+
+No son dos fuentes distintas: `admin_areas` se rellena justamente con lo que devuelve `extractMunicipalities()`. El proveedor de extracto lee lo mismo, antes de guardarlo.
+
+La contención sigue resolviéndola PostGIS en los dos casos, con el mismo `st_contains`, el mismo SRID y el mismo `st_makevalid`. Lo único que cambia es que el polígono llega como parámetro en lugar de leerse de una tabla: sigue siendo un `SELECT`. Implementar aquí un punto-en-polígono propio habría sido una segunda versión de una regla ya existente.
+
+**Consecuencias.** La previsualización se puede ejecutar sobre cualquier provincia sin escribir una sola fila, que era el objetivo. La importación real sigue necesitando los límites en `admin_areas` (los usan `markMissing` y el mapa), así que esto permite mirar antes de decidir, no evita la escritura de la importación.
+
+La prueba que lo sostiene no es un comentario: una base de datos centinela lanza excepción ante cualquier `insert`, `update`, `delete`, `truncate`, `alter`, `drop`, `create`, `grant`, `revoke`, `merge` o `copy` en el camino completo. Se verificó por mutación: al reintroducir a propósito la llamada a `ensureMunicipality()`, la prueba falla con el `insert into public.admin_areas` en el mensaje.
