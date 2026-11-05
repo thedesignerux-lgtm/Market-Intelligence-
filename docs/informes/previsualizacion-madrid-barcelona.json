@@ -1,0 +1,422 @@
+{
+ "total": 420,
+ "nuevas": 371,
+ "existentes": 0,
+ "duplicados": 49,
+ "nuevasPorCategoria": {
+  "comercio.deporte.ciclismo": 360,
+  "club.deportivo.ciclismo": 4,
+  "servicio.ciclismo.taller": 7
+ },
+ "contactoDeNuevas": {
+  "conAlgunCanal": 201,
+  "telefono": 155,
+  "web": 145,
+  "email": 57,
+  "sinNinguno": 170
+ },
+ "independientes": {
+  "total": 388,
+  "conContacto": 202,
+  "conEmail": 58
+ },
+ "cadenas": {
+  "excluidasDetectadas": 0,
+  "nombresParecidosNoExcluidos": []
+ },
+ "paresDuplicados": 30,
+ "pares": [
+  "Bicicletas Salchi ↔ Bicicletas Salchi · review 0.7",
+  "Alcalá Bikes ↔ Alcalá Bikes · review 0.55",
+  "Rincón del Trece ↔ Rincón del Trece · same 1",
+  "Sanferbike Pozuelo ↔ Sanferbike Pozuelo · same 0.85",
+  "Vaic ↔ Vaic · same 1",
+  "Terra BikeTours ↔ Canyon Barcelona · review 0.617",
+  "Vila Ors ↔ Vila Ors · review 0.6",
+  "Biciclot ↔ BiciHub · review 0.769",
+  "Biciclot ↔ Taller Autoreparació Bicihub · review 0.665",
+  "Biciclot ↔ BiciHub · review 0.769",
+  "Folding Bikes House ↔ Folding bikes house · review 0.6",
+  "Va de Bici ↔ Va de bici · review 0.55",
+  "Esports Prieto, SL ↔ Esports Prieto · review 0.7",
+  "Fanatik ↔ Fanatik · review 0.7",
+  "Fanatik ↔ Fanatik · review 0.7",
+  "Koos ↔ Koos · review 0.7",
+  "BiciHub ↔ Taller Autoreparació Bicihub · same 1",
+  "BiciHub ↔ BiciHub · same 1",
+  "The Bike Club Barcelona ↔ Bike club barcelona · review 0.74",
+  "Taller Autoreparació Bicihub ↔ BiciHub · same 1",
+  "Biking Point ↔ Biking Point · same 0.85",
+  "The Cyclery ↔ The Cyclery · same 1",
+  "Fanatik ↔ Fanatik · same 1",
+  "Tomas Domingo ↔ Tomas Domingo · same 0.85",
+  "Zona Bici ↔ Zona Bici · same 0.85",
+  "VBSPORTS Vilafranca ↔ VBSPORTS Vilafranca · same 0.85",
+  "Cicles Sans Specialized Concept Store ↔ Cicles Sans Specialized Concept Store · same 0.85",
+  "T-Bikes ↔ T-Bikes · same 0.85",
+  "Addict Bikes ↔ Addict Bikes · same 0.85",
+  "Ravet Bike ↔ Ravet Bike · same 0.85"
+ ],
+ "independientesConContacto": [
+  {
+   "n": "Bicicletas Salchi",
+   "tel": null,
+   "web": "bicicletassalchi.com",
+   "mail": null
+  },
+  {
+   "n": "Ciclo Work",
+   "tel": null,
+   "web": "ciclowork.es",
+   "mail": null
+  },
+  {
+   "n": "Ciclos Delicias",
+   "tel": "+34915307787",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Centro Bike",
+   "tel": "+34918592347",
+   "web": "centrobike.es",
+   "mail": null
+  },
+  {
+   "n": "Deportes Jiménez",
+   "tel": "+34916769605",
+   "web": "bicisjimenez.negocio.site",
+   "mail": null
+  },
+  {
+   "n": "Ciclos Del Olmo",
+   "tel": "+34914634352",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Ciclospeed",
+   "tel": "+34918043957",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Bicicletas Arnelas",
+   "tel": null,
+   "web": "ciclosarnelas.com",
+   "mail": null
+  },
+  {
+   "n": "Bicicletas Chapinal",
+   "tel": null,
+   "web": "chapinal.com",
+   "mail": null
+  },
+  {
+   "n": "Bicicletas Calmera",
+   "tel": null,
+   "web": "calmera.es",
+   "mail": null
+  },
+  {
+   "n": "Bicimanía",
+   "tel": null,
+   "web": "bicimania.com",
+   "mail": null
+  },
+  {
+   "n": "Félix Pérez",
+   "tel": "+34916692673",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "ToniBike",
+   "tel": null,
+   "web": "tonibike.es",
+   "mail": null
+  },
+  {
+   "n": "Bicis Torrejón",
+   "tel": "+34911720903",
+   "web": "bicistorrejon.com",
+   "mail": "bicistorrejon@gmail.com"
+  },
+  {
+   "n": "Bicicletas Tomás",
+   "tel": "+34916465866",
+   "web": "bicicletastomas.com",
+   "mail": null
+  },
+  {
+   "n": "Ciclos Vega",
+   "tel": "+34912385789",
+   "web": "ciclosvega.com",
+   "mail": null
+  },
+  {
+   "n": "Ciclos Moratalaz",
+   "tel": "+34913283564",
+   "web": "ciclosmoratalaz.com",
+   "mail": null
+  },
+  {
+   "n": "Bikes 101. Specialized Concept Store",
+   "tel": null,
+   "web": "bikes101.es",
+   "mail": null
+  },
+  {
+   "n": "Bicicletas Carpizo",
+   "tel": "+34916105435",
+   "web": "bicicletascarpizo.com",
+   "mail": null
+  },
+  {
+   "n": "Alcalá Bikes",
+   "tel": "+34912657867",
+   "web": "alcalabikes.es",
+   "mail": null
+  },
+  {
+   "n": "Biciados",
+   "tel": "+34684244873",
+   "web": "biciados.net",
+   "mail": null
+  },
+  {
+   "n": "Urban Biking",
+   "tel": "+34918265070",
+   "web": "avantumcompanystore.com.es",
+   "mail": "ventas@avantum.info"
+  },
+  {
+   "n": "La Grupetta - BH Concept Store",
+   "tel": null,
+   "web": "lagrupetta.com",
+   "mail": null
+  },
+  {
+   "n": "¡Viva Bicicletas!",
+   "tel": "+34910248957",
+   "web": "vivabicicletas.com",
+   "mail": "hola@vivabicicletas.com"
+  },
+  {
+   "n": "Bicicletas Tándem",
+   "tel": "+34918587407",
+   "web": "bicicletastandem.com",
+   "mail": "bicicletastandem@gmail.com"
+  },
+  {
+   "n": "Gripp",
+   "tel": null,
+   "web": "gripp.cc",
+   "mail": null
+  },
+  {
+   "n": "Okocicle",
+   "tel": "+34665041376",
+   "web": "okocicle.com",
+   "mail": null
+  },
+  {
+   "n": "El Inglés Brompton Madrid",
+   "tel": "+34910180580",
+   "web": "elingles.com",
+   "mail": "info@elingles.com"
+  },
+  {
+   "n": "Dibike",
+   "tel": "+34918597343",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Taller de bicicletas Villabikess",
+   "tel": "+34914126391",
+   "web": "villabikess.com",
+   "mail": null
+  },
+  {
+   "n": "Secondbike",
+   "tel": "+34910221042",
+   "web": "secondbikemadrid.com",
+   "mail": null
+  },
+  {
+   "n": "MtbSpain",
+   "tel": "+34914072422",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Sanchinarro Bikes",
+   "tel": "+34917046480",
+   "web": "sanchinarrobikes.com",
+   "mail": "info@sanchinarrobikes.com"
+  },
+  {
+   "n": "Bike Stocks",
+   "tel": "+34917607548",
+   "web": "bikestocks.es",
+   "mail": null
+  },
+  {
+   "n": "Mi Bike Río",
+   "tel": "+34911394652",
+   "web": "mibikerio.com",
+   "mail": null
+  },
+  {
+   "n": "Mad Bike",
+   "tel": "+34914642555",
+   "web": "madbikebicicletas.com",
+   "mail": null
+  },
+  {
+   "n": "Ciclos A. Martin",
+   "tel": "+34914619744",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "441Malabares",
+   "tel": "+34914332344",
+   "web": "441malabares.com",
+   "mail": "info@441malabares.com"
+  },
+  {
+   "n": "Sanferbike Madrid",
+   "tel": "+34914755988",
+   "web": "sanferbike.com",
+   "mail": "atencionalcliente@sanferbike.com"
+  },
+  {
+   "n": "Dog Days",
+   "tel": "+34657892256",
+   "web": "dogdays.cc",
+   "mail": "hola@dogdays.cc"
+  },
+  {
+   "n": "Gbici - Avanza Interurbanos SL",
+   "tel": null,
+   "web": "gbici.es",
+   "mail": null
+  },
+  {
+   "n": "Bike Room",
+   "tel": "+34910004993",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "Sanferbike San Sebastián",
+   "tel": "+34916526424",
+   "web": "sanferbike.com",
+   "mail": null
+  },
+  {
+   "n": "Doctor Bicicleta",
+   "tel": null,
+   "web": "doctorbicicleta.com",
+   "mail": null
+  },
+  {
+   "n": "Biked Workshop",
+   "tel": "+34910072087",
+   "web": "bikedworkshop.com",
+   "mail": "info@bikedworkshop.com"
+  },
+  {
+   "n": "Porto Bikes",
+   "tel": "+34639445777",
+   "web": "portobikes.es",
+   "mail": "info@portobikes.es"
+  },
+  {
+   "n": "Flyz Bikes Store",
+   "tel": "+34910563542",
+   "web": "flyzbikestore.com",
+   "mail": "hugoflyz10@gmail.com"
+  },
+  {
+   "n": "Bike Reaction",
+   "tel": null,
+   "web": "bicicletasleganes.com",
+   "mail": null
+  },
+  {
+   "n": "Duo Bike",
+   "tel": "+34918190258",
+   "web": "duobike.es",
+   "mail": "duobikeracing@gmail.com"
+  },
+  {
+   "n": "Kbike Cycling Store",
+   "tel": null,
+   "web": "kbike.es",
+   "mail": null
+  },
+  {
+   "n": "Biciboom",
+   "tel": null,
+   "web": "biciboom.com",
+   "mail": null
+  },
+  {
+   "n": "Bicicletas Andrino",
+   "tel": "+34914655283",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "El Eterno Segundo",
+   "tel": null,
+   "web": "eleternosegundo.com",
+   "mail": null
+  },
+  {
+   "n": "Bicihome",
+   "tel": "+34648644883",
+   "web": "bicihome.com",
+   "mail": null
+  },
+  {
+   "n": "Bike & Roll",
+   "tel": "+34911427793",
+   "web": "tallerbicicletasmadrid.com",
+   "mail": "info@bikeandroll.es"
+  },
+  {
+   "n": "Traviesobike",
+   "tel": "+34918215009",
+   "web": "traviesobike.com",
+   "mail": "traviesobike@gmail.com"
+  },
+  {
+   "n": "Ciclos Florida",
+   "tel": "+34918915768",
+   "web": null,
+   "mail": null
+  },
+  {
+   "n": "EsmiBike",
+   "tel": "+34916799100",
+   "web": "esmibike.es",
+   "mail": null
+  },
+  {
+   "n": "Golpe de Pedal",
+   "tel": null,
+   "web": "golpedepedal.com",
+   "mail": null
+  },
+  {
+   "n": "3ike",
+   "tel": "+34656919671",
+   "web": "3ike.es",
+   "mail": null
+  }
+ ]
+}

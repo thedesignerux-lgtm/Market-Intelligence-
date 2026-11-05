@@ -26,7 +26,16 @@ Cada campo lleva `fuente`, `metodo` y `observado`. El método distingue el grado
 
 Las empresas se identifican por **dominio web**, no por nombre: dos fuentes que citan la misma web son la misma empresa. Por eso «Gurpil» (AMBE) y «Gurpilan S.L.» (directorio) son un solo registro.
 
-Las empresas sin web conocida quedan con una clave `sin-web:<nombre normalizado>` y hay que resolverlas a mano antes de incorporarlas.
+Las empresas sin web conocida quedan con una clave `sin-web:<nombre normalizado>`. El cargador **las descarta a propósito**: sin dominio no hay clave estable, y darlas de alta por nombre arriesga duplicarlas en cuanto aparezcan en otra fuente.
+
+### Pendientes de resolución manual
+
+| Empresa | Localidad | Qué falta |
+|---|---|---|
+| **Neomouv** | Vitoria-Gasteiz (Álava) | Web oficial. El directorio la lista como fabricante y mayorista, pero no enlaza su dominio. |
+| **Prowen Bikes (JL Wenti)** | Lucena (Córdoba) | Web oficial. El directorio la lista como distribuidor, fabricante y mayorista. |
+
+Para incorporarlas: confirma su dominio, añádelo como campo `web` con método `verified` y vuelve a generar el fichero. El cargador las recogerá en la siguiente pasada.
 
 ## Cómo se regenera
 

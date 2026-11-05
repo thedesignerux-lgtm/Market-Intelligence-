@@ -46,8 +46,13 @@ async function main() {
         [provincias],
       );
       if (rows.length === 0) {
+        // Importante: construirRegistrosOsm() llama a ensureMunicipality(), que si faltan los
+        // límites los descarga de OSM y los INSERTA en admin_areas. Eso es una escritura, así
+        // que la previsualización se detiene aquí en vez de dejar de ser de solo lectura.
         throw new Error(
-          `No hay municipios cargados para «${a}». Se cargan solos en la primera importación de esa provincia.`,
+          `No hay límites municipales cargados para «${a}», así que no se puede previsualizar sin escribir.\n` +
+            `Cargarlos inserta unos miles de filas en admin_areas (una escritura), y esta orden es de solo lectura.\n` +
+            `Pide autorización para cargar los límites de esa provincia y vuelve a intentarlo.`,
         );
       }
       municipios.push(...rows.map((r) => r.code));
