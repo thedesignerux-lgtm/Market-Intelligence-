@@ -31,6 +31,6 @@ export interface NormalizedRecord {
   phones: { raw: string; e164: string; isPersonal: boolean }[];
   websites: { raw: string; normalized: string }[];
   emails: { raw: string; normalized: string; isPersonal: boolean }[];
-  identifiers: { scheme: "nif" | "red_galicia" | "osm" | "wikidata"; value: string }[];
+  identifiers: { scheme: "nif" | "red_galicia" | "osm" | "wikidata" | "registro"; value: string }[];
   openingHours: string | null;
 }

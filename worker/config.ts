@@ -1,6 +1,13 @@
 // Configuración del worker desde variables de entorno (validada al arrancar).
 import { z } from "zod";
 
+/**
+ * URL con valor por defecto que se puede sustituir sin desplegar (variable del repositorio
+ * en GitHub Actions). Una variable sin definir llega como cadena vacía: se trata como ausente
+ * para que valga el valor por defecto.
+ */
+const overridableUrl = (fallback: string) => z.preprocess((v) => (v === "" || v == null ? undefined : v), z.string().url().default(fallback));
+
 const schema = z.object({
   // Conexión directa a PostgreSQL con un rol de servidor (nunca se expone al navegador).
   DATABASE_URL: z.string().min(1),
@@ -8,12 +15,11 @@ const schema = z.object({
   // Email o URL de contacto del proyecto (no el email personal de un usuario).
   CONTACT: z.string().min(5),
   CACHE_DIR: z.string().default(".cache"),
-  OSM_EXTRACT_BASE_URL: z.string().url().default("https://download.openstreetmap.fr/extracts/europe/spain/galicia"),
-  RED_CSV_URL: z
-    .string()
-    .url()
-    .default("https://abertos.xunta.gal/catalogo/cultura-ocio-deporte/-/dataset/0271/rexistro-entidades-deportivas/001/descarga-directa-ficheiro.csv"),
-  CARTOCIUDAD_URL: z.string().url().default("https://www.cartociudad.es/geocoder/api/geocoder/find"),
+  OSM_EXTRACT_BASE_URL: overridableUrl("https://download.openstreetmap.fr/extracts"),
+  RED_CSV_URL: overridableUrl(
+    "https://abertos.xunta.gal/catalogo/cultura-ocio-deporte/-/dataset/0271/rexistro-entidades-deportivas/001/descarga-directa-ficheiro.csv",
+  ),
+  CARTOCIUDAD_URL: overridableUrl("https://www.cartociudad.es/geocoder/api/geocoder/find"),
   // Pausa mínima entre peticiones al geocodificador (ms).
   GEOCODER_MIN_INTERVAL_MS: z.coerce.number().int().min(100).default(250),
   // Un extracto de OSM descargado se reutiliza durante este tiempo antes de volver a pedirlo.

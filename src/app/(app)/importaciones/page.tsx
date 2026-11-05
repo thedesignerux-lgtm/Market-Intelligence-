@@ -36,6 +36,11 @@ export default async function ImportsPage() {
   // y, en todo caso, cada noche. Si algo lleva más de 15 minutos en cola, se avisa.
   const immediate = Boolean(process.env.GITHUB_DISPATCH_TOKEN);
   const stalled = (runs ?? []).some((r) => r.status === "queued" && Date.now() - new Date(r.created_at).getTime() > 15 * 60_000);
+  // Una importación que lleva días «en curso» es una fuente caída, no trabajo en marcha:
+  // además bloquea cualquier otra importación de la misma fuente y alcance.
+  const stuck = (runs ?? []).filter(
+    (r) => (r.status === "running" || r.status === "paused") && Date.now() - new Date(r.created_at).getTime() > 24 * 60 * 60_000,
+  );
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-6 md:px-8">
@@ -58,6 +63,14 @@ export default async function ImportsPage() {
           {immediate
             ? "Hay importaciones en cola desde hace más de 15 minutos. Revisa la última ejecución en GitHub → Actions → «Importador»."
             : "Hay importaciones en cola. Se procesarán en la ejecución automática de esta noche (o lánzala a mano en GitHub → Actions → «Importador» → «Run workflow»)."}
+        </p>
+      )}
+
+      {stuck.length > 0 && (
+        <p role="alert" className="mt-4 rounded-md bg-danger-wash px-3 py-2 text-[13px] text-danger">
+          {stuck.length === 1 ? "Hay una importación" : `Hay ${stuck.length} importaciones`} en curso desde hace más de un día (
+          {stuck.map((r) => SOURCE[r.source_id]?.name ?? r.source_id).join(", ")}). Suele significar que la fuente no responde. Mientras siga activa, bloquea otra
+          importación de la misma fuente y alcance: cancélala desde el historial.
         </p>
       )}
 

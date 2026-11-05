@@ -54,6 +54,20 @@ Sin este paso, lo que pidas en **Importaciones** se procesa en la ejecución noc
 2. En Vercel, proyecto **market-intelligence** → **Settings → Environment Variables** → añade `GITHUB_DISPATCH_TOKEN` (tipo **Secret**) con ese token, en Production.
 3. **Deployments → Redeploy** para que la web lo use.
 
+### Si una fuente cambia de dirección o deja de responder
+
+El importador avisa solo: la pantalla **Importaciones** marca en rojo cualquier importación que lleve más de un día en curso, y el worker la cancela tras 12 fallos de red seguidos (ADR-0009).
+
+Si la fuente simplemente cambió de URL, no hace falta tocar el código: añade la nueva dirección como variable del repositorio en **Settings → Secrets and variables → Actions → Variables**.
+
+| Variable | Fuente |
+|---|---|
+| `RED_CSV_URL` | Rexistro de Entidades Deportivas (Xunta) |
+| `OSM_EXTRACT_BASE_URL` | Extractos provinciales de OpenStreetMap |
+| `CARTOCIUDAD_URL` | Geocodificador CartoCiudad (IGN) |
+
+Después, en **Importaciones**, cancela la importación atascada y pide una nueva.
+
 La conexión con Supabase va cifrada (TLS). Para verificar además el certificado del servidor, añade el certificado de Supabase (**Project Settings → Database → SSL Configuration**) como secreto `DATABASE_CA_CERT` y pásalo en el workflow.
 
 Alternativa: `Dockerfile.worker` permite ejecutar el importador como proceso continuo en cualquier servicio de contenedores.
