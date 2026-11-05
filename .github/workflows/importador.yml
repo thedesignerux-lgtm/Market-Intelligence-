@@ -48,6 +48,11 @@ jobs:
       CONTACT: https://github.com/thedesignerux-lgtm/Market-Intelligence-
       CACHE_DIR: .cache
       WORKER_ID: github-actions-${{ github.run_id }}
+      # Si una fuente cambia de dirección, se sustituye aquí sin desplegar:
+      # Settings → Secrets and variables → Actions → Variables. Vacías = valor por defecto.
+      RED_CSV_URL: ${{ vars.RED_CSV_URL }}
+      OSM_EXTRACT_BASE_URL: ${{ vars.OSM_EXTRACT_BASE_URL }}
+      CARTOCIUDAD_URL: ${{ vars.CARTOCIUDAD_URL }}
     steps:
       - uses: actions/checkout@v5
 

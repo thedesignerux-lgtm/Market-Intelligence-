@@ -83,3 +83,15 @@ Registro breve de las decisiones relevantes. Cada una indica el contexto, la dec
 | CartoCiudad (IGN/CNIG) | CC BY 4.0 | Atribución. |
 
 Para uso interno no hay obligación de compartir. Las exportaciones a terceros deberán revisarse (fase 3).
+
+## ADR-0009 · Cortacircuitos cuando una fuente deja de responder
+
+**Contexto.** El 23-10-2026 el servidor de `abertos.xunta.gal` dejó de responder. El importador trató cada fallo como temporal y siguió reintentando: 13 días después la importación seguía en estado `running`, con 161 tareas fallidas y 151 en cola. Nadie se enteró, porque el aviso de la pantalla Importaciones solo miraba las importaciones en estado `queued`, no las que llevan días `running`. Además, mientras una importación sigue activa, el índice `import_runs_one_active_idx` impide lanzar otra de la misma fuente y alcance.
+
+**Decisión.**
+- El worker distingue un fallo de red (sin respuesta del servidor: `HttpError` con `status` nulo) de un fallo de datos.
+- Si una misma fuente acumula 12 fallos de red seguidos dentro de una ejecución, el worker registra una incidencia de nivel `error` con código `source_unreachable` y cancela la importación con `control_import(run, 'cancel')`, que ya existía. Una sola tarea correcta reinicia la cuenta.
+- La pantalla Importaciones avisa en rojo de cualquier importación que lleve más de 24 h en `running` o `paused`, y explica que bloquea otras de la misma fuente.
+- La URL del registro gallego ya era configurable (`RED_CSV_URL`): un cambio de dirección de la fuente se arregla con una variable de entorno, sin desplegar.
+
+**Consecuencias.** Una fuente caída deja de consumir la ventana nocturna del workflow y deja de bloquear otras importaciones. El coste es que una caída larga de verdad obliga a relanzar la importación a mano (`retry_failed` o una nueva), que es el comportamiento deseado: que alguien lo vea.
