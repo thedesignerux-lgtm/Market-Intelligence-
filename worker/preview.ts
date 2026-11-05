@@ -11,6 +11,7 @@ import { findCandidates, toCandidate } from "./pipeline";
 import {
   DEFAULT_MATCH_CONFIG,
   scoreMatch,
+  type MatchCandidate,
   type MatchConfig,
 } from "../src/lib/domain/matching";
 import type { NormalizedRecord } from "../src/lib/domain/records";
@@ -50,6 +51,70 @@ export interface InformePrevio {
   };
 }
 
+/**
+ * Los registros ya vistos de esta importación, indexados igual que los preselecciona
+ * `findCandidates()`: por celda geográfica (para el radio de 1 km) y por municipio + nombre.
+ * Así la previsualización encuentra los mismos choques que encontrará la ingesta, sin
+ * comparar todos contra todos.
+ */
+class Lote {
+  /** Celdas de ~1,1 km: un punto solo se compara con su celda y las 8 vecinas. */
+  private static readonly CELDA = 0.01;
+  private porCelda = new Map<string, { r: NormalizedRecord; c: MatchCandidate }[]>();
+  private porMunicipio = new Map<string, { r: NormalizedRecord; c: MatchCandidate }[]>();
+
+  private static celda(lon: number, lat: number): string {
+    return `${Math.floor(lon / Lote.CELDA)}:${Math.floor(lat / Lote.CELDA)}`;
+  }
+
+  private vecinos(c: MatchCandidate, r: NormalizedRecord): { r: NormalizedRecord; c: MatchCandidate }[] {
+    const out: { r: NormalizedRecord; c: MatchCandidate }[] = [];
+    if (c.location) {
+      const [lon, lat] = c.location;
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const k = Lote.celda(lon + dx * Lote.CELDA, lat + dy * Lote.CELDA);
+          const v = this.porCelda.get(k);
+          if (v) out.push(...v);
+        }
+      }
+    }
+    if (r.municipalityCode) {
+      const v = this.porMunicipio.get(r.municipalityCode);
+      if (v) out.push(...v.filter((x) => !out.includes(x)));
+    }
+    return out;
+  }
+
+  /** Primer registro ya visto que se emparejaría con este, o null. */
+  choque(r: NormalizedRecord, c: MatchCandidate, config: MatchConfig) {
+    let mejor: { externalId: string; nombre: string; puntuacion: number; decision: string } | null = null;
+    for (const otro of this.vecinos(c, r)) {
+      const res = scoreMatch(c, otro.c, config);
+      if (res.decision === "different") continue;
+      if (!mejor || res.score > mejor.puntuacion) {
+        mejor = { externalId: otro.r.externalId, nombre: otro.r.name, puntuacion: res.score, decision: res.decision };
+      }
+    }
+    return mejor;
+  }
+
+  añadir(r: NormalizedRecord, c: MatchCandidate) {
+    const e = { r, c };
+    if (c.location) {
+      const k = Lote.celda(c.location[0], c.location[1]);
+      const v = this.porCelda.get(k);
+      if (v) v.push(e);
+      else this.porCelda.set(k, [e]);
+    }
+    if (r.municipalityCode) {
+      const v = this.porMunicipio.get(r.municipalityCode);
+      if (v) v.push(e);
+      else this.porMunicipio.set(r.municipalityCode, [e]);
+    }
+  }
+}
+
 const cuentaContactos = (r: NormalizedRecord) => ({
   telefono: r.phones.length,
   email: r.emails.length,
@@ -87,8 +152,15 @@ export async function previsualizar(
   };
 
   // Choques dentro del propio lote: dos registros de esta misma importación que se
-  // emparejarían entre sí. La ingesta los mandaría a revisión, no los uniría sola.
-  const vistos = new Map<string, string>(); // clave de emparejamiento -> externalId ya visto
+  // emparejarían entre sí. En la importación real, el primero ya existe como entidad cuando
+  // llega el segundo, así que findCandidates() lo encuentra y scoreMatch() lo puntúa; como
+  // ambos vienen de la misma fuente, acaban en revisión en vez de fusionarse.
+  //
+  // Aquí esas entidades aún no existen, así que hay que simular ese encuentro. Se usa el
+  // MISMO scoreMatch y la misma preselección que findCandidates(): candidatos a menos de
+  // 1 km, o del mismo municipio con nombre parecido. Una comparación de todos contra todos
+  // no escalaría a una importación grande.
+  const lote = new Lote();
 
   // Una sola conexión para todo el informe: las consultas de emparejamiento son las mismas
   // que usa la ingesta y esperan un cliente, no el pool.
@@ -159,8 +231,7 @@ export async function previsualizar(
         .sort((a, b) => b.res.score - a.res.score);
 
       const mejor = puntuados[0];
-      const clave = `${r.entityType}:${r.normalizedName}:${r.municipalityCode ?? ""}`;
-      const choqueLote = vistos.get(clave);
+      const choqueLote = lote.choque(r, yo, matchConfig);
 
       if (mejor && mejor.res.decision === "same") {
         informe.existentes.push({
@@ -190,7 +261,9 @@ export async function previsualizar(
         informe.duplicados.push({
           ...base,
           clase: "duplicado",
-          motivo: `Mismo nombre y municipio que ${choqueLote} dentro de esta misma importación: quedaría para revisión`,
+          motivo:
+          `Se empareja con ${choqueLote.externalId} («${choqueLote.nombre}») dentro de esta misma importación ` +
+          `(${choqueLote.decision}, ${choqueLote.puntuacion}): ambos se crearían y quedarían para revisión`,
         });
       } else {
         informe.nuevas.push({
@@ -199,7 +272,7 @@ export async function previsualizar(
           motivo: "No existe nada parecido: se crearía",
         });
       }
-      if (!choqueLote) vistos.set(clave, r.externalId);
+      lote.añadir(r, yo);
     }
   } finally {
     tx.release();

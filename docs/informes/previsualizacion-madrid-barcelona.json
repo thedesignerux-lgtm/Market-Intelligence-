@@ -2434,17 +2434,6 @@
       "motivo": "No existe nada parecido: se crearía"
     },
     {
-      "externalId": "node/9562519157",
-      "nombre": "Canyon Barcelona",
-      "contactos": {
-        "telefono": 0,
-        "email": 0,
-        "web": 1
-      },
-      "clase": "nueva",
-      "motivo": "No existe nada parecido: se crearía"
-    },
-    {
       "externalId": "node/9800778718",
       "nombre": "Ciclone bikes",
       "contactos": {
@@ -2579,17 +2568,6 @@
     {
       "externalId": "node/11343790061",
       "nombre": "I'm Bikes",
-      "contactos": {
-        "telefono": 0,
-        "email": 0,
-        "web": 1
-      },
-      "clase": "nueva",
-      "motivo": "No existe nada parecido: se crearía"
-    },
-    {
-      "externalId": "node/11348369929",
-      "nombre": "BiciHub",
       "contactos": {
         "telefono": 0,
         "email": 0,
@@ -2748,28 +2726,6 @@
         "telefono": 0,
         "email": 0,
         "web": 0
-      },
-      "clase": "nueva",
-      "motivo": "No existe nada parecido: se crearía"
-    },
-    {
-      "externalId": "node/11917823369",
-      "nombre": "Bike club barcelona",
-      "contactos": {
-        "telefono": 0,
-        "email": 0,
-        "web": 0
-      },
-      "clase": "nueva",
-      "motivo": "No existe nada parecido: se crearía"
-    },
-    {
-      "externalId": "node/11969439778",
-      "nombre": "Taller Autoreparació Bicihub",
-      "contactos": {
-        "telefono": 0,
-        "email": 0,
-        "web": 1
       },
       "clase": "nueva",
       "motivo": "No existe nada parecido: se crearía"
@@ -4370,7 +4326,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/2778991972 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/2778991972 («Alcalá Bikes») dentro de esta misma importación (review, 0.55): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/1809561216",
@@ -4381,7 +4337,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/904780608 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/904780608 («Rincón del Trece») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/11226640202",
@@ -4392,7 +4348,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/266171335 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/266171335 («Bicicletas Salchi») dentro de esta misma importación (review, 0.7): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/2377617302",
@@ -4403,7 +4359,29 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/1188808651 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/1188808651 («Sanferbike Pozuelo») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
+    },
+    {
+      "externalId": "node/9562519157",
+      "nombre": "Canyon Barcelona",
+      "contactos": {
+        "telefono": 0,
+        "email": 0,
+        "web": 1
+      },
+      "clase": "duplicado",
+      "motivo": "Se empareja con node/6052500460 («Terra BikeTours») dentro de esta misma importación (review, 0.617): ambos se crearían y quedarían para revisión"
+    },
+    {
+      "externalId": "node/11348369929",
+      "nombre": "BiciHub",
+      "contactos": {
+        "telefono": 0,
+        "email": 0,
+        "web": 1
+      },
+      "clase": "duplicado",
+      "motivo": "Se empareja con node/6531790385 («Biciclot») dentro de esta misma importación (review, 0.769): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/11917779436",
@@ -4414,7 +4392,29 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/9466782642 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/9466782642 («Folding Bikes House») dentro de esta misma importación (review, 0.6): ambos se crearían y quedarían para revisión"
+    },
+    {
+      "externalId": "node/11917823369",
+      "nombre": "Bike club barcelona",
+      "contactos": {
+        "telefono": 0,
+        "email": 0,
+        "web": 0
+      },
+      "clase": "duplicado",
+      "motivo": "Se empareja con node/11821408638 («The Bike Club Barcelona») dentro de esta misma importación (review, 0.74): ambos se crearían y quedarían para revisión"
+    },
+    {
+      "externalId": "node/11969439778",
+      "nombre": "Taller Autoreparació Bicihub",
+      "contactos": {
+        "telefono": 0,
+        "email": 0,
+        "web": 1
+      },
+      "clase": "duplicado",
+      "motivo": "Se empareja con node/11348369929 («BiciHub») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/11969439780",
@@ -4425,7 +4425,7 @@
         "web": 1
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/11348369929 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/11348369929 («BiciHub») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/12257972008",
@@ -4436,7 +4436,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/11339601035 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/11339601035 («Koos») dentro de esta misma importación (review, 0.7): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/2676710006",
@@ -4447,7 +4447,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/1338355003 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/1338355003 («Ravet Bike») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/2538137684",
@@ -4458,7 +4458,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/1269068842 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/1269068842 («Addict Bikes») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/2015348090",
@@ -4469,7 +4469,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/1007674045 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/1007674045 («T-Bikes») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/262850532",
@@ -4480,7 +4480,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/131425266 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/131425266 («Biking Point») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/1063687858",
@@ -4491,7 +4491,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/531843929 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/531843929 («Tomas Domingo») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/1063687864",
@@ -4502,7 +4502,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/531843932 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/531843932 («Zona Bici») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/13522614720",
@@ -4513,7 +4513,7 @@
         "web": 1
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/3714121698 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/3714121698 («Vaic») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/305462700",
@@ -4524,7 +4524,7 @@
         "web": 1
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/152731350 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/152731350 («The Cyclery») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/6249268458",
@@ -4535,7 +4535,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/6249268457 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/6249268457 («Vila Ors») dentro de esta misma importación (review, 0.6): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "way/319019056",
@@ -4546,7 +4546,7 @@
         "web": 1
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/11219710187 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/11219710187 («Fanatik») dentro de esta misma importación (review, 0.7): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/638038112",
@@ -4557,7 +4557,7 @@
         "web": 1
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/11219710187 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/319019056 («Fanatik») dentro de esta misma importación (same, 1): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/1422255404",
@@ -4568,7 +4568,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/711127702 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/711127702 («VBSPORTS Vilafranca») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/1547700406",
@@ -4579,7 +4579,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que way/773850203 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con way/773850203 («Cicles Sans Specialized Concept Store») dentro de esta misma importación (same, 0.85): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/11020613129",
@@ -4590,7 +4590,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/10985254583 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/10985254583 («Va de Bici») dentro de esta misma importación (review, 0.55): ambos se crearían y quedarían para revisión"
     },
     {
       "externalId": "node/11077789675",
@@ -4601,7 +4601,7 @@
         "web": 0
       },
       "clase": "duplicado",
-      "motivo": "Mismo nombre y municipio que node/11032902086 dentro de esta misma importación: quedaría para revisión"
+      "motivo": "Se empareja con node/11032902086 («Esports Prieto, SL») dentro de esta misma importación (review, 0.7): ambos se crearían y quedarían para revisión"
     }
   ],
   "descartadas": [

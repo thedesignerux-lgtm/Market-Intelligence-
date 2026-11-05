@@ -22,18 +22,59 @@ alter role previsualizador bypassrls;
 
 No se concede `insert`, `update`, `delete` ni `truncate`. **PostgreSQL rechaza cualquier escritura**, así que la garantía no depende del código: la impone el motor.
 
-Comprobación:
+Comprobación de permisos efectivos:
 
 ```sql
--- Como previsualizador. Debe responder: ERROR: permission denied for table admin_areas
-insert into public.admin_areas (code, level, name) values ('99999','municipio','Prueba');
+select privilege_type, count(*) as tablas
+  from information_schema.table_privileges
+ where grantee = 'previsualizador' and table_schema = 'public'
+ group by 1;
+-- Debe salir SELECT y nada más.
+
+select rolsuper, rolbypassrls, rolcreatedb, rolcreaterole
+  from pg_roles where rolname = 'previsualizador';
+-- Solo rolbypassrls debe ser true.
 ```
+
+Verificado sobre una base local construida desde estas migraciones: el rol tiene `SELECT` sobre 32 tablas y ningún otro permiso. Estas ocho operaciones se rechazan:
+
+| Operación | Respuesta |
+|---|---|
+| `insert into public.entities …` | permission denied for table entities |
+| `update public.entities …` | permission denied for table entities |
+| `delete from public.entities` | permission denied for table entities |
+| `truncate public.entities` | permission denied for table entities |
+| `create table public.prueba (…)` | permission denied for schema public |
+| `alter table public.entities add column …` | must be owner of table entities |
+| `drop table public.entity_notes` | must be owner of table entity_notes |
+| `create index on public.entities (…)` | must be owner of table entities |
 
 ### Por qué hace falta `bypassrls`
 
-Todas las tablas tienen RLS y sus políticas se escribieron para el rol `authenticated` de Supabase. Un rol nuevo no las cumple, así que **las consultas no fallan: devuelven cero filas**. La previsualización saldría con 0 registros y parecería correcta.
+Todas las tablas de `public` tienen RLS activa y sus políticas se escribieron para el rol `authenticated` de Supabase: comprueban `has_role_anywhere(...)`, que consulta `memberships`. Un rol nuevo no es miembro de ningún espacio de trabajo, así que **ninguna política se cumple**.
 
-Es el fallo más peligroso de este montaje, porque es silencioso. `bypassrls` lo resuelve sin conceder ninguna escritura.
+Cuando RLS no deja pasar una fila, PostgreSQL **no da error**: la omite. Un `select count(*) from category_mappings` devuelve `0` en lugar de `12`, y la previsualización termina con 0 candidatos y aspecto de haber funcionado.
+
+Es el fallo más peligroso de este montaje porque es silencioso: no hay nada que revisar en los registros.
+
+`bypassrls` es un **atributo del rol**, no un permiso sobre tablas. Permite ver todas las filas y **no concede ninguna escritura**: el rol sigue sin `insert`, `update`, `delete` ni `truncate`.
+
+Alternativa si no quieres `bypassrls`: dar de alta al rol en `memberships` con papel `lector`. Es más fino, pero requiere escribir una fila de datos, que es justo lo que se intenta evitar.
+
+### La herramienta se para sola
+
+`previsualizar` comprueba antes de empezar que puede leer lo que espera, y **se detiene** si no puede garantizarlo:
+
+```
+El rol «previsualizador» no puede ver todas las filas: RLS está activa en
+category_mappings, contact_points, entities, entity_sources, source_records
+y este rol no la elude.
+Las consultas no fallarían: devolverían cero filas y el informe saldría vacío
+pareciendo correcto.
+Solución: alter role previsualizador bypassrls;  (no concede ninguna escritura)
+```
+
+Comprueba dos cosas: que ninguna tabla imprescindible esté filtrando filas para el rol actual, y que se vea al menos una regla de categorías de `osm`. Sin reglas no puede salir ningún candidato, así que un `0` ahí nunca es un resultado legítimo.
 
 ## 2. Ejecutar
 
@@ -79,12 +120,14 @@ Siempre se cumple:
 nuevas + existentes + duplicados + descartadas = total
 ```
 
-## Limitación conocida: la previsualización cuenta de menos los duplicados
+## Duplicados dentro del mismo lote
 
-Los duplicados **dentro del mismo lote** se detectan por nombre idéntico y mismo municipio, porque las entidades aún no existen y `findCandidates()` no puede verlas.
+Dos registros de la misma importación que son el mismo negocio no se pueden comparar con `findCandidates()`, porque ninguna de las dos entidades existe aún.
 
-La importación real es más estricta: cuando llega el segundo registro, el primero ya existe como entidad, así que `scoreMatch()` lo encuentra también por cercanía y nombre parecido.
+La previsualización simula lo que hará la ingesta: guarda los registros ya vistos indexados **igual que los preselecciona `findCandidates()`** (celda geográfica de ~1,1 km, o mismo municipio) y los puntúa con el **mismo `scoreMatch()`**. En la importación real ocurre lo mismo: cuando llega el segundo registro, el primero ya es una entidad, el emparejador lo encuentra y, al venir ambos de la misma fuente, acaban en revisión en vez de fusionarse.
 
-Medido sobre Madrid y Barcelona: **la previsualización marca 22 registros; el emparejador completo encuentra 30 parejas.** Las 5 parejas que se escapan son nombres parecidos pero no idénticos a pocos metros.
+Medido sobre Madrid y Barcelona: el emparejador completo encuentra **30 parejas** y la previsualización marca **26 registros**, cubriendo **las 30**. La diferencia entre 30 y 26 no es un hueco: cuando tres registros son el mismo negocio forman 3 parejas pero solo 2 se marcan, porque el primero es el que se crearía.
 
-**El número de duplicados de la previsualización es un suelo, no la cifra final.** Para dimensionar la revisión manual, usa el listado completo de parejas.
+> Una versión anterior comparaba solo por nombre idéntico y mismo municipio, y se dejaba 5 parejas con nombres parecidos pero no iguales (por ejemplo «BiciHub» y «Taller Autoreparació Bicihub», a 6 m y con la misma web). Hay pruebas que cubren ese caso.
+
+**Nada se fusiona ni se elimina automáticamente.** La previsualización solo informa; la importación crea ambas entidades y las deja marcadas para que una persona decida.

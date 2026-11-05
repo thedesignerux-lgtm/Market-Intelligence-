@@ -13,6 +13,7 @@ import { loadConfig } from "./config";
 import { createPool } from "./db";
 import { construirRegistrosOsm } from "./handlers";
 import { limitesDelExtracto } from "./limites";
+import { garantizarLectura, resumenLectura } from "./lectura";
 import { previsualizar, resumen, type Descartada, type InformePrevio } from "./preview";
 import { provincesForScope } from "../src/lib/domain/territory";
 import type { NormalizedRecord } from "../src/lib/domain/records";
@@ -31,6 +32,11 @@ async function main() {
   const config = loadConfig();
   const db = createPool(config.DATABASE_URL);
   try {
+    // Antes de nada: ¿vemos de verdad los datos? Un rol sin bypassrls devolvería cero filas
+    // sin dar error y el informe saldría vacío pareciendo correcto.
+    const lectura = await garantizarLectura(db);
+    if (!json) console.error(resumenLectura(lectura));
+
     // Los límites salen del extracto de OSM, no de admin_areas: así la previsualización
     // no necesita que la provincia esté cargada y no escribe ni una fila.
     const limites = limitesDelExtracto(db, config);

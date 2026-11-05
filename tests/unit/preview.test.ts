@@ -117,6 +117,42 @@ describe("previsualización", () => {
     expect(i.duplicados[0]!.motivo).toMatch(/revisión/i);
   });
 
+  it("detecta choques de lote con nombres DISTINTOS, como hará la importación real", async () => {
+    // Caso real: «BiciHub» y «Taller Autoreparació Bicihub», a 6 m y con la misma web.
+    // La regla antigua (nombre idéntico + municipio) no los veía; scoreMatch sí.
+    const { db } = fakeDb();
+    const a = registro("BiciHub", {
+      location: { lon: 2.1963, lat: 41.4005, precision: "exact", sourceId: "osm", method: "found", confidence: 0.6 },
+      websites: [{ raw: "https://bicihub.barcelona", normalized: "bicihub.barcelona" }],
+    });
+    const b = registro("Taller Autoreparació Bicihub", {
+      location: { lon: 2.19637, lat: 41.40055, precision: "exact", sourceId: "osm", method: "found", confidence: 0.6 },
+      websites: [{ raw: "https://bicihub.barcelona", normalized: "bicihub.barcelona" }],
+    });
+
+    const i = await previsualizar(db, "osm", [a, b]);
+
+    expect(i.nuevas).toHaveLength(1);
+    expect(i.duplicados).toHaveLength(1);
+    expect(i.duplicados[0]!.motivo).toMatch(/misma importación/i);
+  });
+
+  it("no empareja registros lejanos aunque se parezcan de nombre", async () => {
+    const { db } = fakeDb();
+    const madrid = registro("Ciclos Vega", {
+      location: { lon: -3.7, lat: 40.4, precision: "exact", sourceId: "osm", method: "found", confidence: 0.6 },
+    });
+    const barcelona = registro("Ciclos Vega", {
+      externalId: "node/otro",
+      location: { lon: 2.17, lat: 41.38, precision: "exact", sourceId: "osm", method: "found", confidence: 0.6 },
+    });
+
+    const i = await previsualizar(db, "osm", [madrid, barcelona]);
+
+    expect(i.nuevas).toHaveLength(2);
+    expect(i.duplicados).toHaveLength(0);
+  });
+
   it("detecta choques dentro del propio lote", async () => {
     const { db } = fakeDb();
     const i = await previsualizar(db, "osm", [registro("Bicis Uno"), registro("Bicis Uno")]);

@@ -145,3 +145,25 @@ La contención sigue resolviéndola PostGIS en los dos casos, con el mismo `st_c
 **Consecuencias.** La previsualización se puede ejecutar sobre cualquier provincia sin escribir una sola fila, que era el objetivo. La importación real sigue necesitando los límites en `admin_areas` (los usan `markMissing` y el mapa), así que esto permite mirar antes de decidir, no evita la escritura de la importación.
 
 La prueba que lo sostiene no es un comentario: una base de datos centinela lanza excepción ante cualquier `insert`, `update`, `delete`, `truncate`, `alter`, `drop`, `create`, `grant`, `revoke`, `merge` o `copy` en el camino completo. Se verificó por mutación: al reintroducir a propósito la llamada a `ensureMunicipality()`, la prueba falla con el `insert into public.admin_areas` en el mensaje.
+
+## ADR-0014 · La previsualización se detiene si no puede garantizar que lee los datos
+
+**Contexto.** Todas las tablas de `public` tienen RLS, y sus políticas comprueban `has_role_anywhere(...)` contra `memberships`. Un rol de solo lectura creado a mano no es miembro de ningún espacio de trabajo, así que ninguna política se cumple. PostgreSQL entonces **no da error: omite las filas**. `select count(*) from category_mappings` devuelve 0 en lugar de 12 y la previsualización termina con 0 candidatos, con aspecto de haber funcionado.
+
+Ocurrió de verdad al validar contra una base local: la primera ejecución dio 0 registros sin ningún mensaje.
+
+**Decisión.** `worker/lectura.ts` comprueba antes de empezar que ninguna tabla imprescindible esté filtrando filas para el rol actual, y que se vea al menos una regla de categorías de `osm`. Si no puede garantizarlo, lanza `LecturaNoGarantizada` con la causa y la solución. Prefiere pararse a entregar un informe vacío que parezca correcto.
+
+**Consecuencias.** Un fallo silencioso pasa a ser ruidoso. El coste es una consulta más al arrancar.
+
+## ADR-0015 · Los choques de lote se detectan con el emparejador real
+
+**Contexto.** Dos registros de la misma importación que son el mismo negocio no se pueden comparar con `findCandidates()`, porque ninguna de las dos entidades existe todavía. La primera versión los buscaba por nombre idéntico y mismo municipio.
+
+Al reconciliar la previsualización con el análisis completo apareció el hueco: el emparejador encontraba 30 parejas y la previsualización solo cubría 25. Las 5 que faltaban tenían nombres parecidos pero no iguales, a pocos metros y con la misma web; el caso más claro, «BiciHub» y «Taller Autoreparació Bicihub», a 6 metros.
+
+**Decisión.** La previsualización guarda los registros ya vistos indexados **igual que los preselecciona `findCandidates()`** —celda geográfica de ~1,1 km, o mismo municipio— y los puntúa con el **mismo `scoreMatch()`**. Es lo que hará la ingesta: cuando llega el segundo registro, el primero ya es una entidad.
+
+El índice por celdas evita comparar todos contra todos, que no escalaría a una importación grande.
+
+**Consecuencias.** Las 30 parejas quedan cubiertas (26 registros marcados; un trío de registros son 3 parejas pero solo 2 marcas, porque el primero es el que se crearía). Nada se fusiona ni se elimina automáticamente: la previsualización informa y la importación deja las entidades marcadas para revisión humana.
