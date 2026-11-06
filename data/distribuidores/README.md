@@ -45,6 +45,39 @@ python3 scripts/analisis/construir-dataset-distribuidores.py
 
 El script lleva los datos dentro. No descarga nada: las fuentes se consultaron una vez y se transcribieron, para que el fichero sea reproducible y revisable en un diff.
 
+## Qué carga el cargador, y qué no
+
+Por defecto solo entran las empresas con **tipo declarado y con fuente**: 13 de las 64.
+
+| Entran | Nº |
+|---|---|
+| Mayoristas | 8 |
+| Distribuidores | 3 |
+| Central de compras | 1 |
+| Marca | 1 |
+
+Las demás se quedan fuera **con el motivo escrito**, no en silencio:
+
+| Se quedan fuera | Nº | Por qué |
+|---|---|---|
+| Sin tipo verificado | 48 | Entrarían como «Distribuidor de bicicletas» genérico, y entre ellas están Trek, Shimano, Specialized, Canyon y Campagnolo, que son marcas. Un mayorista y una marca no se abordan igual: la etiqueta equivocada cambia el primer contacto, no solo la ficha. |
+| Cadena excluida | 1 | Decathlon. Misma razón que en la ruta de OSM (ADR-0011): precios centralizados, sin capacidad de cerrar una oferta agrupada. |
+| Sin web conocida | 2 | Neomouv y Prowen Bikes: sin dominio no hay clave estable para deduplicar. |
+
+Para cargarlas todas como distribuidor genérico, de forma explícita:
+
+```
+npm run cargar -- data/distribuidores/investigacion-2026-11.json --generico --escribir
+```
+
+### Cómo clasificar las 48 pendientes
+
+El directorio de AMBE **no publica categorías**: comprobado el 06-11-2026, solo da nombres y enlaces. La frase «empresas que producen, importan y distribuyen» es genérica y no asigna categoría a nadie.
+
+La vía que sí da método `verified` es leer la web de cada empresa y recoger qué dice ser. Son 48 consultas. Añade a cada empresa un campo `tipo` con uno de estos valores y vuelve a generar el fichero:
+
+`mayorista` · `fabricante` · `marca` · `central_de_compras` · `distribuidor`
+
 ## Estado
 
 Ninguna de estas empresas se ha cargado en la base de datos todavía. Falta decidir por qué vía se incorporan (ver el informe de la Fase 1).

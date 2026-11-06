@@ -7,6 +7,7 @@
 // de modo que la deduplicación, la vinculación y la procedencia son exactamente las mismas.
 
 import { readFile } from "node:fs/promises";
+import { cadenaExcluida } from "../../src/lib/domain/exclusiones";
 import { displayName, normalizeName, normalizePhone, normalizeWebsite } from "../../src/lib/domain/normalize";
 import type { ExtraField, NormalizedRecord, ValueMethod } from "../../src/lib/domain/records";
 
@@ -53,6 +54,21 @@ const CAMPOS_PROPIOS = ["especializacion", "cobertura", "portal_b2b", "afiliacio
 
 const metodo = (c: CampoCurado): ValueMethod =>
   c.metodo === "verified" ? "verified" : c.metodo === "manual" ? "manual" : c.metodo === "inferred" ? "inferred" : "found";
+
+/**
+ * ¿Se puede clasificar esta empresa con un dato que tenga fuente?
+ *
+ * Sin `tipo` declarado caería en `distribuidor.ciclismo` genérico («Distribuidor de
+ * bicicletas»), y eso etiquetaría a Shimano, Trek o Specialized como distribuidores cuando
+ * son marcas. Un mayorista y una marca no se abordan igual, así que la etiqueta equivocada
+ * no es un detalle de ficha: cambia el primer contacto.
+ *
+ * Por eso, por defecto, una empresa sin tipo NO entra. Entra con `--generico`, que es una
+ * decisión explícita de quien ejecuta, no un silencio del código.
+ */
+export function tipoDeclarado(e: EmpresaCurada): string | null {
+  return e.campos.tipo?.valor ?? null;
+}
 
 export function empresaARegistro(e: EmpresaCurada, fuenteId = CURADOS_SOURCE_ID): NormalizedRecord | null {
   const nombre = displayName(e.nombre);
@@ -109,12 +125,28 @@ export interface LecturaCurada {
   descartadas: { externalId: string; nombre: string; motivo: string }[];
 }
 
-export async function leerFicheroCurado(ruta: string): Promise<LecturaCurada> {
+export async function leerFicheroCurado(ruta: string, opts: { generico?: boolean } = {}): Promise<LecturaCurada> {
   const fichero = JSON.parse(await readFile(ruta, "utf-8")) as FicheroCurado;
   const registros: NormalizedRecord[] = [];
   const descartadas: LecturaCurada["descartadas"] = [];
 
   for (const e of fichero.empresas) {
+    // Misma exclusión comercial que en la ruta de OSM (ADR-0011): una cadena con precios
+    // centralizados no puede cerrar una oferta agrupada, tampoco como proveedora. Se descarta
+    // con motivo visible, no en silencio, y basta quitar el patrón para volver a incluirla.
+    const motivoCadena = cadenaExcluida(e.nombre);
+    if (motivoCadena) {
+      descartadas.push({ externalId: e.clave, nombre: e.nombre, motivo: `Cadena excluida de la captación: ${motivoCadena}` });
+      continue;
+    }
+    if (!tipoDeclarado(e) && !opts.generico) {
+      descartadas.push({
+        externalId: e.clave,
+        nombre: e.nombre,
+        motivo: "Sin tipo verificado (mayorista, fabricante, marca o central de compras): entraría como distribuidor genérico",
+      });
+      continue;
+    }
     if (e.clave.startsWith("sin-web:")) {
       // Sin web no hay clave estable: incorporarla arriesga duplicar a la empresa más adelante.
       descartadas.push({ externalId: e.clave, nombre: e.nombre, motivo: "Sin web conocida: no hay clave estable para deduplicar" });

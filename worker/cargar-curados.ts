@@ -17,10 +17,12 @@ import { leerFicheroCurado } from "./sources/curados";
 
 const args = process.argv.slice(2);
 const escribir = args.includes("--escribir");
+// Carga también las empresas sin tipo verificado, como «Distribuidor de bicicletas» genérico.
+const generico = args.includes("--generico");
 const ruta = args.find((a) => !a.startsWith("--"));
 
 if (!ruta) {
-  console.error("Uso: npm run cargar -- <fichero.json> [--escribir]");
+  console.error("Uso: npm run cargar -- <fichero.json> [--escribir] [--generico]");
   process.exit(2);
 }
 
@@ -45,7 +47,7 @@ async function main() {
   const config = loadConfig();
   const db = createPool(config.DATABASE_URL);
   try {
-    const { registros, descartadas } = await leerFicheroCurado(ruta!);
+    const { registros, descartadas } = await leerFicheroCurado(ruta!, { generico });
     const fuente = registros[0]?.sourceId ?? "investigacion_distribuidores";
 
     // La previsualización siempre se ejecuta, también antes de escribir.

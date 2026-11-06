@@ -167,3 +167,19 @@ Al reconciliar la previsualización con el análisis completo apareció el hueco
 El índice por celdas evita comparar todos contra todos, que no escalaría a una importación grande.
 
 **Consecuencias.** Las 30 parejas quedan cubiertas (26 registros marcados; un trío de registros son 3 parejas pero solo 2 marcas, porque el primero es el que se crearía). Nada se fusiona ni se elimina automáticamente: la previsualización informa y la importación deja las entidades marcadas para revisión humana.
+
+## ADR-0016 · Una clasificación sin fuente no entra en la base
+
+**Contexto.** El fichero de investigación de distribuidores trae 64 empresas, pero solo 13 con el tipo declarado y con fuente. Las otras 51 caerían en `distribuidor.ciclismo` genérico, y entre ellas están Trek, Shimano, Specialized, Canyon, Campagnolo, Giant y Brompton, que son marcas, no distribuidores.
+
+No es un detalle de ficha: a un mayorista se le pide tarifa por volumen y a una marca se le propone un acuerdo de patrocinio o de canal. La etiqueta equivocada cambia el primer correo.
+
+Se buscó una fuente que las agrupara. El directorio de AMBE **no publica categorías** (comprobado el 06-11-2026): solo nombres y enlaces. Clasificarlas de memoria habría sido inventar un dato sin procedencia, que es justo lo que el resto del sistema evita.
+
+**Decisión.** Por defecto el cargador **no admite una empresa sin tipo declarado**: la descarta con el motivo escrito. Entra con `--generico`, que es una decisión explícita de quien ejecuta y queda en el historial del comando, no un silencio del código.
+
+La exclusión comercial de cadenas (ADR-0011) se aplica también aquí: Decathlon es socia de AMBE, pero una cadena con precios centralizados no puede cerrar una oferta agrupada tampoco como proveedora. Se descarta con motivo visible y basta quitar el patrón para volver a incluirla.
+
+**Consecuencias.** La carga por defecto son 13 empresas con su tipo correcto, que además son las que de verdad pueden venderle a GROPO: 8 mayoristas, 3 distribuidores, 1 central de compras (Bicimarket, con más de 170 tiendas asociadas) y 1 marca. Las 48 marcas esperan a que alguien verifique su web, que son 48 consultas.
+
+Es la misma filosofía que el ADR-0014: preferir pararse a producir algo que parezca correcto.
