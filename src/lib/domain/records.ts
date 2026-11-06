@@ -14,6 +14,22 @@ export interface RecordLocation {
   confidence: number;
 }
 
+/**
+ * Campo adicional con procedencia propia, para fuentes de investigación curada donde
+ * cada dato se ha verificado con un método y en una fecha distintos (p. ej. la web de la
+ * empresa confirma la especialización, pero el teléfono viene de un directorio).
+ */
+export interface ExtraField {
+  field: string;
+  value: unknown;
+  method: ValueMethod;
+  confidence: number;
+  /** Página concreta de la que sale este dato, si no es la del registro. */
+  sourceUrl?: string | null;
+  /** Cuándo se observó (ISO). Si falta, se usa el momento de la carga. */
+  observedAt?: string | null;
+}
+
 export interface NormalizedRecord {
   sourceId: string;
   externalId: string;
@@ -33,4 +49,6 @@ export interface NormalizedRecord {
   emails: { raw: string; normalized: string; isPersonal: boolean }[];
   identifiers: { scheme: "nif" | "red_galicia" | "osm" | "wikidata" | "registro"; value: string }[];
   openingHours: string | null;
+  /** Campos propios de la fuente, cada uno con su método y su fecha de verificación. */
+  extraFields?: ExtraField[];
 }

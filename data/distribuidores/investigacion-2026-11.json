@@ -1,0 +1,1645 @@
+{
+  "fuente_id": "investigacion_distribuidores",
+  "generado": "2026-11-05",
+  "nota": "Cada campo lleva su fuente y su método: 'verified' = leído en la web de la propia empresa; 'found' = leído en un directorio sectorial; 'inferred' = deducido por el directorio, sin confirmar. Un campo que no se ha podido verificar no aparece: no se estima ni se rellena.",
+  "empresas": [
+    {
+      "clave": "abus.com",
+      "nombre": "Abus",
+      "campos": {
+        "web": {
+          "valor": "https://www.abus.com/es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "accell-group.com",
+      "nombre": "Accell Group",
+      "campos": {
+        "web": {
+          "valor": "https://www.accell-group.com/en",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "aurumbikes.com",
+      "nombre": "Aurum Bikes",
+      "campos": {
+        "web": {
+          "valor": "https://aurumbikes.com/es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "beeq-bicycles.com",
+      "nombre": "BEEQ Bicycles",
+      "campos": {
+        "web": {
+          "valor": "https://www.beeq-bicycles.com/es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "berriabikes.com",
+      "nombre": "Berria Bikes",
+      "campos": {
+        "web": {
+          "valor": "https://berriabikes.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bhbikes.com",
+      "nombre": "BH",
+      "campos": {
+        "web": {
+          "valor": "https://www.bhbikes.com/es_ES",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bicimax.es",
+      "nombre": "Bicimax",
+      "campos": {
+        "web": {
+          "valor": "https://www.bicimax.es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bicismendiz.com",
+      "nombre": "Bicis Mendiz",
+      "campos": {
+        "web": {
+          "valor": "https://www.bicismendiz.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bikedifusion.com",
+      "nombre": "Bike Difusion",
+      "campos": {
+        "web": {
+          "valor": "https://bikedifusion.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Vitoria-Gasteiz (Álava)",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "distribuidor",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "especializacion": {
+          "valor": "Componentes y accesorios desde 1995, unas 30 marcas (Hope, Stan's NoTubes, Birzman, e*thirteen, iXS, Onza, Ergotec, Wheels Manufacturing). También ropa, nutrición, cascos y portabicicletas.",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "cobertura": {
+          "valor": "Mercado ciclista español",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "email": {
+          "valor": "info@bikedifusion.com",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "telefono": {
+          "valor": "+34 945 158 288",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "portal_b2b": {
+          "valor": "sí, restringido a tiendas que ya son clientes",
+          "fuente": "https://www.bikedifusion.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/",
+        "https://www.bikedifusion.com/"
+      ]
+    },
+    {
+      "clave": "bkl.eco",
+      "nombre": "BKL",
+      "campos": {
+        "web": {
+          "valor": "https://bkl.eco/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bosch-ebike.com",
+      "nombre": "Bosch eBike",
+      "campos": {
+        "web": {
+          "valor": "https://www.bosch-ebike.com/es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "brompton.com",
+      "nombre": "Brompton",
+      "campos": {
+        "web": {
+          "valor": "https://www.brompton.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "campagnolo.com",
+      "nombre": "Campagnolo",
+      "campos": {
+        "web": {
+          "valor": "https://www.campagnolo.com/es-es/carretera-2/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "canyon.com",
+      "nombre": "Canyon",
+      "campos": {
+        "web": {
+          "valor": "https://www.canyon.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "casamasferrer.com",
+      "nombre": "Casa Masferrer",
+      "campos": {
+        "web": {
+          "valor": "https://www.casamasferrer.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Granollers (Barcelona)",
+          "fuente": "https://www.casamasferrer.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "distribuidor",
+          "fuente": "https://www.casamasferrer.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "especializacion": {
+          "valor": "Distribución a detallistas de 19 marcas (Massi, Look, Dahon, Topeak, Campagnolo, Schwalbe, Michelin, Sigma, Zycle, Micro Shift y otras). Declara cartera de más de 3.500 tiendas.",
+          "fuente": "https://www.casamasferrer.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "cobertura": {
+          "valor": "Europa, América y Asia; exporta a más de 20 países",
+          "fuente": "https://www.casamasferrer.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "portal_b2b": {
+          "valor": "sí (aplicación B2B enlazada, requisitos no publicados)",
+          "fuente": "https://www.casamasferrer.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/",
+        "https://www.casamasferrer.com/"
+      ]
+    },
+    {
+      "clave": "cjmsport.com",
+      "nombre": "CJM Sport",
+      "campos": {
+        "web": {
+          "valor": "https://cjmsport.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "clootbike.com",
+      "nombre": "Cloot Bike",
+      "campos": {
+        "web": {
+          "valor": "https://clootbike.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Alboraya (València)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "cobalai.com",
+      "nombre": "Cobalai Bikes",
+      "campos": {
+        "tipo": {
+          "valor": "distribuidor",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "especializacion": {
+          "valor": "Accesorios y recambios de ciclismo para tiendas y talleres. Marcas: Elvedes, Gist, Rubbex, Ahooh. Exclusivas: Brakco, DBD Tools, Connex, Ahooh.",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Granollers (Barcelona)",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "direccion": {
+          "valor": "Avda. Sant Julià, 154, Nau 6, 08403 Granollers",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "email": {
+          "valor": "info@cobalaibikes.com",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "telefono": {
+          "valor": "+34 938 793 711",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "portal_b2b": {
+          "valor": "https://b2b.cobalaibikes.com",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "web": {
+          "valor": "https://cobalai.com",
+          "fuente": "https://cobalai.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://cobalai.com/"
+      ]
+    },
+    {
+      "clave": "coluer.com",
+      "nombre": "Coluer Bicycles",
+      "campos": {
+        "web": {
+          "valor": "https://coluer.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Tarragona",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "cometbikeparts.com",
+      "nombre": "Comet Bike Parts",
+      "campos": {
+        "web": {
+          "valor": "https://www.cometbikeparts.com/es/inicio",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "cyclingfactory.be",
+      "nombre": "Cycling Factory",
+      "campos": {
+        "web": {
+          "valor": "https://www.cyclingfactory.be/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "decathlon.es",
+      "nombre": "Decathlon",
+      "campos": {
+        "web": {
+          "valor": "https://www.decathlon.es/es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "deportica.es",
+      "nombre": "Deportica",
+      "campos": {
+        "web": {
+          "valor": "https://www.deportica.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Parla (Madrid)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "dmotor.net",
+      "nombre": "DMotor",
+      "campos": {
+        "web": {
+          "valor": "https://www.dmotor.net/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "dtswiss.com",
+      "nombre": "DT Swiss",
+      "campos": {
+        "web": {
+          "valor": "https://www.dtswiss.com/en",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "flebi.com",
+      "nombre": "Flebi",
+      "campos": {
+        "web": {
+          "valor": "https://flebi.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "focus-bikes.com",
+      "nombre": "Focus",
+      "campos": {
+        "web": {
+          "valor": "https://www.focus-bikes.com/es_es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "freeel.bike",
+      "nombre": "Freeel",
+      "campos": {
+        "web": {
+          "valor": "https://freeel.bike/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "galfer.com",
+      "nombre": "Galfer",
+      "campos": {
+        "web": {
+          "valor": "https://galfer.com/bike/es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "giant-bicycles.com",
+      "nombre": "Giant",
+      "campos": {
+        "web": {
+          "valor": "https://www.giant-bicycles.com/global",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "gurpil.com",
+      "nombre": "Gurpil",
+      "campos": {
+        "web": {
+          "valor": "https://www.gurpil.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Itziar (Gipuzkoa)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/",
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "incycles.eu",
+      "nombre": "Incycles",
+      "campos": {
+        "web": {
+          "valor": "https://www.incycles.eu/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "isbsport.com",
+      "nombre": "ISB Sport",
+      "campos": {
+        "web": {
+          "valor": "https://isbsport.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "luchia.eu",
+      "nombre": "Luchia",
+      "campos": {
+        "web": {
+          "valor": "https://luchia.eu/en/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "es.luma.es",
+      "nombre": "Luma",
+      "campos": {
+        "web": {
+          "valor": "https://es.luma.es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "mahle-smartbike.com",
+      "nombre": "Mahle Smartbike",
+      "campos": {
+        "web": {
+          "valor": "https://mahle-smartbike.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "manufacturasges.com",
+      "nombre": "Manufacturas GES",
+      "campos": {
+        "web": {
+          "valor": "https://www.manufacturasges.com/es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "massi.bike",
+      "nombre": "Massi",
+      "campos": {
+        "web": {
+          "valor": "https://www.massi.bike/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "merida-bikes.com",
+      "nombre": "Mérida",
+      "campos": {
+        "web": {
+          "valor": "https://www.merida-bikes.com/es-es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "mmrbikes.com",
+      "nombre": "MMR Bikes",
+      "campos": {
+        "web": {
+          "valor": "https://mmrbikes.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "marca",
+          "fuente": "https://www.mmrbikes.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "especializacion": {
+          "valor": "Marca de bicicletas. Página de equipos patrocinados y embajadores.",
+          "fuente": "https://www.mmrbikes.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "cobertura": {
+          "valor": "Venta internacional: el selector de región lista unos 45 países, España incluida",
+          "fuente": "https://www.mmrbikes.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "portal_b2b": {
+          "valor": "https://b2b.slsbikes.com",
+          "fuente": "https://www.mmrbikes.com/",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/",
+        "https://www.mmrbikes.com/"
+      ]
+    },
+    {
+      "clave": "momabikes.com",
+      "nombre": "Moma",
+      "campos": {
+        "web": {
+          "valor": "https://momabikes.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "mondraker.com",
+      "nombre": "Mondraker",
+      "campos": {
+        "web": {
+          "valor": "https://mondraker.com/be/es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "montybikes.com",
+      "nombre": "Monty",
+      "campos": {
+        "web": {
+          "valor": "https://www.montybikes.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "mothium.com",
+      "nombre": "Mothium",
+      "campos": {
+        "web": {
+          "valor": "https://www.mothium.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "mycycle.eu",
+      "nombre": "myCycle",
+      "campos": {
+        "web": {
+          "valor": "https://mycycle.eu",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Errenteria (Gipuzkoa)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "sin-web:neomouv",
+      "nombre": "Neomouv",
+      "campos": {
+        "localidad": {
+          "valor": "Vitoria-Gasteiz (Álava)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "orbea.com",
+      "nombre": "Orbea",
+      "campos": {
+        "web": {
+          "valor": "https://www.orbea.com/es-int",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "pinarello.es",
+      "nombre": "Pinarello",
+      "campos": {
+        "web": {
+          "valor": "https://www.pinarello.es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Barbatain (Navarra)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/",
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "podiumbike.es",
+      "nombre": "Podium Bike",
+      "campos": {
+        "web": {
+          "valor": "https://www.podiumbike.es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "pon.bike",
+      "nombre": "PON",
+      "campos": {
+        "web": {
+          "valor": "https://pon.bike/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "sin-web:prowen bikes jl wenti",
+      "nombre": "Prowen Bikes (JL Wenti)",
+      "campos": {
+        "localidad": {
+          "valor": "Lucena (Córdoba)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "qikbike.com",
+      "nombre": "Q.ik ebikes",
+      "campos": {
+        "web": {
+          "valor": "https://www.qikbike.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Barcelona",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "r-m.de",
+      "nombre": "R&M",
+      "campos": {
+        "web": {
+          "valor": "https://www.r-m.de/es-es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "rali-bikes.com",
+      "nombre": "RALI",
+      "campos": {
+        "web": {
+          "valor": "https://rali-bikes.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "santafixie.com",
+      "nombre": "Santa Fixie",
+      "campos": {
+        "web": {
+          "valor": "https://www.santafixie.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "bike.shimano.com",
+      "nombre": "Shimano",
+      "campos": {
+        "web": {
+          "valor": "https://bike.shimano.com/es-ES/home.html",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "specialized.com",
+      "nombre": "Specialized",
+      "campos": {
+        "web": {
+          "valor": "https://www.specialized.com/es/es",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "spiuk.com",
+      "nombre": "Spiuk",
+      "campos": {
+        "web": {
+          "valor": "https://spiuk.com/es/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "teambike.com",
+      "nombre": "Teambike",
+      "campos": {
+        "web": {
+          "valor": "https://teambike.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "tekmaxcomponents.es",
+      "nombre": "Tekmax Componentes",
+      "campos": {
+        "web": {
+          "valor": "https://tekmaxcomponents.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Loeches (Madrid)",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "mayorista",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/"
+      ]
+    },
+    {
+      "clave": "bicimarket.com",
+      "nombre": "The Bike Alliance / Bicimarket",
+      "campos": {
+        "web": {
+          "valor": "https://bicimarket.com",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "localidad": {
+          "valor": "Barcelona",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "tipo": {
+          "valor": "central_de_compras",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "clasificacion_directorio": {
+          "valor": "Mayorista según el directorio bicicleta.es",
+          "fuente": "https://www.bicicleta.es/sitios/category/mayorista/",
+          "metodo": "inferred",
+          "observado": "2026-11-05"
+        },
+        "especializacion": {
+          "valor": "Central de compras de la red Bicimarket-BMK: 40.000 referencias de 200 marcas para tiendas y talleres asociados.",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "cobertura": {
+          "valor": "Más de 170 tiendas y talleres asociados en España",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "email": {
+          "valor": "expansion@bicimarket.com",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        },
+        "telefono": {
+          "valor": "+34 934 238 409",
+          "fuente": "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html",
+          "metodo": "verified",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://www.bicicleta.es/sitios/category/mayorista/",
+        "https://www.interempresas.net/Ciclismo/558906-Alianza-estrategica-entre-The-Bike-Alliance-y-Sportmas-Bike.html"
+      ]
+    },
+    {
+      "clave": "trekbikes.com",
+      "nombre": "Trek",
+      "campos": {
+        "web": {
+          "valor": "https://www.trekbikes.com/es/es_ES/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "urbanbiker.com",
+      "nombre": "Urban Biker",
+      "campos": {
+        "web": {
+          "valor": "https://www.urbanbiker.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    },
+    {
+      "clave": "weareyouin.com",
+      "nombre": "Weareyouin",
+      "campos": {
+        "web": {
+          "valor": "https://weareyouin.com/",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        },
+        "afiliacion": {
+          "valor": "Asociada a AMBE (Asociación de Marcas y Bicicletas de España)",
+          "fuente": "https://asociacionambe.com/asociados/",
+          "metodo": "found",
+          "observado": "2026-11-05"
+        }
+      },
+      "fuentes": [
+        "https://asociacionambe.com/asociados/"
+      ]
+    }
+  ]
+}
