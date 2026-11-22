@@ -23,6 +23,7 @@ export const SOURCE: Record<string, { short: string; name: string; color: string
   registro_cataluna: { short: "REE Cat", name: "Registre d'Entitats Esportives (Generalitat)", color: "var(--src-red)" },
   registro_euskadi: { short: "RED Eus", name: "Registro de Entidades Deportivas (Gobierno Vasco)", color: "var(--src-red)" },
   registro_navarra: { short: "RED Nav", name: "Registro de Entidades Deportivas (Gobierno de Navarra)", color: "var(--src-red)" },
+  registro_castilla_leon: { short: "RED CyL", name: "Registro de Clubes Deportivos (Junta de Castilla y León)", color: "var(--src-red)" },
   registro_canarias: { short: "RED Can", name: "Registro de Entidades Deportivas (Gobierno de Canarias)", color: "var(--src-red)" },
   cartociudad: { short: "IGN", name: "CartoCiudad (IGN)", color: "var(--src-ign)" },
   investigacion_comunidades: { short: "Investigación", name: "Investigación de comunidades (páginas públicas)", color: "var(--src-web)" },
