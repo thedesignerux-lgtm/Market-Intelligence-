@@ -3,7 +3,7 @@
 # · Cada noche: actualiza toda Galicia (clubes del RED y comercios de OpenStreetMap)
 #   y procesa cualquier importación pendiente.
 # · Cada domingo: actualiza los comercios de OpenStreetMap de toda España (52 provincias) y los clubes
-#   de los registros autonómicos en abierto (Cataluña, País Vasco, Navarra y Canarias).
+#   de los registros autonómicos en abierto (Cataluña, País Vasco, Navarra, Canarias y Castilla y León).
 # · Bajo demanda: la web lo lanza al pedir una importación (si tiene GITHUB_DISPATCH_TOKEN),
 #   o se lanza a mano desde la pestaña Actions → «Importador» → «Run workflow»
 #   (en «Ámbito de OpenStreetMap» se puede escribir espana, una comunidad como andalucia, o un código de provincia).

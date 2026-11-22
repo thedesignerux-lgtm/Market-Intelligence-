@@ -6,6 +6,7 @@ import { parseCataluna, cataluna } from "../../worker/sources/registries/catalun
 import { parseEuskadi } from "../../worker/sources/registries/euskadi";
 import { parseNavarra } from "../../worker/sources/registries/navarra";
 import { parseCanarias } from "../../worker/sources/registries/canarias";
+import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registries/castilla-leon";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -108,6 +109,32 @@ describe("adaptadores de registros", () => {
     expect(row!.modalities).toEqual([CYCLING, "Ciclismo", "Futbol"]);
     expect(row!.kind).toBe("Clubes Deportivos");
     expect(row!.nif).toBe("G00000000");
+  });
+
+  it("Castilla y León: ciclismo solo por código CI (ni motociclismo ni deporte adaptado)", () => {
+    const csv = [
+      "Nº registro;Nombre;Domicilio;Provincia;Localidad;C.Postal;Teléfono;Fax;Email;Web;F.Fundación;F.Inscripción;Deportes;Column 14",
+      'CYA/900001;CLUB CICLISTA DE PRUEBA;C/ Mayor 1;Zamora;ZAMORA;49006;980000000;;club@example.org;;2000-01-01;2000-02-01;CI001 CICLISMO - CARRETERA,CI003 CICLISMO - BICICLETA MONTAÑA (BTT);',
+      'CYA/900002;"CLUB ""MOTOR"" DE PRUEBA";C/ Nueva 2;León;LEON;24001;;;;;2000-01-01;2000-02-01;MT001 MOTOCICLISMO - VELOCIDAD;',
+      'CYA/900003;CLUB ATLETISMO DE PRUEBA;C/ Sola 3;Burgos;BURGOS;09001;;;;;2000-01-01;2000-02-01;AT001 ATLETISMO - PISTA,DM005 DEPORTE ADAPTADO - CICLISMO (DF);',
+      'CYA/900004;CLUB FUERA DE AMBITO;C/ Otra 4;Madrid;MADRID;28001;;;;;2000-01-01;2000-02-01;CI001 CICLISMO - CARRETERA;',
+    ].join("\n");
+    const rows = parseCastillaLeon(csv);
+    expect(rows).toHaveLength(4);
+    expect(rows[0]!.modalities).toContain(CYCLING);
+    expect(rows[0]!.provinceCode).toBe("49");
+    expect(rows[0]!.emails).toEqual(["club@example.org"]);
+    expect(rows[1]!.modalities).not.toContain(CYCLING);
+    expect(rows[1]!.name).toBe('CLUB "MOTOR" DE PRUEBA');
+    expect(rows[2]!.modalities).not.toContain(CYCLING);
+    // Un código postal fuera de Castilla y León no asigna provincia.
+    expect(rows[3]!.provinceCode).toBeNull();
+    expect(isCyclingCode("CI012 CICLISMO - GRAVEL")).toBe(true);
+    expect(isCyclingCode("OR003 ORIENTACIÓN - EN BICICLETA DE MONTAÑA")).toBe(false);
+  });
+
+  it("Castilla y León: falla de forma explícita si cambian las columnas", () => {
+    expect(() => parseCastillaLeon("Codigo;Nombre\n1;x")).toThrow(/ha cambiado de formato/);
   });
 
   it("Canarias: el código de municipio lleva dígito de control", () => {
