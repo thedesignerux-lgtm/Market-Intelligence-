@@ -9,6 +9,7 @@ import { parseCanarias } from "../../worker/sources/registries/canarias";
 import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registries/castilla-leon";
 import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/registries/andalucia";
 import { parseMadrid, looksCycling } from "../../worker/sources/registries/madrid";
+import { parseCastillaLaMancha, latin1FormEncode } from "../../worker/sources/registries/castilla-la-mancha";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -244,5 +245,26 @@ describe("registro de Madrid (modalidad deducida del nombre)", () => {
 
   it("falla si la fuente cambia de columnas", () => {
     expect(() => parseMadrid("TIPO;NUM;NOMBRE;MUNI\nClub;1;CICLISTA;Madrid")).toThrow(/formato/);
+  });
+});
+
+describe("registro de Castilla-La Mancha", () => {
+  it("codifica el formulario en ISO-8859-1", () => {
+    expect(latin1FormEncode("BICICLETA DE MONTAÑA (BTT)")).toBe("BICICLETA+DE+MONTA%D1A+%28BTT%29");
+    expect(latin1FormEncode("CICLO-CROSS")).toBe("CICLO-CROSS");
+  });
+
+  it("lee la tabla del listado y resuelve la provincia", () => {
+    const html = `<table><tr><th>Nº Registro</th><th>Nombre Entidad</th><th>Tipo</th><th>Localidad</th><th>Provincia</th></tr>
+      <tr><td>0000004556</td><td>CLUB CICLISTA DE PRUEBA</td><td>Club</td><td>Olías del Rey</td><td>Toledo</td></tr>
+      <tr><td>0000004589</td><td>CLUB MTB DE PRUEBA</td><td>Club</td><td>Enguídanos</td><td>Cuenca</td></tr>
+      <tr><td>sin numero</td><td>FILA QUE NO ES UNA ENTIDAD</td><td>-</td><td>-</td><td>-</td></tr></table>`;
+    const rows = parseCastillaLaMancha(html, "CICLISMO");
+    expect(rows.map((r) => r.externalId)).toEqual(["0000004556", "0000004589"]);
+    expect(rows[0]!.name).toBe("CLUB CICLISTA DE PRUEBA");
+    expect(rows[0]!.provinceCode).toBe("45");
+    expect(rows[0]!.municipalityName).toBe("Olías del Rey");
+    expect(rows[0]!.modalities).toContain(CYCLING);
+    expect(rows[1]!.provinceCode).toBe("16");
   });
 });
