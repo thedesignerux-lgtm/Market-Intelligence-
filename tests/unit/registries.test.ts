@@ -8,6 +8,7 @@ import { parseNavarra } from "../../worker/sources/registries/navarra";
 import { parseCanarias } from "../../worker/sources/registries/canarias";
 import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registries/castilla-leon";
 import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/registries/andalucia";
+import { parseMadrid, looksCycling } from "../../worker/sources/registries/madrid";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -213,5 +214,35 @@ describe("registro de Andalucía (RAED)", () => {
   it("lee el total de resultados para detectar cambios de formato", () => {
     expect(parseTotal(html)).toBe(3);
     expect(parseTotal("<p>sin paginación</p>")).toBeNull();
+  });
+});
+
+describe("registro de Madrid (modalidad deducida del nombre)", () => {
+  it("reconoce el ciclismo en el nombre y descarta el motor", () => {
+    for (const n of ["CICLISTA DE PRUEBA", "MTB JUSPIN", "PEÑA CICLOTURISTA X", "VALDEBIKE", "14BIKES", "AMIGOS POR LA BICICLETA", "CICLISTA TAM MOTOR"])
+      expect(looksCycling(n), n).toBe(true);
+    for (const n of ["MOTOCICLISMO MORATALAZ", "MOTOCICLISTA VALDEMORO", "PILOTOS DE MINI-BIKES", "MOTOR BIKE CUP", "MOTOCLUB SOTOBIKE", "CLUB DE FUTBOL SALA", "ESCUELA DE KARTING"])
+      expect(looksCycling(n), n).toBe(false);
+  });
+
+  it("lee el CSV y usa tipo+número como identificador", () => {
+    const csv = [
+      "TIPO_ENTIDAD;NUMERO;DENOMINACION;MUNICIPIO",
+      "Agrupación;1;CICLISTA DE PRUEBA;Madrid",
+      "Club;1;PEÑA CICLOTURISTA DE PRUEBA;Getafe",
+      "Club;2;MOTOCICLISMO DE PRUEBA;Leganés",
+      "Club;3;CLUB DE AJEDREZ DE PRUEBA;Madrid",
+    ].join("\n");
+    const rows = parseMadrid(csv);
+    expect(rows.map((r) => r.externalId)).toEqual(["Agrupación/1", "Club/1"]);
+    expect(rows[0]!.modalities).toEqual([CYCLING]);
+    expect(rows[0]!.municipalityName).toBe("Madrid");
+    expect(rows[0]!.provinceCode).toBe("28");
+    // La modalidad no la publica la fuente: queda marcada en el payload.
+    expect(rows[0]!.raw.modalidad_inferida).toBe(true);
+  });
+
+  it("falla si la fuente cambia de columnas", () => {
+    expect(() => parseMadrid("TIPO;NUM;NOMBRE;MUNI\nClub;1;CICLISTA;Madrid")).toThrow(/formato/);
   });
 });

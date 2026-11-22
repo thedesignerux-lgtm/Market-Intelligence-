@@ -5,8 +5,9 @@ import { canarias } from "./canarias";
 import { castillaLeon } from "./castilla-leon";
 import { cataluna } from "./cataluna";
 import { euskadi } from "./euskadi";
+import { madrid } from "./madrid";
 import { navarra } from "./navarra";
 
 export const REGISTRIES: Record<string, RegistrySource> = Object.fromEntries(
-  [cataluna, euskadi, navarra, canarias, castillaLeon, andalucia].map((s) => [s.id, s]),
+  [cataluna, euskadi, navarra, canarias, castillaLeon, andalucia, madrid].map((s) => [s.id, s]),
 );
