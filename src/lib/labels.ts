@@ -27,6 +27,7 @@ export const SOURCE: Record<string, { short: string; name: string; color: string
   registro_andalucia: { short: "RAED", name: "Registro Andaluz de Entidades Deportivas (Junta de Andalucía)", color: "var(--src-red)" },
   registro_madrid: { short: "RED Mad", name: "Registro de Entidades Deportivas (Comunidad de Madrid)", color: "var(--src-red)" },
   registro_castilla_la_mancha: { short: "RED CLM", name: "Registro de Entidades Deportivas (Junta de Castilla-La Mancha)", color: "var(--src-red)" },
+  registro_aragon: { short: "RED Ara", name: "Registro de Entidades Deportivas (Gobierno de Aragón)", color: "var(--src-red)" },
   registro_canarias: { short: "RED Can", name: "Registro de Entidades Deportivas (Gobierno de Canarias)", color: "var(--src-red)" },
   cartociudad: { short: "IGN", name: "CartoCiudad (IGN)", color: "var(--src-ign)" },
   investigacion_comunidades: { short: "Investigación", name: "Investigación de comunidades (páginas públicas)", color: "var(--src-web)" },
