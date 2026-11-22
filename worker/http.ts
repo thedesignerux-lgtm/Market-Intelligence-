@@ -13,6 +13,10 @@ export class HttpError extends Error {
 
 export interface FetchOptions {
   userAgent: string;
+  /** Método HTTP; por omisión GET. */
+  method?: "GET" | "POST";
+  /** Cuerpo de la petición (para los buscadores que solo responden a POST). */
+  body?: string;
   timeoutMs?: number;
   retries?: number;
   baseDelayMs?: number;
@@ -36,6 +40,8 @@ export async function fetchWithRetry(url: string, opts: FetchOptions): Promise<R
     try {
       const res = await fetch(url, {
         signal: controller.signal,
+        method: opts.method ?? "GET",
+        body: opts.body,
         headers: { "User-Agent": opts.userAgent, ...opts.headers },
         redirect: "follow",
       });

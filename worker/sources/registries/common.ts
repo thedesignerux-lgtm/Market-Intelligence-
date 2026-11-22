@@ -73,6 +73,8 @@ export async function fetchDaily(
   name: string,
   url: string,
   maxBytes = 60 * 1024 * 1024,
+  /** Cuerpo a enviar por POST, ya codificado, para los buscadores que no responden a GET. */
+  post?: string,
 ): Promise<{ buf: Buffer; version: string }> {
   const dir = path.join(config.CACHE_DIR, "registros", sourceId);
   await mkdir(dir, { recursive: true });
@@ -83,7 +85,13 @@ export async function fetchDaily(
     await stat(file);
     buf = await readFile(file);
   } catch {
-    const res = await fetchWithRetry(url, { userAgent: userAgent(config), timeoutMs: 180_000 });
+    const res = await fetchWithRetry(url, {
+      userAgent: userAgent(config),
+      timeoutMs: 180_000,
+      ...(post === undefined
+        ? {}
+        : { method: "POST" as const, body: post, headers: { "Content-Type": "application/x-www-form-urlencoded" } }),
+    });
     buf = Buffer.from(await res.arrayBuffer());
     if (buf.length > maxBytes) throw new Error(`${sourceId}: fichero demasiado grande (${buf.length} bytes)`);
     if (buf.length === 0) throw new Error(`${sourceId}: fichero vacío`);
