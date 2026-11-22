@@ -22,9 +22,13 @@ on:
         type: boolean
         default: false
       clubes_registros:
-        description: "Actualizar los clubes de los registros autonómicos (Cataluña, País Vasco, Navarra, Canarias)"
+        description: "Actualizar los clubes de todos los registros autonómicos"
         type: boolean
         default: false
+      fuente_clubes:
+        description: "Un solo registro (p. ej. registro_andalucia). Vacío = todos, si se marca la casilla de arriba"
+        type: string
+        default: ""
       ambito_osm:
         description: "Ámbito de OpenStreetMap (espana, una comunidad como andalucia o madrid, o un código de provincia). Vacío = nada"
         type: string
@@ -92,5 +96,8 @@ jobs:
         run: npm run -s import -- osm "$AMBITO"
 
       - name: Clubes de los registros autonómicos (o todos los domingos)
-        if: ${{ !cancelled() && ((github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.clubes_registros) }}
-        run: npm run -s import -- clubes espana
+        if: ${{ !cancelled() && ((github.event_name == 'schedule' && github.event.schedule == '41 0 * * 0') || inputs.clubes_registros || inputs.fuente_clubes != '') }}
+        env:
+          FUENTE: ${{ inputs.fuente_clubes }}
+        # Cada registro por separado si se pide uno: así un buscador lento no bloquea a los demás.
+        run: npm run -s import -- "${FUENTE:-clubes}" espana
