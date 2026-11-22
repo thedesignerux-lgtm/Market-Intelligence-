@@ -11,6 +11,7 @@ import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/re
 import { parseMadrid, looksCycling } from "../../worker/sources/registries/madrid";
 import { parseCastillaLaMancha, latin1FormEncode } from "../../worker/sources/registries/castilla-la-mancha";
 import { parseAragon, parseTotal as parseTotalAragon } from "../../worker/sources/registries/aragon";
+import { parseAsturias } from "../../worker/sources/registries/asturias";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -294,5 +295,30 @@ describe("registro de Aragón (SIGO)", () => {
   it("lee el total para comprobar que no se importa medio registro", () => {
     expect(parseTotalAragon(html)).toBe(3);
     expect(parseTotalAragon("<p>sin total</p>")).toBeNull();
+  });
+});
+
+describe("guía de clubes de Asturias", () => {
+  const fila = (c: string[]) => `<tr>${c.map((x) => `<td>${x}</td>`).join("")}</tr>`;
+  const html = `<h2>Clubes basicos deportivos</h2><table>
+      ${fila(["DENOMINACIÓN", "DIRECCIÓN", "CP", "LOCALIDAD", "MUNICIPIO", "EMAIL", "MODALIDADES_DEPORTIVAS"])}
+      ${fila(["A DOS RUEDAS DE PRUEBA", "C/ DE PRUEBA, 3", "33204", "GIJÓN", "GIJÓN", "", "CICLISMO"])}
+      ${fila(["TRIATLON DE PRUEBA", "C/ INVENTADA, 4", "33410", "MIRANDA", "AVILÉS", "prueba@example.org", "ATLETISMO,CICLISMO,NATACION"])}
+      ${fila(["CLUB DE REMO DE PRUEBA", "C/ OTRA, 5", "33001", "OVIEDO", "OVIEDO", "", "REMO"])}
+    </table>
+    <h2>Avisos que no son la guía</h2><table>${fila(["uno", "dos", "tres", "cuatro", "cinco", "seis", "CICLISMO"])}</table>`;
+
+  it("lee las tablas de la guía y descarta las que no lo son", () => {
+    const rows = parseAsturias(html);
+    expect(rows.map((r) => r.name)).toEqual(["A DOS RUEDAS DE PRUEBA", "TRIATLON DE PRUEBA"]);
+    expect(rows[0]!.externalId).toBe("a-dos-ruedas-de-prueba-33204");
+    expect(rows[0]!.kind).toBe("Club deportivo básico");
+    expect(rows[0]!.provinceCode).toBe("33");
+    expect(rows[0]!.municipalityName).toBe("GIJÓN");
+    expect(rows[0]!.address).toBe("C/ DE PRUEBA, 3");
+    expect(rows[0]!.emails).toEqual([]);
+    expect(rows[1]!.modalities).toContain(CYCLING);
+    expect(rows[1]!.modalities).toContain("ATLETISMO");
+    expect(rows[1]!.emails).toEqual(["prueba@example.org"]);
   });
 });
