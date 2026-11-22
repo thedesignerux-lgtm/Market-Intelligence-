@@ -7,6 +7,7 @@ import { parseEuskadi } from "../../worker/sources/registries/euskadi";
 import { parseNavarra } from "../../worker/sources/registries/navarra";
 import { parseCanarias } from "../../worker/sources/registries/canarias";
 import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registries/castilla-leon";
+import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/registries/andalucia";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -161,5 +162,56 @@ describe("adaptadores de registros", () => {
     expect(rec.emails[0]!.isPersonal).toBe(true);
     expect(rec.municipalityCode).toBe("17079");
     expect(registryRowToRecord(cataluna, football!, "17079", mappings)).toBeNull();
+  });
+});
+
+describe("registro de Andalucía (RAED)", () => {
+  // Página de resultados inventada con la estructura del buscador del RAED.
+  const page = (filas: string) => `<html><body>
+    <table class="table table-striped"><thead><tr><th></th><th>Número inscripción</th><th>Denominación</th><th>Municipio</th></tr></thead>
+    <tbody>${filas}</tbody></table>
+    <div class="paginado"><p>1 a 3 de 3 resultados</p></div></body></html>`;
+  const fila = (num: string, nombre: string, muni: string, detalle: string) =>
+    `<tr><td></td><td>${num}</td><td>${nombre}</td><td>${muni}</td></tr><tr><td colspan="4">${detalle}</td></tr>`;
+
+  const html = page(
+    fila("000273", "C.D. CICLISTA DE PRUEBA", "ALGECIRAS",
+      "Fecha inscripción: 03/02/1986 Dirección: Plaza DE PRUEBA, S/N Provincia: CÁDIZ Municipio: ALGECIRAS C.P.: 11201 Teléfono: 956111111 Fax: ---- Email: prueba@example.org Entidad: Club deportivo Deporte: CICLISMO Fecha modificación estatuto: ---- Otros deportes: [TRIATLON] | Descargar Estatutos") +
+    fila("000999", "C.D. DE MOTOS DE PRUEBA", "SEVILLA",
+      "Fecha inscripción: 01/01/1990 Dirección: Calle INVENTADA, 1 Provincia: SEVILLA Municipio: SEVILLA C.P.: 41001 Teléfono: ---- Fax: ---- Email: ---- Entidad: Club deportivo Deporte: MOTOCICLISMO Fecha modificación estatuto: ---- Otros deportes: [----] | Descargar Estatutos") +
+    fila("001234", "A.D. BTT DE PRUEBA", "PUERTO DE SANTA MARIA (EL)",
+      "Fecha inscripción: 05/05/2005 Dirección: Avenida DE PRUEBA, 4 Provincia: CÁDIZ Municipio: PUERTO DE SANTA MARIA (EL) C.P.: 11500 Teléfono: ---- Fax: ---- Email: btt@example.org Entidad: Asociacion Deporte: MOUNTAIN BIKE Fecha modificación estatuto: ---- Otros deportes: [CICLISMO]"),
+  );
+
+  it("lee las fichas de ciclismo y descarta el motociclismo", () => {
+    const rows = parseAndalucia(html);
+    expect(rows.map((r) => r.externalId)).toEqual(["000273", "001234"]);
+    const [primera, segunda] = rows;
+    expect(primera!.name).toBe("C.D. CICLISTA DE PRUEBA");
+    expect(primera!.modalities).toContain(CYCLING);
+    expect(primera!.modalities).toContain("TRIATLON");
+    expect(primera!.address).toBe("Plaza DE PRUEBA, S/N");
+    expect(primera!.postalCode).toBe("11201");
+    expect(primera!.provinceCode).toBe("11");
+    expect(primera!.phones).toEqual(["956111111"]);
+    expect(primera!.emails).toEqual(["prueba@example.org"]);
+    expect(primera!.municipalityName).toBe("ALGECIRAS");
+    // El artículo final del municipio lo resuelve municipality-match.
+    expect(segunda!.municipalityName).toBe("PUERTO DE SANTA MARIA (EL)");
+    expect(segunda!.kind).toBe("Asociacion");
+    expect(segunda!.modalities).toContain(CYCLING);
+  });
+
+  it("no inventa campos cuando el registro escribe guiones", () => {
+    const d = parseDetail("Fecha inscripción: 01/01/1990 Dirección: Calle X, 1 Provincia: SEVILLA Municipio: SEVILLA C.P.: 41001 Teléfono: ---- Fax: ---- Email: ---- Entidad: Club deportivo Deporte: CICLISMO Fecha modificación estatuto: ---- Otros deportes: [----] | Descargar Estatutos");
+    expect(d["Teléfono"]).toBeUndefined();
+    expect(d["Email"]).toBeUndefined();
+    expect(d["Otros deportes"]).toBe("[----]");
+    expect(d["Entidad"]).toBe("Club deportivo");
+  });
+
+  it("lee el total de resultados para detectar cambios de formato", () => {
+    expect(parseTotal(html)).toBe(3);
+    expect(parseTotal("<p>sin paginación</p>")).toBeNull();
   });
 });
