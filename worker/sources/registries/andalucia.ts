@@ -11,7 +11,9 @@ const PROVINCES = ["04", "11", "14", "18", "21", "23", "29", "41"];
 const BASE = "https://www.juntadeandalucia.es/deporte/dpweb/buscadorRaed/result";
 /** El buscador agota el tiempo de espera con páginas grandes; 200 filas por página va bien. */
 const PAGE = 200;
-const MAX_PAGES = 60;
+const MAX_PAGES = 20;
+/** Presupuesto de tiempo: si el buscador va lento, mejor fallar que bloquear la importación entera. */
+const BUDGET_MS = 25 * 60 * 1000;
 
 /** Códigos del desplegable «deporte» del buscador que son ciclismo. */
 export const SPORT_CODES: Record<string, string> = {
@@ -178,6 +180,7 @@ export const andalucia: RegistrySource = {
   datasetUrl:
     "https://www.juntadeandalucia.es/organismos/culturaydeporte/areas/deporte/entidades-deportivas/registro-entidades-deportivas.html",
   async load(config) {
+    const start = Date.now();
     const byId = new Map<string, RegistryRow>();
     const versions: string[] = [];
     for (const sportCode of Object.keys(SPORT_CODES)) {
@@ -185,6 +188,9 @@ export const andalucia: RegistrySource = {
       let expected: number | null = null;
       let seen = 0;
       for (let page = 0; page < MAX_PAGES; page++) {
+        if (Date.now() - start > BUDGET_MS) {
+          throw new Error(`${this.id}: el buscador tarda demasiado (más de ${BUDGET_MS / 60000} min); se deja para la próxima importación`);
+        }
         const { buf, version } = await fetchDaily(
           config,
           this.id,

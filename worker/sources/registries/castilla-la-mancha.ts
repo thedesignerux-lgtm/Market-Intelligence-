@@ -31,6 +31,9 @@ export const MODALITIES = [
   "EN BICICLETA DE MONTAÑA",
 ];
 
+/** Presupuesto de tiempo: si el listado va lento, mejor fallar que bloquear la importación entera. */
+const BUDGET_MS = 20 * 60 * 1000;
+
 const PROVINCE_BY_NAME: Record<string, string> = {
   albacete: "02",
   "ciudad real": "13",
@@ -102,9 +105,13 @@ export const castillaLaMancha: RegistrySource = {
   provinces: PROVINCES,
   datasetUrl: URL,
   async load(config) {
+    const start = Date.now();
     const byId = new Map<string, RegistryRow>();
     const versions: string[] = [];
     for (const modality of MODALITIES) {
+      if (Date.now() - start > BUDGET_MS) {
+        throw new Error(`${this.id}: el listado tarda demasiado (más de ${BUDGET_MS / 60000} min); se deja para la próxima importación`);
+      }
       const name = `${modality.replace(/[^A-Za-z0-9]+/g, "_")}.html`;
       const { buf, version } = await fetchDaily(config, this.id, name, URL, 20 * 1024 * 1024, body(modality));
       const html = buf.toString("latin1");
