@@ -10,6 +10,7 @@ import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registrie
 import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/registries/andalucia";
 import { parseMadrid, looksCycling } from "../../worker/sources/registries/madrid";
 import { parseCastillaLaMancha, latin1FormEncode } from "../../worker/sources/registries/castilla-la-mancha";
+import { parseAragon, parseTotal as parseTotalAragon } from "../../worker/sources/registries/aragon";
 import type { CategoryMapping } from "../../src/lib/domain/categories";
 
 describe("emparejar municipios por nombre", () => {
@@ -266,5 +267,32 @@ describe("registro de Castilla-La Mancha", () => {
     expect(rows[0]!.municipalityName).toBe("Olías del Rey");
     expect(rows[0]!.modalities).toContain(CYCLING);
     expect(rows[1]!.provinceCode).toBe("16");
+  });
+});
+
+describe("registro de Aragón (SIGO)", () => {
+  const fila = (c: string[]) => `<tr>${c.map((x) => `<td>${x}</td>`).join("")}</tr>`;
+  const html = `<input type="hidden" id="totalElementos" value="3" /><table>
+    ${fila(["Nº Registro", "Nombre Entidad", "Tipo de entidad", "Fecha Inscripción", "Email", "Provincia", "Localidad", "Dirección", "Modalidades"])}
+    ${fila(["005269/1", "AGRUPACION CICLISTA DE PRUEBA", "Club deportivo", "30/01/2003", "prueba@example.org", "TERUEL", "TERUEL", "Zurbar&aacute;n, 18", "CICLISMO"])}
+    ${fila(["002564/1", "ENTIDAD MULTIDEPORTE DE PRUEBA", "Club deportivo", "25/03/1994", "", "ZARAGOZA", "ZARAGOZA", "Calle de prueba, 1", "ATLETISMO,CICLISMO,F&Uacute;TBOL"])}
+    ${fila(["009999/1", "CLUB DE OTRO DEPORTE", "Club deportivo", "01/01/2020", "", "HUESCA", "HUESCA", "Calle inventada, 2", "BALONCESTO"])}
+  </table>`;
+
+  it("lee la tabla, resuelve provincia y conserva las otras modalidades", () => {
+    const rows = parseAragon(html);
+    expect(rows.map((r) => r.externalId)).toEqual(["005269/1", "002564/1"]);
+    expect(rows[0]!.provinceCode).toBe("44");
+    expect(rows[0]!.municipalityName).toBe("TERUEL");
+    expect(rows[0]!.address).toBe("Zurbarán, 18");
+    expect(rows[0]!.emails).toEqual(["prueba@example.org"]);
+    expect(rows[1]!.modalities).toContain(CYCLING);
+    expect(rows[1]!.modalities).toContain("ATLETISMO");
+    expect(rows[1]!.provinceCode).toBe("50");
+  });
+
+  it("lee el total para comprobar que no se importa medio registro", () => {
+    expect(parseTotalAragon(html)).toBe(3);
+    expect(parseTotalAragon("<p>sin total</p>")).toBeNull();
   });
 });
