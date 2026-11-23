@@ -185,6 +185,13 @@ interface RegistrySnapshot {
   unresolved: RegistryRow[];
 }
 const registrySnapshots = new Map<string, RegistrySnapshot>();
+/**
+ * Fallos de descarga del día, por fuente. Las tareas de un registro son una por municipio y
+ * todas piden el mismo extracto: si la fuente está caída, sin esto cada tarea reintenta la
+ * descarga (5 intentos con espera) y una provincia se come diez minutos antes de que salte el
+ * cortacircuitos. Con esto, la primera tarea paga el intento y las demás fallan al instante.
+ */
+const registryFailures = new Map<string, { day: string; message: string }>();
 const unresolvedReported = new Set<string>();
 
 /** Descarga el registro (una vez al día por proceso) y reparte sus filas por municipio (código INE). */
@@ -192,8 +199,18 @@ async function registrySnapshot(db: Db, config: Config, source: RegistrySource):
   const day = new Date().toISOString().slice(0, 10);
   const cached = registrySnapshots.get(source.id);
   if (cached && cached.day === day) return cached;
+  const failed = registryFailures.get(source.id);
+  if (failed && failed.day === day) throw new Error(failed.message);
 
-  const { rows, version } = await source.load(config);
+  let loaded: Awaited<ReturnType<typeof source.load>>;
+  try {
+    loaded = await source.load(config);
+  } catch (error) {
+    const message = `${source.id}: no se ha podido leer la fuente (${(error as Error).message})`;
+    registryFailures.set(source.id, { day, message });
+    throw new Error(message);
+  }
+  const { rows, version } = loaded;
   // Límites y nombres de los municipios de las provincias del registro (se cargan de OSM si faltan).
   for (const p of source.provinces) await provinceMunicipalityCodes(db, config, p);
   const { rows: munis } = await db.query<{ code: string; name: string }>(

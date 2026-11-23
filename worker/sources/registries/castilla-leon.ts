@@ -7,10 +7,24 @@
 // «ciclismo» en el texto, que también aparece en MOTOCICLISMO y en las modalidades de deporte adaptado
 // (un club de atletismo con 140 modalidades adaptadas no es un club ciclista). OR003 (orientación en BTT) no cuenta.
 
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { parse } from "csv-parse/sync";
 import { CYCLING, fetchDaily, requireColumns, type RegistryRow, type RegistrySource } from "./common";
 
 const URL = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/deporte/clubes-deportivos/1284839616146.csv";
+
+/**
+ * Copia de respaldo con solo los clubes de ciclismo, descargada a mano el 23/11/2026.
+ * datosabiertos.jcyl.es no es accesible desde los servidores donde corre el importador
+ * (ni GitHub Actions ni el entorno de trabajo llegan: «fetch failed»), así que sin este
+ * respaldo la fuente no entra. Se usa solo cuando falla la descarga, y entonces la versión
+ * del import deja constancia de que son datos congelados en esa fecha.
+ */
+const BACKUP_FILE = "castilla-leon-ciclismo-2026-11-23.csv";
+const BACKUP_DATE = "2026-11-23";
 const C = {
   num: "Nº registro",
   name: "Nombre",
@@ -72,7 +86,20 @@ export const castillaLeon: RegistrySource = {
   provinces: PROVINCES,
   datasetUrl: "https://datosabiertos.jcyl.es/web/jcyl/set/es/deporte/clubes-deportivos/1284839616146",
   async load(config) {
-    const { buf, version } = await fetchDaily(config, this.id, "clubes.csv", URL);
-    return { rows: parseCastillaLeon(buf.toString("utf8")), version };
+    try {
+      const { buf, version } = await fetchDaily(config, this.id, "clubes.csv", URL);
+      return { rows: parseCastillaLeon(buf.toString("utf8")), version };
+    } catch (error) {
+      // Si la Junta no es accesible, se usa la copia de respaldo del repositorio en lugar de
+      // dejar la comunidad sin clubes. La versión avisa de que los datos están congelados.
+      const path = join(dirname(fileURLToPath(import.meta.url)), "data", BACKUP_FILE);
+      const csv = readFileSync(path, "utf8");
+      const rows = parseCastillaLeon(csv);
+      console.warn(
+        `[${castillaLeon.id}] no se ha podido descargar de la Junta (${(error as Error).message}); ` +
+          `se usa la copia de respaldo de ${BACKUP_DATE} con ${rows.length} clubes`,
+      );
+      return { rows, version: `respaldo-${BACKUP_DATE}` };
+    }
   },
 };
