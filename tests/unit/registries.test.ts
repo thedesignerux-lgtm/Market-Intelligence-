@@ -7,6 +7,7 @@ import { parseEuskadi } from "../../worker/sources/registries/euskadi";
 import { parseNavarra } from "../../worker/sources/registries/navarra";
 import { parseCanarias } from "../../worker/sources/registries/canarias";
 import { parseCastillaLeon, isCyclingCode } from "../../worker/sources/registries/castilla-leon";
+import { readFileSync } from "node:fs";
 import { parseAndalucia, parseDetail, parseTotal } from "../../worker/sources/registries/andalucia";
 import { parseMadrid, looksCycling } from "../../worker/sources/registries/madrid";
 import { parseCastillaLaMancha, latin1FormEncode } from "../../worker/sources/registries/castilla-la-mancha";
@@ -320,5 +321,16 @@ describe("guía de clubes de Asturias", () => {
     expect(rows[1]!.modalities).toContain(CYCLING);
     expect(rows[1]!.modalities).toContain("ATLETISMO");
     expect(rows[1]!.emails).toEqual(["prueba@example.org"]);
+  });
+});
+
+describe("respaldo de Castilla y León", () => {
+  it("la copia del repositorio trae los 973 clubes de ciclismo", () => {
+    const csv = readFileSync("worker/sources/registries/data/castilla-leon-ciclismo-2026-11-23.csv", "utf8");
+    const rows = parseCastillaLeon(csv);
+    expect(rows.length).toBe(973);
+    expect(rows.every((r) => r.postalCode !== null)).toBe(true);
+    // La copia ya viene filtrada, pero el filtro por código CI debe seguir aplicándose.
+    expect(rows.every((r) => r.modalities.includes(CYCLING))).toBe(true);
   });
 });
