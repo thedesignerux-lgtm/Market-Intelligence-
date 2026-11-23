@@ -2,7 +2,7 @@ import Link from "next/link";
 import { EntityFilterForm } from "@/components/entity-filters";
 import { EntityTable } from "@/components/entity-table";
 import { EmptyState, ErrorNote, PageHeader } from "@/components/ui";
-import { filtersToParams, readFilters, searchEntities } from "@/lib/entities";
+import { filtersToParams, readFilters, searchEntities, territoryLabels } from "@/lib/entities";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 
@@ -26,10 +26,10 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pr
   }
 
   const supabase = await createClient();
-  const [{ rows, error }, { data: categories }, { data: munis }, { data: statuses }] = await Promise.all([
+  const [{ rows, error }, { data: categories }, territorios, { data: statuses }] = await Promise.all([
     searchEntities(supabase, session, f, { limit: PAGE_SIZE + 1, cursor }),
     supabase.from("categories").select("id, name, parent_id").order("sort"),
-    supabase.from("municipality_summary").select("municipality_code, municipality_name").order("municipality_name"),
+    territoryLabels(supabase, f.territorio),
     supabase.from("crm_statuses").select("slug, label").eq("workspace_id", session.workspaceId!).order("sort"),
   ]);
 
@@ -63,7 +63,7 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pr
           action="/directorio"
           filters={f}
           categories={categories ?? []}
-          municipalities={(munis ?? []).map((m) => ({ code: m.municipality_code as string, name: m.municipality_name as string }))}
+          territoryLabels={territorios}
           statuses={statuses ?? []}
         />
       </div>

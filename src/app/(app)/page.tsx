@@ -2,7 +2,7 @@ import Link from "next/link";
 import { EntityFilterForm } from "@/components/entity-filters";
 import { EntityTable } from "@/components/entity-table";
 import { EmptyState, ErrorNote, PriorityTag } from "@/components/ui";
-import { filtersToParams, readFilters, searchEntities } from "@/lib/entities";
+import { filtersToParams, readFilters, searchEntities, territoryLabels } from "@/lib/entities";
 import { formatDay } from "@/lib/labels";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
@@ -52,7 +52,7 @@ export default async function SummaryPage({ searchParams }: { searchParams: Prom
   const f = readFilters(await searchParams);
   const supabase = await createClient();
 
-  const [kpiRes, followRes, list, { data: categories }, { data: munis }, { data: statuses }] = await Promise.all([
+  const [kpiRes, followRes, list, { data: categories }, territorios, { data: statuses }] = await Promise.all([
     supabase.rpc("dashboard_kpis", { p_workspace: session.workspaceId! }),
     supabase
       .from("follow_ups")
@@ -64,7 +64,7 @@ export default async function SummaryPage({ searchParams }: { searchParams: Prom
       .returns<FollowUp[]>(),
     searchEntities(supabase, session, f, { limit: PANEL_ROWS + 1 }),
     supabase.from("categories").select("id, name, parent_id").order("sort"),
-    supabase.from("municipality_summary").select("municipality_code, municipality_name").order("municipality_name"),
+    territoryLabels(supabase, f.territorio),
     supabase.from("crm_statuses").select("slug, label").eq("workspace_id", session.workspaceId!).order("sort"),
   ]);
   const k = kpiRes.data as Kpis | null;
@@ -166,7 +166,7 @@ export default async function SummaryPage({ searchParams }: { searchParams: Prom
               filters={f}
               hidden={["rol"]}
               categories={categories ?? []}
-              municipalities={(munis ?? []).map((m) => ({ code: m.municipality_code as string, name: m.municipality_name as string }))}
+              territoryLabels={territorios}
               statuses={statuses ?? []}
             />
           </div>

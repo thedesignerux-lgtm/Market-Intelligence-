@@ -1,5 +1,6 @@
 import "server-only";
-import { ENTITY_TYPE, FOLLOW_FILTER, PROVINCES, ROLE_FILTER } from "./labels";
+import { parseTerritory, serializeTerritory, territoryQuery } from "./domain/territory-selection";
+import { ENTITY_TYPE, FOLLOW_FILTER, ROLE_FILTER } from "./labels";
 import type { AppSession } from "./session";
 import type { createClient } from "./supabase/server";
 
@@ -39,8 +40,8 @@ export interface EntityFilters {
   q?: string;
   tipo?: string;
   categoria?: string;
-  provincia?: string;
-  municipio?: string;
+  /** Selección territorial serializada: "ca12,28,-28079". Vacío = toda España. */
+  territorio?: string;
   estado?: string;
   prioridad?: string;
   rol?: string;
@@ -49,10 +50,9 @@ export interface EntityFilters {
 
 export function readFilters(sp: Params): EntityFilters {
   const prioridad = one(sp.prioridad);
-  // «territorio» (selector único) acepta una provincia (2 cifras) o un municipio (5 cifras).
-  const territorio = one(sp.territorio);
-  const provincia = territorio?.length === 2 ? territorio : territorio ? undefined : one(sp.provincia);
-  const municipio = territorio?.length === 5 ? territorio : territorio ? undefined : one(sp.municipio);
+  // «territorio» admite comunidades, provincias y municipios separados por comas, con "-" para
+  // excluir. Se siguen aceptando los antiguos «provincia» y «municipio» (enlaces de cobertura).
+  const picks = parseTerritory([sp.territorio, sp.provincia, sp.municipio].flat() as string[]);
   const tipo = one(sp.tipo);
   const rol = one(sp.rol);
   const seguimiento = one(sp.seguimiento);
@@ -62,8 +62,7 @@ export function readFilters(sp: Params): EntityFilters {
     q: one(sp.q)?.slice(0, 120),
     tipo: tipo && tipo in ENTITY_TYPE ? tipo : undefined,
     categoria: categoria && /^[a-z.]{2,80}$/.test(categoria) ? categoria : undefined,
-    provincia: provincia && PROVINCES.some((p) => p.code === provincia) ? provincia : undefined,
-    municipio: municipio && /^\d{5}$/.test(municipio) ? municipio : undefined,
+    territorio: serializeTerritory(picks),
     estado: estado && /^[a-z_]{2,40}$/.test(estado) ? estado : undefined,
     prioridad: prioridad && ["1", "2", "3"].includes(prioridad) ? prioridad : undefined,
     rol: rol && rol in ROLE_FILTER ? rol : undefined,
@@ -81,13 +80,15 @@ export async function searchEntities(
   f: EntityFilters,
   opts: { limit: number; cursor?: { score?: number; key?: string; id?: string } },
 ) {
+  const territory = territoryQuery(parseTerritory(f.territorio));
   const { data, error } = await supabase.rpc("search_entities", {
     p_workspace: session.workspaceId!,
     p_q: f.q,
     p_types: f.tipo ? [f.tipo as "comercio"] : undefined,
     p_category: f.categoria,
-    p_province: f.provincia,
-    p_municipality: f.municipio,
+    p_provinces: territory.provinces.length ? territory.provinces : undefined,
+    p_municipalities: territory.municipalities.length ? territory.municipalities : undefined,
+    p_exclude_municipalities: territory.excluded.length ? territory.excluded : undefined,
     p_crm_status: f.estado,
     p_priority: f.prioridad ? Number(f.prioridad) : undefined,
     p_role: f.rol,
@@ -98,4 +99,19 @@ export async function searchEntities(
     p_after_id: opts.cursor?.id,
   });
   return { rows: (data as EntityRow[] | null) ?? [], error };
+}
+
+/**
+ * Nombres de los territorios seleccionados, para los chips del selector.
+ * Se resuelven en el servidor: así los chips tienen nombre desde el primer pintado,
+ * incluso cuando la selección llega en la URL y el navegador aún no ha pedido nada.
+ */
+export async function territoryLabels(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  territorio?: string,
+): Promise<Record<string, string>> {
+  const codes = parseTerritory(territorio).map((p) => p.code);
+  if (codes.length === 0) return {};
+  const { data } = await supabase.from("admin_areas").select("code, name").in("code", codes);
+  return Object.fromEntries(((data as { code: string; name: string }[] | null) ?? []).map((r) => [r.code, r.name]));
 }

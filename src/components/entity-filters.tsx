@@ -1,19 +1,21 @@
 import Link from "next/link";
+import { TerritoryPicker } from "@/components/territory-picker";
 import type { EntityFilters } from "@/lib/entities";
-import { FOLLOW_FILTER, PRIORITY, PROVINCES, ROLE_FILTER } from "@/lib/labels";
+import { FOLLOW_FILTER, PRIORITY, ROLE_FILTER } from "@/lib/labels";
 
 interface Props {
   action: string;
   filters: EntityFilters;
   categories: { id: string; name: string; parent_id: string | null }[];
-  municipalities: { code: string; name: string }[];
+  /** Nombres de los territorios ya seleccionados, para los chips del selector. */
+  territoryLabels?: Record<string, string>;
   statuses: { slug: string; label: string }[];
   /** Campos que se fijan desde fuera (p. ej. la pestaña de rol del resumen) y no se muestran. */
   hidden?: (keyof EntityFilters)[];
 }
 
 /** Búsqueda y filtros del directorio. Formulario GET: los filtros quedan en la URL y se pueden compartir. */
-export function EntityFilterForm({ action, filters: f, categories, municipalities, statuses, hidden = [] }: Props) {
+export function EntityFilterForm({ action, filters: f, categories, territoryLabels, statuses, hidden = [] }: Props) {
   const show = (k: keyof EntityFilters) => !hidden.includes(k);
   const active = Object.entries(f).some(([k, v]) => v && !hidden.includes(k as keyof EntityFilters));
   return (
@@ -25,26 +27,7 @@ export function EntityFilterForm({ action, filters: f, categories, municipalitie
         <span className="label">Buscar</span>
         <input name="q" defaultValue={f.q} placeholder="Nombre o dirección" className="field" type="search" />
       </label>
-      <label className="flex min-w-[140px] flex-1 flex-col gap-1">
-        <span className="label">Territorio</span>
-        <select name="territorio" defaultValue={f.municipio ?? f.provincia ?? ""} className="field">
-          <option value="">Toda Galicia</option>
-          <optgroup label="Provincias">
-            {PROVINCES.map((p) => (
-              <option key={p.code} value={p.code}>
-                {p.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Municipios con datos">
-            {municipalities.map((m) => (
-              <option key={m.code} value={m.code}>
-                {m.name}
-              </option>
-            ))}
-          </optgroup>
-        </select>
-      </label>
+      <TerritoryPicker value={f.territorio} labels={territoryLabels} />
       <label className="flex min-w-[140px] flex-1 flex-col gap-1">
         <span className="label">Categoría</span>
         <select name="categoria" defaultValue={f.categoria ?? ""} className="field">
