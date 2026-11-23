@@ -39,6 +39,7 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)?
 export interface EntityFilters {
   q?: string;
   tipo?: string;
+  /** Una o varias categorías separadas por comas. Vacío = todas. */
   categoria?: string;
   /** Selección territorial serializada: "ca12,28,-28079". Vacío = toda España. */
   territorio?: string;
@@ -57,11 +58,14 @@ export function readFilters(sp: Params): EntityFilters {
   const rol = one(sp.rol);
   const seguimiento = one(sp.seguimiento);
   const estado = one(sp.estado);
+  // «categoria» admite varias separadas por comas. Las que no existan las ignora la consulta;
+  // quitar las redundantes (una hija cuya madre también está marcada) es cosa del selector,
+  // que es quien sabe la relación madre/hija.
   const categoria = one(sp.categoria);
   return {
     q: one(sp.q)?.slice(0, 120),
     tipo: tipo && tipo in ENTITY_TYPE ? tipo : undefined,
-    categoria: categoria && /^[a-z.]{2,80}$/.test(categoria) ? categoria : undefined,
+    categoria: categoria && /^[a-z.]{2,80}(,[a-z.]{2,80})*$/.test(categoria) ? categoria : undefined,
     territorio: serializeTerritory(picks),
     estado: estado && /^[a-z_]{2,40}$/.test(estado) ? estado : undefined,
     prioridad: prioridad && ["1", "2", "3"].includes(prioridad) ? prioridad : undefined,
@@ -85,7 +89,7 @@ export async function searchEntities(
     p_workspace: session.workspaceId!,
     p_q: f.q,
     p_types: f.tipo ? [f.tipo as "comercio"] : undefined,
-    p_category: f.categoria,
+    p_categories: f.categoria ? f.categoria.split(",") : undefined,
     p_provinces: territory.provinces.length ? territory.provinces : undefined,
     p_municipalities: territory.municipalities.length ? territory.municipalities : undefined,
     p_exclude_municipalities: territory.excluded.length ? territory.excluded : undefined,

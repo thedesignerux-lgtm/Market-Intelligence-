@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CategoryPicker } from "@/components/category-picker";
 import { TerritoryPicker } from "@/components/territory-picker";
 import type { EntityFilters } from "@/lib/entities";
 import { FOLLOW_FILTER, PRIORITY, ROLE_FILTER } from "@/lib/labels";
@@ -28,17 +29,7 @@ export function EntityFilterForm({ action, filters: f, categories, territoryLabe
         <input name="q" defaultValue={f.q} placeholder="Nombre o dirección" className="field" type="search" />
       </label>
       <TerritoryPicker value={f.territorio} labels={territoryLabels} />
-      <label className="flex min-w-[140px] flex-1 flex-col gap-1">
-        <span className="label">Categoría</span>
-        <select name="categoria" defaultValue={f.categoria ?? ""} className="field">
-          <option value="">Todas</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.parent_id ? `  ${c.name}` : c.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <CategoryPicker categories={categories} value={f.categoria} />
       {show("rol") && (
         <label className="flex min-w-[140px] flex-1 flex-col gap-1">
           <span className="label">Rol</span>
