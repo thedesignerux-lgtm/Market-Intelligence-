@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // El worker (carpeta worker/) no forma parte de la web: Next solo compila src/.
   poweredByHeader: false,
+  // Lo pide «next upgrade --agent=security»: deja constancia de que esta actualización
+  // se hizo por un aviso de seguridad, no por cambiar de versión mayor.
+  experimental: { agentUpgrade: "security" },
   async headers() {
     return [
       {
